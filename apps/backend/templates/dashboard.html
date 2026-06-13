@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}} - LifeLinker</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-admin">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">❤️</div>
+                    <div class="logo-text">
+                        <span class="logo-main">LifeLinker</span>
+                        <span class="logo-sub">Admin</span>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="/admin/dashboard" class="nav-item active">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/doctors" class="nav-item">
+                    <span class="nav-icon">👨‍⚕️</span>
+                    <span>Manajemen Dokter</span>
+                </a>
+                <a href="/admin/users" class="nav-item">
+                    <span class="nav-icon">👤</span>
+                    <span>Manajemen User</span>
+                </a>
+                <a href="/admin/events" class="nav-item">
+                    <span class="nav-icon">📋</span>
+                    <span>Manajemen Event</span>
+                </a>
+                <a href="/admin/donors" class="nav-item">
+                    <span class="nav-icon">🩸</span>
+                    <span>Manajemen Pendonor</span>
+                </a>
+                <a href="/admin/reports" class="nav-item">
+                    <span class="nav-icon">📈</span>
+                    <span>Laporan</span>
+                </a>
+                <a href="/admin/profile" class="nav-item">
+                    <span class="nav-icon">👤</span>
+                    <span>Profile</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="/logout" class="nav-item logout">
+                    <span class="nav-icon">🚪</span>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1>{{.Title}}</h1>
+            </header>
+
+            <!-- Metrics Grid -->
+            <section class="metrics-section">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-accent accent-red"></div>
+                        <div class="metric-content">
+                            <div class="metric-value">{{.UserCount}}</div>
+                            <div class="metric-title">User Terdaftar</div>
+                            <div class="metric-subtitle">Seluruh Sumatera Utara</div>
+                        </div>
+                        <div class="metric-icon">👥</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-accent accent-pink"></div>
+                        <div class="metric-content">
+                            <div class="metric-value">{{.DoctorCount}}</div>
+                            <div class="metric-title">Dokter Terverifikasi</div>
+                            <div class="metric-subtitle">30 Rumah Sakit</div>
+                        </div>
+                        <div class="metric-icon">👨‍⚕️</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-accent accent-rose"></div>
+                        <div class="metric-content">
+                            <div class="metric-value">{{.DonorCount}}</div>
+                            <div class="metric-title">Pendonor Aktif</div>
+                            <div class="metric-subtitle">Seluruh Provinsi</div>
+                        </div>
+                        <div class="metric-icon">🩸</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-accent accent-blue"></div>
+                        <div class="metric-content">
+                            <div class="metric-value">{{.EventCount}}</div>
+                            <div class="metric-title">Event</div>
+                            <div class="metric-subtitle">Di berbagai RS</div>
+                        </div>
+                        <div class="metric-icon">📅</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-accent accent-purple"></div>
+                        <div class="metric-content">
+                            <div class="metric-value">{{.StockCount}}</div>
+                            <div class="metric-title">Stok Darah (kantong)</div>
+                            <div class="metric-subtitle">30 Rumah Sakit</div>
+                        </div>
+                        <div class="metric-icon">🧪</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-accent accent-orange"></div>
+                        <div class="metric-content">
+                            <div class="metric-value">{{.CompletedEventCount}}</div>
+                            <div class="metric-title">Event Terlaksana</div>
+                            <div class="metric-subtitle">Seluruh Provinsi</div>
+                        </div>
+                        <div class="metric-icon">✅</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blood Stock Section -->
+            <section class="blood-stock-section">
+                <div class="blood-stock-card">
+                    <h3>Stok Darah terkini</h3>
+                    <div class="blood-types-grid">
+                        {{range .BloodStock}}
+                        <div class="blood-type-card {{.Color}}">
+                            <div class="blood-count">{{.Count}}</div>
+                            <div class="blood-type">{{.Type}}</div>
+                        </div>
+                        {{end}}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bottom Grid Section -->
+            <section class="bottom-grid">
+                <!-- Chart and Events Column -->
+                <div class="left-column">
+                    <!-- Blood Stock Development Chart -->
+                    <div class="chart-card">
+                        <h4>Perkembangan Stok Darah</h4>
+                        <div class="chart-container">
+                            <svg class="chart-svg" viewBox="0 0 400 200">
+                                <!-- Chart grid lines -->
+                                <defs>
+                                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f0f0f0" stroke-width="1"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#grid)" />
+                                
+                                <!-- Sample chart line -->
+                                <polyline
+                                    fill="none"
+                                    stroke="#ff6b6b"
+                                    stroke-width="3"
+                                    points="50,150 100,120 150,100 200,130 250,110 300,140 350,120"
+                                />
+                                
+                                <!-- Chart points -->
+                                <circle cx="50" cy="150" r="4" fill="#ff6b6b" />
+                                <circle cx="100" cy="120" r="4" fill="#ff6b6b" />
+                                <circle cx="150" cy="100" r="4" fill="#ff6b6b" />
+                                <circle cx="200" cy="130" r="4" fill="#ff6b6b" />
+                                <circle cx="250" cy="110" r="4" fill="#ff6b6b" />
+                                <circle cx="300" cy="140" r="4" fill="#ff6b6b" />
+                                <circle cx="350" cy="120" r="4" fill="#ff6b6b" />
+                                
+                                <!-- Y-axis labels -->
+                                <text x="20" y="170" font-size="12" fill="#666">400 mg</text>
+                                <text x="20" y="130" font-size="12" fill="#666">500 mg</text>
+                                <text x="20" y="90" font-size="12" fill="#666">600 mg</text>
+                                <text x="20" y="50" font-size="12" fill="#666">700 mg</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Events per Month -->
+                    <div class="events-card">
+                        <h4>Event per Bulan</h4>
+                        <div class="events-list">
+                            {{range .Events}}
+                            <div class="event-item">
+                                <div class="event-title">{{.Title}}</div>
+                                <div class="event-details">
+                                    <span class="event-location">{{.Location}}</span>
+                                    <span class="event-date">{{.Date}}</span>
+                                </div>
+                            </div>
+                            {{end}}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Column -->
+                <div class="right-column">
+                    <div class="notifications-card">
+                        <h4>Notifikasi Terbaru</h4>
+                        <div class="notifications-list">
+                            {{range .Notifications}}
+                            <div class="notification-card {{.Type}}">
+                                <div class="notification-title">{{.Title}}</div>
+                                <div class="notification-message">{{.Message}}</div>
+                                <div class="notification-time">{{.Time}}</div>
+                            </div>
+                            {{end}}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

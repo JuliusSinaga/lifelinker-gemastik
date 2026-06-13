@@ -1,0 +1,28 @@
+# --- 1. Keamanan (Paling Penting) ---
+# Mengabaikan file konfigurasi rahasia
+.env
+# Note: .env.example JANGAN dimasukkan ke sini agar teman tim bisa melihat contohnya
+
+# --- 2. Build Output (Sampah Hasil Compile) ---
+# Saat Anda menjalankan 'go build', file-file ini muncul. Tidak perlu di-upload.
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Jika binary output Anda bernama 'main' atau 'backend' tanpa ekstensi (Linux/Mac)
+main
+backend
+
+# --- 3. Dependensi ---
+# Folder vendor biasanya tidak di-push jika menggunakan Go Modules (go.mod)
+vendor/
+
+# --- 4. System & Editor Junk ---
+    .DS_Store
+    Thumbs.db
+    .vscode/
+    .idea/

@@ -1,0 +1,243 @@
+/* =============================== */
+/* PAGE CONTAINER */
+/* =============================== */
+
+.login-page, .login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff5f5, #fefefe);
+  font-family: 'Inter', sans-serif;
+}
+
+/* =============================== */
+/* LOGIN CARD */
+/* =============================== */
+
+.login-card {
+  background: white;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  width: 420px;
+  max-width: 90%;
+  box-shadow: 0px 8px 24px rgba(0,0,0,0.08);
+  animation: fadeIn 0.4s ease;
+}
+
+/* =============================== */
+/* LOGO */
+/* =============================== */
+
+.logo-wrapper {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.logo-image {
+  width: 48px;
+  margin-bottom: 6px;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.logo-life {
+  color: #dc2626;
+}
+
+.logo-bold {
+  color: #000;
+}
+
+/* =============================== */
+/* TITLE */
+/* =============================== */
+
+.welcome-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 12px 0 18px 0;
+}
+
+/* =============================== */
+/* ROLE BUTTONS */
+/* =============================== */
+
+.role-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.role-btn {
+  padding: 10px 24px;
+  min-width: 120px;
+  text-align: center;
+  background: #e5e7eb;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.role-btn:hover {
+  background: #dcdfe3;
+}
+
+.role-btn.active {
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+  transform: translateY(-1px);
+}
+
+/* =============================== */
+/* INPUT FORM */
+/* =============================== */
+
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.login-form input:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+  outline: none;
+}
+
+/* =============================== */
+/* LOGIN BUTTON */
+/* =============================== */
+
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: 0.25s ease;
+}
+
+.btn-login:hover {
+  background: #b91c1c;
+  box-shadow: 0 4px 10px rgba(220,38,38,0.25);
+}
+
+/* =============================== */
+/* DIVIDER */
+/* =============================== */
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+  width: 100%;
+  color: #6b7280;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #d4d4d4;
+}
+
+.divider span {
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* =============================== */
+/* GOOGLE LOGIN */
+/* =============================== */
+
+.google-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: white;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-weight: 600;
+}
+
+.google-btn img {
+  width: 20px;
+}
+
+.google-btn:hover {
+  background: #f3f4f6;
+}
+
+/* =============================== */
+/* REGISTER LINK */
+/* =============================== */
+
+.register-text {
+  margin-top: 16px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.register-text a {
+  color: #dc2626;
+  font-weight: 600;
+  margin-left: 4px;
+  text-decoration: none;
+}
+
+.register-text a:hover {
+  text-decoration: underline;
+}
+
+/* =============================== */
+/* ANIMATIONS */
+/* =============================== */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================== */
+/* RESPONSIVE */
+/* =============================== */
+
+@media (max-width: 480px) {
+  .login-card {
+    width: 92%;
+    padding: 1.8rem 1.5rem;
+  }
+
+  .role-btn {
+    min-width: 100px;
+    padding: 8px 18px;
+  }
+}

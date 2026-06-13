@@ -1,0 +1,92 @@
+.admin-wrapper {
+  background: #f3f4f6;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-card {
+  width: 420px;
+  background: white;
+  padding: 35px 40px;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.admin-logo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+}
+
+.red {
+  color: #d92b2b;
+}
+
+.admin-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+/* HANYA ADMIN BUTTON */
+.admin-only-tab {
+  margin-bottom: 20px;
+}
+
+.admin-active {
+  background: #d92b2b;
+  color: white;
+  border: none;
+  padding: 10px 26px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* FORM INPUT */
+.admin-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+  outline: none;
+  background: #f9fafb;
+}
+
+.admin-input:focus {
+  border-color: #d92b2b;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(217, 43, 43, 0.15);
+}
+
+/* SUBMIT BUTTON */
+.admin-submit {
+  width: 100%;
+  background: #d92b2b;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.admin-submit:hover {
+  background: #b71c1c;
+}

@@ -1,0 +1,247 @@
+/* Layout Utama - Full Screen */
+.dokter-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden; /* Mencegah scroll horizontal yang tidak perlu */
+}
+
+/* Konten Utama */
+.dokter-main {
+  flex: 1;
+  padding: 30px 40px;
+  
+  /* --- KUNCI TAMPILAN FULL --- */
+  margin-left: 260px; /* Jarak dari kiri selebar Sidebar */
+  width: calc(100% - 260px); /* Sisa lebar layar */
+  box-sizing: border-box; /* Pastikan padding dihitung dalam width */
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
+}
+
+/* Container Konten */
+.pd-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%; /* Lebar penuh mengikuti parent */
+  /* Hapus max-width jika ingin benar-benar full sampai ujung kanan */
+  /* max-width: 1200px; */ 
+}
+
+/* --- Card Styles --- */
+.pd-card {
+  background: white;
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  border: 1px solid #e5e7eb;
+  width: 100%; /* Card memenuhi lebar container */
+}
+
+.pd-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+/* --- Profile Summary (Kartu Atas) --- */
+.profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  background: linear-gradient(to right, #ffffff, #f9fafb);
+  padding: 30px;
+}
+
+.pd-avatar {
+  width: 90px;
+  height: 90px;
+  background-color: #fee2e2;
+  color: #dc2626;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.1);
+}
+
+.pd-info h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 5px 0;
+}
+
+.pd-info p {
+  color: #6b7280;
+  margin: 0 0 12px 0;
+  font-size: 15px;
+}
+
+.pd-badge {
+  background-color: #dbeafe;
+  color: #1e40af;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* --- Form Grid (Input Kiri-Kanan) --- */
+.pd-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 Kolom proporsional */
+  gap: 25px; /* Jarak antar input */
+}
+
+/* Responsif Mobile */
+@media (max-width: 900px) {
+  .dokter-main {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+  }
+  .pd-grid {
+    grid-template-columns: 1fr; /* Jadi 1 kolom di layar kecil */
+  }
+  .profile-summary {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.pd-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pd-form-group.full-width {
+  grid-column: span 2; /* Input lebar penuh (seperti Nama & Password) */
+}
+
+@media (max-width: 900px) {
+  .pd-form-group.full-width {
+    grid-column: span 1;
+  }
+}
+
+.pd-form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.pd-input {
+  padding: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  background-color: #fff;
+  transition: all 0.2s;
+  width: 100%; /* Pastikan input memenuhi grid */
+}
+
+.pd-input:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input-readonly {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+  border-color: #e5e7eb;
+}
+
+/* --- Buttons --- */
+.pd-btn-save, .pd-btn-password {
+  margin-top: 30px;
+  padding: 14px 28px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+}
+
+.pd-btn-save:hover, .pd-btn-password:hover {
+  background-color: #dc2626;
+}
+
+.pd-btn-save:disabled, .pd-btn-password:disabled {
+  background-color: #fca5a5;
+  cursor: not-allowed;
+}
+
+/* --- Popup Modal --- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content-popup {
+  background: white;
+  padding: 35px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transform: scale(1);
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.popup-icon { font-size: 56px; margin-bottom: 20px; }
+.popup-icon.success { color: #10b981; }
+.popup-icon.error { color: #ef4444; }
+
+.popup-title { font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 10px; }
+.popup-message { font-size: 15px; color: #6b7280; margin-bottom: 30px; line-height: 1.5; }
+
+.popup-btn {
+  background-color: #1f2937;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  font-size: 15px;
+  transition: transform 0.1s;
+}
+
+.popup-btn:active { transform: scale(0.98); }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }

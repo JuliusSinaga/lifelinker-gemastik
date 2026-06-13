@@ -1,0 +1,210 @@
+/* Shared Footer Component CSS */
+:root {
+  --primary-red: #d92b2b;
+  --text-dark: #333;
+  --text-light: #555;
+  --text-white: white;
+  --bg-dark: #2c3e50;
+  --bg-darker: #1a252f;
+}
+
+.app-footer {
+  width: 100%;
+  margin: 0;
+  padding: 40px 0 0;
+  background-color: var(--bg-dark);
+  color: var(--text-white);
+  position: relative;
+  
+  /* --- PERBAIKAN UTAMA --- */
+  /* Memaksa footer untuk selalu menempel di bawah container flex */
+  margin-top: auto; 
+  z-index: 10; /* Memastikan footer tidak tertutup elemen lain */
+}
+
+.app-footer-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 5%;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.app-footer-section h3,
+.app-footer-section h4 {
+  color: var(--text-white);
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.app-footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.app-footer-logo-image {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+}
+
+.app-footer-logo h3 {
+  font-size: 28px;
+  color: var(--primary-red);
+  margin-bottom: 0;
+}
+
+.app-footer-section p {
+  color: #bdc3c7;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.app-footer-social {
+  display: flex;
+  gap: 15px;
+}
+
+.app-footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: var(--primary-red);
+  color: white;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.app-footer-social a:hover {
+  background-color: #c02525;
+  transform: translateY(-2px);
+}
+
+.app-footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.app-footer-section ul li {
+  margin-bottom: 10px;
+}
+
+.app-footer-section ul li a {
+  color: #bdc3c7;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.app-footer-section ul li a:hover {
+  color: var(--primary-red);
+}
+
+.app-footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.app-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #bdc3c7;
+  font-size: 14px;
+}
+
+.app-contact-item svg {
+  color: var(--primary-red);
+  font-size: 16px;
+}
+
+.app-footer-bottom {
+  border-top: 1px solid #34495e;
+  background-color: var(--bg-darker);
+  padding: 20px 0;
+  width: 100%;
+}
+
+.app-footer-bottom-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #bdc3c7;
+  font-size: 14px;
+}
+
+.app-footer-bottom-links {
+  display: flex;
+  gap: 20px;
+}
+
+.app-footer-bottom-links a {
+  color: #bdc3c7;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.app-footer-bottom-links a:hover {
+  color: var(--primary-red);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .app-footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-footer-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+  }
+  
+  .app-footer-logo {
+    justify-content: center;
+  }
+
+  .app-footer-social {
+    justify-content: center;
+  }
+
+  .app-contact-item {
+    justify-content: center;
+  }
+
+  .app-footer-bottom-content {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .app-footer-bottom-links {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-footer {
+    padding: 30px 0 0;
+  }
+
+  .app-footer-content {
+    gap: 25px;
+  }
+}

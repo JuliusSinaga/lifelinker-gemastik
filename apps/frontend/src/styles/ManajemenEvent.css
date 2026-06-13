@@ -1,0 +1,345 @@
+/* --- Layout Utama --- */
+.dokter-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  font-family: 'Inter', sans-serif;
+}
+
+.dokter-main {
+  flex: 1;
+  padding: 30px 40px;
+  overflow-y: auto;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
+}
+
+.event-container {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+
+/* --- Generic Card Style --- */
+.me-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.me-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f3f4f6;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --- Form Styling (Grid Layout) --- */
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.me-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.me-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.me-form-group.full-width {
+  grid-column: span 2;
+}
+
+.me-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.me-input,
+.me-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s;
+  background-color: #fff;
+  outline: none;
+}
+
+.me-input:focus,
+.me-textarea:focus {
+  border-color: #ef4444; /* Merah Brand */
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.me-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.me-btn-submit {
+  background-color: #ef4444;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-top: 10px;
+  align-self: flex-end; /* Tombol di kanan */
+  width: auto;
+  min-width: 180px;
+}
+
+.me-btn-submit:hover {
+  background-color: #dc2626;
+  transform: translateY(-1px);
+}
+
+/* --- Table Styling --- */
+.table-responsive {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.event-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.event-table th {
+  text-align: left;
+  padding: 16px 20px;
+  background-color: #f9fafb;
+  color: #4b5563;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.event-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #1f2937;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.event-table tr:last-child td {
+  border-bottom: none;
+}
+
+.event-table tr:hover {
+  background-color: #fef2f2; /* Hover merah sangat muda */
+}
+
+/* --- Status Badges --- */
+.me-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+}
+
+.me-badge.approved { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+.me-badge.pending { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+.me-badge.rejected { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+.me-badge.completed { background-color: #e0f2fe; color: #075985; border: 1px solid #bae6fd; }
+
+/* --- Action Buttons --- */
+.me-action-btn {
+  background-color: white;
+  border: 1px solid #d1d5db;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.me-action-btn:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+  border-color: #9ca3af;
+}
+
+/* --- Completed Events Grid --- */
+.completed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.completed-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.completed-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  border-color: #d1d5db;
+}
+
+.completed-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 6px;
+  height: 100%;
+  background-color: #10b981; /* Garis hijau di kiri */
+}
+
+.completed-top h4 {
+  margin: 0 0 5px;
+  color: #111827;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.completed-date {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.completed-bottom {
+  margin-top: 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.big-number {
+  font-size: 32px;
+  font-weight: 800;
+  color: #10b981;
+  line-height: 1;
+}
+
+.label {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+/* --- Modal Styling --- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+  animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header h3 {
+  margin: 0 0 20px 0;
+  color: #111827;
+  font-size: 20px;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 15px;
+}
+
+.modal-detail-row {
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: #4b5563;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed #f3f4f6;
+  padding-bottom: 8px;
+}
+
+.modal-detail-row strong {
+  color: #111827;
+}
+
+.modal-desc {
+  background-color: #f9fafb;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.6;
+  margin-top: 15px;
+}
+
+.modal-close-btn {
+  margin-top: 25px;
+  width: 100%;
+  padding: 12px;
+  background-color: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal-close-btn:hover {
+  background-color: #e5e7eb;
+}
+
+/* Helper */
+.text-center { text-align: center; padding: 30px; color: #6b7280; font-style: italic; }
+.text-muted { color: #9ca3af; font-style: italic; text-align: center; margin-top: 20px;}

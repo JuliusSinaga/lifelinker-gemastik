@@ -1,0 +1,1222 @@
+/* --- Global Variables --- */
+:root {
+  --primary-red: #d92b2b;
+  --light-gray: #f5f5f5;
+  --dark-gray: #222;
+  --text-dark: #333;
+  --text-light: #555;
+  --border-light: #eee;
+  --shadow-light: rgba(0, 0, 0, 0.05);
+  --shadow-medium: rgba(0, 0, 0, 0.08);
+  --shadow-strong: rgba(0, 0, 0, 0.15);
+}
+
+/* --- FULL PAGE SCROLL SETUP --- */
+.beranda-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Minimal tinggi layar, tapi bisa lebih untuk footer */
+  width: 100%;
+  /* overflow-x: hidden;12. */
+  /* overflow-y: auto; WAJIB: Mengizinkan scroll vertikal */
+  scroll-snap-type: y proximity; /* Menggunakan proximity agar footer tetap bisa diakses */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Setiap 'section' dan 'header' (Hero) akan menjadi satu slide.
+  Footer TIDAK termasuk scroll-snap - akan selalu terlihat di bawah.
+*/
+.hero,
+.checklist-section,
+.about-section,
+.collective-strength-section,
+.good-deeds-section,
+.testimonials-section {
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0; /* Mencegah section mengecil */
+  scroll-snap-align: start; /* WAJIB: Setiap section akan snap di bagian atas */
+
+  /* Atur tinggi dan padding untuk setiap section */
+  min-height: 100vh; /* Setiap section minimal 100% tinggi layar */
+  padding: 60px 5%; /* Padding internal untuk konten */
+
+  /* Pusatkan konten di dalam setiap section */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: relative; /* Untuk elemen overlay */
+}
+
+/* --- Header & Navbar (Hero Section) --- */
+.hero {
+  padding: 0; /* Hero tidak perlu padding, overlay yang akan mengaturnya */
+  background-size: cover;
+  background-position: center right;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 60%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  display: flex;
+  flex-direction: column;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 5%;
+  color: white;
+  z-index: 1000;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  flex-shrink: 0; /* Mencegah navbar mengecil */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-weight: 800;
+  font-size: 24px;
+  color: white;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px;
+  margin-left: auto;
+}
+
+.nav-link {
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  opacity: 0.9;
+  transition: opacity 0.3s ease, color 0.3s ease;
+  padding: 5px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-link:hover {
+  opacity: 1;
+  color: var(--primary-red);
+  border-bottom-color: var(--primary-red);
+}
+
+.nav-link.active {
+  color: var(--primary-red);
+  font-weight: 700;
+  border-bottom-color: var(--primary-red);
+}
+
+.nav-actions {
+  display: flex;
+  gap: 15px;
+  margin-left: 25px;
+  align-items: center;
+}
+
+.btn-login-header,
+.btn-daftar-header {
+  padding: 10px 24px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-login-header {
+  background-color: white;
+  color: var(--text-dark);
+  border: 2px solid white;
+}
+.btn-login-header:hover {
+  background-color: transparent;
+  color: white;
+}
+
+.btn-daftar-header {
+  background-color: var(--primary-red);
+  color: white;
+  border: 2px solid var(--primary-red);
+}
+.btn-daftar-header:hover {
+  background-color: #c02525;
+  border-color: #c02525;
+}
+
+/* Hero Content */
+.hero-content-wrapper {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  padding: 0 5%;
+  text-align: left;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.hero-content {
+  max-width: 600px;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content h1 {
+  font-size: 4.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.accent {
+  color: var(--primary-red);
+}
+
+.hero-sub {
+  font-size: 1.4rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.95;
+  max-width: 500px;
+}
+
+.btn-primary {
+  display: inline-block;
+  background-color: var(--primary-red);
+  color: white;
+  padding: 15px 35px;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 15px rgba(217, 43, 43, 0.3);
+  text-decoration: none;
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(217, 43, 43, 0.4);
+}
+
+/* --- Section: Ragu Untuk Donor? --- */
+.checklist-section {
+  background-color: white; /* WAJIB: Ini memperbaiki "latar belakang abu-abu" */
+  justify-content: center;
+  align-items: center;
+}
+
+.checklist-section h2 {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.checklist-subtitle {
+  color: var(--primary-red);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+.checklist-card {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  padding: 30px 40px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.progress-wrap {
+  height: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  margin-bottom: 25px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 20%;
+  background-color: #007bff;
+  border-radius: 5px;
+}
+
+.check-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.check-item:last-child {
+  border-bottom: none;
+}
+
+.check-question {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: var(--text-dark);
+  flex-grow: 1;
+  text-align: left;
+}
+
+.check-question svg {
+  margin-right: 15px;
+  font-size: 1.5rem;
+  color: var(--primary-red);
+}
+
+.answers {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btn-check-yes,
+.btn-check-no {
+  padding: 8px 25px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-check-yes {
+  background-color: white;
+  border: 1px solid #ccc;
+  color: var(--text-dark);
+}
+.btn-check-yes:hover {
+  background-color: #f0f0f0;
+}
+
+.btn-check-no {
+  background-color: var(--primary-red);
+  color: white;
+  border: 1px solid var(--primary-red);
+}
+.btn-check-no:hover {
+  background-color: #c02525;
+}
+
+/* --- Section: Apa itu LifeLinker? --- */
+.about-section {
+  background-color: white; /* WAJIB: Latar belakang putih */
+}
+.about-section h2 {
+  margin-bottom: 50px;
+}
+
+.about-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* 3 kolom */
+  gap: 30px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Mengatur ulang layout agar 2 di atas (center), 3 di bawah */
+.about-cards-grid {
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: auto auto;
+}
+.about-card-item:nth-child(1) {
+  grid-column: 1 / 4;
+  grid-row: 1 / 2;
+}
+.about-card-item:nth-child(2) {
+  grid-column: 4 / 7;
+  grid-row: 1 / 2;
+}
+.about-card-item:nth-child(3) {
+  grid-column: 1 / 3;
+  grid-row: 2 / 3;
+}
+.about-card-item:nth-child(4) {
+  grid-column: 3 / 5;
+  grid-row: 2 / 3;
+}
+.about-card-item:nth-child(5) {
+  grid-column: 5 / 7;
+  grid-row: 2 / 3;
+}
+
+/* Styling kartu Visi & Misi (dengan border merah) */
+.about-card-item:nth-child(1),
+.about-card-item:nth-child(2) {
+  border: 1px solid var(--border-light);
+  border-left: 5px solid var(--primary-red);
+  text-align: left;
+  padding: 30px;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px var(--shadow-light);
+}
+
+/* Styling kartu Tujuan, Mudah, Komunitas (3 kolom bawah) */
+.about-card-item:nth-child(3),
+.about-card-item:nth-child(4),
+.about-card-item:nth-child(5) {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px var(--shadow-light);
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.about-icon {
+  font-size: 3rem;
+  color: var(--primary-red);
+  margin-bottom: 15px;
+}
+
+.about-card-item h3 {
+  font-size: 1.4rem;
+  color: var(--text-dark); /* Teks hitam sesuai UI */
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* Visi & Misi h3 */
+.about-card-item:nth-child(1) h3,
+.about-card-item:nth-child(2) h3 {
+  color: var(--primary-red); /* Merah */
+  text-align: left;
+}
+
+.about-card-item p {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+/* Visi & Misi p */
+.about-card-item:nth-child(1) p,
+.about-card-item:nth-child(2) p {
+  text-align: left;
+}
+
+/* --- Section: Kekuatan Kolektif Kita --- */
+.collective-strength-section {
+  /* Use plain white background (like other sections) */
+  padding: 60px 5%;
+  background-color: white;
+  overflow: visible;
+}
+
+.collective-strength-overlay {
+  /* no dark overlay when using plain white background */
+  background: none;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.collective-strength-section h2 {
+  color: var(--text-dark);
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.collective-strength-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  margin-bottom: 50px;
+  max-width: 800px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 kolom */
+  gap: 30px;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.stat-item-new {
+  background-color: white;
+  border: 2px solid #f3f4f6;
+  border-radius: 15px;
+  padding: 35px 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.stat-item-new:hover {
+  transform: translateY(-8px);
+  border-color: var(--primary-red);
+  box-shadow: 0 8px 25px rgba(217, 43, 43, 0.15);
+}
+
+.stat-icon {
+  font-size: 2.8rem;
+  margin-bottom: 18px;
+  color: var(--primary-red);
+}
+
+.stat-number {
+  font-size: 3.2rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+  line-height: 1;
+  color: var(--primary-red);
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  text-align: center;
+}
+
+/* --- Section: Jejak Kebaikan Anda --- */
+.good-deeds-section {
+  background-color: white; /* WAJIB: Latar belakang putih */
+}
+.good-deeds-section h2 {
+  margin-bottom: 10px;
+}
+.good-deeds-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  max-width: 700px;
+  margin: 0 auto 40px auto;
+}
+
+.good-deeds-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.good-deeds-card-item {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px var(--shadow-light);
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.good-deeds-card-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px var(--shadow-medium);
+}
+
+.good-deeds-icon {
+  font-size: 3rem;
+  color: var(--primary-red);
+  margin-bottom: 20px;
+}
+
+.good-deeds-card-item h3 {
+  font-size: 1.3rem;
+  color: var(--text-dark);
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.good-deeds-card-item p {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+.good-deeds-card-item p strong {
+  color: var(--text-dark);
+}
+
+/* --- Section: Apa Kata Mereka? --- */
+.testimonials-section {
+  background-color: white; /* WAJIB: Latar belakang putih */
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* 1 kolom */
+  gap: 20px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.testimonial-item {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px var(--shadow-light);
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-align: left;
+}
+
+.testimonial-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 4px solid var(--primary-red);
+}
+
+.testimonial-content strong {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--primary-red);
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.testimonial-content p {
+  font-size: 1rem;
+  color: var(--text-light);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* --- Footer --- */
+/* Footer terpisah dari scroll-snap behavior */
+.site-footer {
+  background-color: var(--dark-gray);
+  color: white;
+  width: 100%;
+  min-height: auto; /* Footer tidak perlu 100vh */
+  height: auto;
+  padding: 50px 5%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  /* Footer tidak menggunakan scroll-snap-align */
+}
+
+.footer-inner-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+  text-align: left;
+}
+
+.footer-left {
+  flex-basis: 300px;
+  flex-shrink: 0;
+}
+
+.footer-logo-text {
+  font-weight: 800;
+  font-size: 30px;
+  color: var(--primary-red);
+  display: block;
+  margin-bottom: 15px;
+}
+
+.footer-copyright {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.footer-center {
+  flex-grow: 1;
+  min-width: 250px;
+}
+
+.footer-heading {
+  font-size: 1.3rem;
+  color: var(--primary-red);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.footer-links-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+}
+
+.footer-link {
+  font-size: 1rem;
+  opacity: 0.8;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+.footer-link:hover {
+  opacity: 1;
+  color: var(--primary-red);
+}
+
+.footer-right {
+  flex-basis: 200px;
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  font-size: 1.8rem;
+  margin-top: 10px;
+}
+
+.social-icons a {
+  color: white;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+.social-icons a:hover {
+  opacity: 1;
+  color: var(--primary-red);
+  transform: translateY(-3px);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+  /* Hapus scroll snap di tablet, ganti ke scroll biasa */
+  .beranda-root {
+    scroll-snap-type: none;
+    height: auto;
+  }
+  .hero,
+  .checklist-section,
+  .about-section,
+  .collective-strength-section,
+  .good-deeds-section,
+  .testimonials-section {
+    min-height: auto;
+    height: auto;
+    padding: 80px 5%;
+  }
+  .hero {
+    height: 600px; /* Tinggi hero normal */
+    padding: 0;
+  }
+  .checklist-section {
+    margin-top: -120px; /* Kembalikan overlap */
+    padding-top: 60px;
+  }
+
+  .about-cards-grid {
+    grid-template-columns: 1fr 1fr; /* 2x2 grid */
+  }
+  .about-card-item:nth-child(1) {
+    grid-column: 1 / 2;
+  }
+  .about-card-item:nth-child(2) {
+    grid-column: 2 / 3;
+  }
+  .about-card-item:nth-child(3) {
+    grid-column: 1 / 2;
+  }
+  .about-card-item:nth-child(4) {
+    grid-column: 2 / 3;
+  }
+  .about-card-item:nth-child(5) {
+    grid-column: 1 / 3;
+  }
+
+  .footer-inner-content,
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    text-align: center;
+  }
+  .footer-links-group,
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .top-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 15px;
+  }
+  .top-nav .logo-container,
+  .nav-links,
+  .nav-actions {
+    width: 100%;
+    justify-content: center;
+    margin: 0;
+  }
+  .nav-links {
+    gap: 10px 15px;
+  }
+  .nav-actions {
+    margin-top: 10px;
+  }
+  .hero {
+    height: 500px;
+  }
+  .hero-content-wrapper {
+    text-align: center;
+  }
+  .hero-content h1 {
+    font-size: 2.8rem;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    max-width: 100%;
+  }
+
+  .main-container {
+    padding: 60px 3%;
+  }
+  section h2 {
+    font-size: 2rem;
+  }
+  .checklist-card {
+    padding: 20px;
+  }
+  .check-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  .answers {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .about-cards-grid,
+  .stats-grid,
+  .good-deeds-cards-grid,
+  .testimonials-grid {
+    grid-template-columns: 1fr; /* 1 kolom di mobile */
+  }
+  .about-card-item:nth-child(1),
+  .about-card-item:nth-child(2),
+  .about-card-item:nth-child(3),
+  .about-card-item:nth-child(4),
+  .about-card-item:nth-child(5) {
+    grid-column: 1 / 2;
+    margin-top: 0;
+  }
+  .collective-strength-section {
+    border-radius: 0;
+    margin-left: -3%;
+    margin-right: -3%;
+    width: 106%;
+  }
+  .footer-links-group {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Apply animations to elements */
+.hero-content h1 {
+  animation: slideInLeft 1s ease-out;
+}
+
+.hero-sub {
+  animation: slideInLeft 1s ease-out 0.2s both;
+}
+
+.btn-primary {
+  animation: fadeInUp 1s ease-out 0.4s both;
+}
+
+.btn-primary:hover {
+  animation: pulse 0.5s ease-in-out;
+}
+
+.checklist-section h2,
+.about-section h2,
+.collective-strength-section h2,
+.good-deeds-section h2,
+.testimonials-section h2 {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.checklist-subtitle {
+  animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.checklist-card {
+  animation: scaleIn 0.8s ease-out 0.3s both;
+}
+
+.about-card-item {
+  animation: fadeInUp 0.8s ease-out both;
+}
+
+.about-card-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.about-card-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.about-card-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.about-card-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.about-card-item:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.stat-item-new {
+  animation: scaleIn 0.8s ease-out both;
+}
+
+.stat-item-new:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.stat-item-new:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.stat-item-new:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.stat-item-new:nth-child(4) {
+  animation-delay: 0.5s;
+}
+
+.good-deeds-card-item {
+  animation: fadeInUp 0.8s ease-out both;
+}
+
+.good-deeds-card-item:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.good-deeds-card-item:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.good-deeds-card-item:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.testimonial-item {
+  animation: slideInRight 0.8s ease-out both;
+}
+
+.testimonial-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.testimonial-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.testimonial-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.check-item {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+.check-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.check-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.check-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.check-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.check-item:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.feature-card {
+  animation: scaleIn 0.6s ease-out both;
+}
+
+.feature-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.feature-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.feature-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+/* --- Red Shadow Balanced: kiri & tengah sama tebal --- */
+.hero-overlay {
+  background: linear-gradient(
+    90deg,
+    rgba(180, 0, 0, 0.6) 0%,
+    /* kiri tebal */ rgba(165, 0, 0, 0.55) 15%,
+    /* masih tebal */ rgba(150, 0, 0, 0.45) 35%,
+    /* tengah stabil tebal */ rgba(130, 0, 0, 0.35) 55%,
+    /* tengah kanan sedikit lebih tipis */ rgba(90, 0, 0, 0.22) 75%,
+    rgba(40, 0, 0, 0.12) 100% /* kanan paling ringan */
+  ) !important;
+
+  /* Shadow datar, tanpa efek bulat */
+  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0), inset 0 0 90px rgba(150, 0, 0, 0.25),
+    inset 0 0 50px rgba(150, 0, 0, 0.2);
+}
+
+/* --- FLASH CARD & RESULT STYLES (NEW) --- */
+
+.flash-card-container {
+  min-height: 300px; /* Menjaga tinggi card stabil */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.question-header {
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+.step-count {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  font-weight: 600;
+  background: #f0f0f0;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+/* Style untuk Pertanyaan Aktif (Besar di tengah) */
+.check-item-active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.check-question-large {
+  margin-bottom: 30px;
+}
+
+.icon-wrapper {
+  font-size: 3.5rem;
+  color: var(--primary-red);
+  margin-bottom: 20px;
+  background: #fff0f0;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.check-question-large p {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  max-width: 600px;
+  line-height: 1.4;
+}
+
+.answers-large {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Memperbesar tombol untuk mode Flash Card */
+.answers-large button {
+  padding: 12px 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+/* --- RESULT CARD STYLES --- */
+.result-content {
+  text-align: center;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.result-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.result-icon.success {
+  color: #28a745; /* Hijau sukses */
+}
+
+.result-icon.fail {
+  color: #dc3545; /* Merah gagal */ /* Atau gunakan var(--primary-red) */
+}
+
+.result-content h4 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: var(--text-dark);
+}
+
+.result-content p {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  max-width: 500px;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.result-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  justify-content: center; /* <--- INI KUNCINYA AGAR DI TENGAH */
+  width: 100%; /* Memastikan container mengambil lebar penuh */
+  margin-top: 10px; /* Memberi sedikit jarak dari teks di atasnya */
+}
+
+/* Pastikan tombol reset juga rapi */
+.btn-reset {
+  background: transparent;
+  border: 2px solid #ddd;
+  padding: 10px 25px; /* Sedikit diperlebar padding-nya */
+  border-radius: 25px;
+  font-weight: 700;
+  color: var(--text-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Pastikan teks di dalam tombol juga tengah */
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-reset:hover {
+  border-color: var(--text-dark);
+  color: var(--text-dark);
+  background-color: #f9f9f9;
+}
+
+/* Responsive adjustment for flash card */
+@media (max-width: 768px) {
+  .check-question-large p {
+    font-size: 1.1rem;
+  }
+  .answers-large button {
+    padding: 10px 30px;
+    font-size: 1rem;
+  }
+  .result-actions {
+    flex-direction: column;
+  }
+}

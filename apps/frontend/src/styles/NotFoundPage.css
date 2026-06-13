@@ -1,0 +1,121 @@
+.error-page-root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  font-family: 'Poppins', sans-serif;
+  padding: 20px;
+}
+
+.error-container {
+  text-align: center;
+  background: white;
+  padding: 50px 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  max-width: 500px;
+  width: 100%;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Icon Visual */
+.error-visual {
+  font-size: 80px;
+  color: #ef4444; /* Merah LifeLinker */
+  margin-bottom: 20px;
+}
+
+.error-icon.pulse {
+  animation: heartbeat 2s infinite;
+}
+
+/* Typography */
+.error-code {
+  font-size: 6rem;
+  font-weight: 800;
+  color: #1f2937;
+  line-height: 1;
+  margin: 0;
+}
+
+.error-title {
+  font-size: 1.5rem;
+  color: #374151;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.error-message {
+  color: #6b7280;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+/* Buttons */
+.error-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-back,
+.btn-home {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-back {
+  background-color: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.btn-back:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.btn-home {
+  background-color: #dc2626;
+  border: 1px solid #dc2626;
+  color: white;
+}
+
+.btn-home:hover {
+  background-color: #b91c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  5% { transform: scale(1.1); }
+  10% { transform: scale(1); }
+  15% { transform: scale(1.1); }
+  50% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .error-code { font-size: 4rem; }
+  .error-actions { flex-direction: column; }
+  .btn-back, .btn-home { width: 100%; justify-content: center; }
+}

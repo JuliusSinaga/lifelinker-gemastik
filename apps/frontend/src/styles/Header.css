@@ -1,0 +1,419 @@
+:root {
+  --primary-red: #dc2626;
+  --primary-hover: #b91c1c;
+  --bg-light-pink: #fef2f2;
+  --text-red: #991b1b;
+  --text-dark: #1f2937;
+  --text-gray: #6b7280;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --nav-height: 70px;
+}
+
+/* --- HEADER CONTAINER --- */
+.app-header {
+  background: white;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: var(--nav-height);
+}
+
+.app-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 100%;
+}
+
+/* LOGO */
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.app-logo-image {
+  width: 32px;
+  height: 32px;
+}
+
+.app-logo-text {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--primary-red);
+  letter-spacing: -0.5px;
+}
+
+/* --- NAVIGATION LINKS --- */
+.nav-menu-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 100px;
+}
+
+.app-nav-links {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.app-nav-link {
+  color: var(--text-dark);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 5px 0;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.app-nav-link:hover,
+.app-nav-link.active {
+  color: var(--primary-red);
+  font-weight: 600;
+}
+
+.app-nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-red);
+  border-radius: 2px;
+}
+
+/* --- ACTION BUTTONS (Login/Reg) --- */
+.auth-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.app-btn-login,
+.app-btn-register {
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.app-btn-login {
+  color: var(--primary-red);
+  border: 1px solid var(--primary-red);
+  background: transparent;
+}
+
+.app-btn-login:hover {
+  background-color: var(--bg-light-pink);
+}
+
+.app-btn-register {
+  background-color: var(--primary-red);
+  color: white;
+  border: 1px solid var(--primary-red);
+}
+
+.app-btn-register:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+/* --- LOGGED IN USER --- */
+.app-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.app-user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: var(--primary-red);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  transition: transform 0.2s;
+}
+
+.app-user-avatar:hover {
+  transform: scale(1.1);
+}
+
+/* Container Dropdown */
+.user-dropdown {
+  position: absolute;
+  top: 60px; /* Sesuaikan jarak dari header */
+  right: 0;
+  width: 240px; /* Lebar fixed agar rapi */
+  background-color: white;
+  border-radius: 16px; /* Sudut lebih bulat modern */
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.05), 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1); /* Shadow halus */
+  border: 1px solid #f3f4f6;
+  padding: 8px;
+  z-index: 1100;
+  transform-origin: top right;
+  animation: dropdownPop 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Segitiga kecil di atas dropdown (opsional, pemanis visual) */
+.user-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 20px;
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  transform: rotate(45deg);
+  border-left: 1px solid #f3f4f6;
+  border-top: 1px solid #f3f4f6;
+}
+
+/* Item Menu Dropdown */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  color: var(--text-dark);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 10px; /* Item juga rounded */
+  transition: all 0.2s ease;
+  margin-bottom: 2px;
+}
+
+/* Hover Effect: Merah Muda Pudar */
+.dropdown-item:hover {
+  background-color: var(--bg-light-pink); /* #fef2f2 */
+  color: var(--primary-red);
+  transform: translateX(3px); /* Efek geser dikit saat hover */
+}
+
+/* Garis Pemisah sebelum Logout */
+.dropdown-item.logout {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6; /* Garis pemisah */
+  border-radius: 0 0 10px 10px; /* Round bawah saja */
+  color: var(--text-gray);
+}
+
+/* Hover khusus Logout: Merah lebih tegas */
+.dropdown-item.logout:hover {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  transform: none; /* Logout tidak perlu geser */
+}
+
+/* Animasi Muncul (Pop) */
+@keyframes dropdownPop {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 900px) {
+  .user-dropdown {
+    position: static; /* Tidak melayang di mobile */
+    width: 100%;
+    box-shadow: none;
+    border: 1px solid #e5e7eb;
+    background-color: #f9fafb; /* Background beda dikit biar kontras */
+    margin-top: 15px;
+    animation: slideDown 0.3s ease;
+  }
+  
+  .user-dropdown::before {
+    display: none; /* Hilangkan segitiga di mobile */
+  }
+
+  .dropdown-item {
+    justify-content: center; /* Teks di tengah saat mobile */
+  }
+}
+/* --- MOBILE MENU --- */
+.mobile-menu-icon {
+  display: none;
+  font-size: 24px;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+/* --- MODAL LOGOUT (SESUAI REQUEST GAMBAR) --- */
+.header-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s;
+}
+
+.header-modal {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-icon-warning {
+  font-size: 48px;
+  color: #f59e0b; /* Kuning Peringatan */
+  margin-bottom: 15px;
+}
+
+.header-modal h3 {
+  margin: 0 0 10px 0;
+  color: var(--text-dark);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.header-modal p {
+  color: var(--text-gray);
+  margin-bottom: 25px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.header-modal-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+/* Tombol Batal (Pink Pudar) */
+.btn-header-cancel {
+  background-color: var(--bg-light-pink);
+  color: var(--text-red);
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 14px;
+}
+
+.btn-header-cancel:hover {
+  background-color: #fee2e2;
+}
+
+/* Tombol Ya (Merah Solid) */
+.btn-header-confirm {
+  background-color: var(--primary-red);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 14px;
+}
+
+.btn-header-confirm:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 4px 6px rgba(220, 38, 38, 0.2);
+}
+
+/* Animasi */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+/* --- RESPONSIVE CSS --- */
+@media (max-width: 900px) {
+  .mobile-menu-icon {
+    display: block;
+  }
+
+  .nav-menu-wrapper {
+    position: absolute;
+    top: var(--nav-height);
+    left: 0;
+    width: 100%;
+    background-color: white;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    transform: translateY(-150%);
+    transition: transform 0.3s ease;
+    z-index: 999;
+  }
+
+  .nav-menu-wrapper.active {
+    transform: translateY(0);
+  }
+
+  .app-nav-links {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .app-nav-actions {
+    margin-top: 20px;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+
+  .app-user-info {
+    flex-direction: column;
+  }
+
+  .user-dropdown {
+    position: static;
+    box-shadow: none;
+    border: 1px solid #e5e7eb;
+    margin-top: 10px;
+    width: 90%;
+    text-align: center;
+  }
+}

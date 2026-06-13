@@ -1,0 +1,346 @@
+/* Layout Utama */
+.mea-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  width: 100%;
+}
+
+.mea-content {
+  /* --- PERBAIKAN LAYOUT DI SINI --- */
+  /* Memberi jarak kiri selebar Sidebar agar tidak tertimpa */
+  margin-left: 240px; /* Sesuaikan dengan lebar SidebarAdmin */
+  
+  /* Konten mengambil sisa lebar layar */
+  width: calc(100% - 240px);
+  
+  padding: 25px;
+  flex: 1;
+  /* overflow-y: auto; */
+  transition: all 0.3s ease;
+}
+
+.mea-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
+}
+
+/* --- Metrics Grid --- */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  margin-bottom: 35px;
+}
+
+.metric-card {
+  background-color: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  border: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: transform 0.2s;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.metric-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.metric-title {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.metric-subtitle {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+.metric-icon {
+  font-size: 24px;
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-icon.blue { background-color: #eff6ff; color: #3b82f6; }
+.metric-icon.yellow { background-color: #fef9c3; color: #ca8a04; }
+.metric-icon.green { background-color: #dcfce7; color: #16a34a; }
+.metric-icon.purple { background-color: #f3e8ff; color: #9333ea; }
+
+/* --- Table Section --- */
+.mea-table-section {
+  background-color: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.mea-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+/* --- Filters (Grid Layout) --- */
+.mea-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+  background-color: #f9fafb;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.mea-filter-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 8px;
+}
+
+.mea-filter-group input,
+.mea-filter-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  background-color: white;
+  transition: all 0.2s;
+  box-sizing: border-box; /* Agar padding tidak merusak lebar */
+}
+
+.mea-filter-group input:focus,
+.mea-filter-group select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* --- Table Styling --- */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.mea-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mea-table th {
+  text-align: left;
+  padding: 16px;
+  background-color: #f9fafb;
+  color: #4b5563;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.mea-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #1f2937;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.mea-table tr:hover {
+  background-color: #f8fafc;
+}
+
+/* --- Badges --- */
+.mea-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+}
+
+.mea-badge.approved { background-color: #dcfce7; color: #166534; }
+.mea-badge.pending { background-color: #fef9c3; color: #854d0e; }
+.mea-badge.rejected { background-color: #fee2e2; color: #991b1b; }
+.mea-badge.completed { background-color: #e0f2fe; color: #075985; }
+.mea-badge.gray { background-color: #f3f4f6; color: #374151; }
+
+/* --- Action Buttons --- */
+.mea-action-cell {
+  width: 140px;
+}
+
+.mea-action-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.mea-action-hover {
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+tr:hover .mea-action-hover {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.mea-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mea-btn:hover:not(.disabled) { transform: scale(1.1); }
+
+.mea-btn.view { background-color: #eff6ff; color: #3b82f6; border: 1px solid #dbeafe; }
+.mea-btn.approve { background-color: #dcfce7; color: #166534; }
+.mea-btn.reject { background-color: #fee2e2; color: #991b1b; }
+.mea-btn.disabled { opacity: 0.3; cursor: not-allowed; filter: grayscale(100%); }
+
+/* --- Modal Styles --- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-card {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+  animation: modalPop 0.3s ease;
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-title {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  color: #111827;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 15px;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #4b5563;
+  border-bottom: 1px dashed #f3f4f6;
+  padding-bottom: 8px;
+}
+
+.detail-row strong { color: #111827; }
+
+.modal-desc-box {
+  background-color: #f9fafb;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+.modal-actions {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.modal-close {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mea-btn-modal {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+}
+
+.mea-btn-modal.approve { background-color: #10b981; }
+.mea-btn-modal.reject { background-color: #ef4444; }
+
+.loading-text, .empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Responsif untuk Mobile */
+@media (max-width: 768px) {
+  .mea-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+  }
+}

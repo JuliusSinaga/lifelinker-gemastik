@@ -1,0 +1,407 @@
+/* Shared Login Page Styles - Konsisten dengan Role Selection */
+
+.login-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fef2f2 0%, #fff 50%, #fef2f2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.login-card {
+  background: white;
+  border-radius: 24px;
+  padding: 45px 40px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  animation: scaleIn 0.6s ease-out;
+}
+
+/* Logo Section */
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.logo-image {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.logo-text {
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0;
+  color: #222;
+}
+
+.logo-life {
+  color: #b91c1c;
+}
+
+.logo-bold {
+  color: #222;
+}
+
+/* Title Section */
+.welcome-title {
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  margin: 8px 0 10px;
+  color: #1f2937;
+}
+
+.subtitle {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+
+/* Role Buttons */
+.role-buttons {
+  display: flex;           /* Menggunakan Flexbox agar rata */
+  width: 100%;             /* Memenuhi lebar container */
+  justify-content: center; /* Posisi di tengah */
+  gap: 15px;               /* Jarak antar tombol */
+  margin-bottom: 30px;
+}
+
+.role-btn {
+  flex: 1;                 /* Tombol akan membagi lebar sama rata (50:50) */
+  padding: 12px 0;         /* Padding atas bawah */
+  border: 2px solid #e5e7eb;
+  background: #f9fafb;
+  color: #6b7280;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  /* Memastikan teks di tengah */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.role-btn:hover {
+  border-color: #b91c1c;
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+.role-btn.active {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border-color: #b91c1c;
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
+}
+
+/* Form */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-input {
+  width: 100%;
+  box-sizing: border-box; /* Agar padding tidak merusak lebar */
+  padding: 14px 18px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-family: "Poppins", sans-serif;
+  background-color: #f9fafb;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #b91c1c;
+  box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.1);
+}
+
+.form-input::placeholder {
+  color: #9ca3af;
+}
+
+.btn-login {
+  padding: 14px;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 6px;
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
+}
+
+.btn-login:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(185, 28, 28, 0.4);
+}
+
+.btn-login:active {
+  transform: translateY(0);
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.divider span {
+  padding: 0 15px;
+}
+
+/* Google Button */
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #374151;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.google-btn img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.google-btn:hover {
+  border-color: #b91c1c; /* Aksen merah sedikit saat hover */
+  background: #fff5f5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.google-btn:active {
+  transform: translateY(0);
+}
+
+/* Register Text */
+.register-text {
+  text-align: center;
+  margin-top: 20px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.register-text a {
+  color: #b91c1c;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.register-text a:hover {
+  color: #dc2626;
+  text-decoration: underline;
+}
+
+/* --- Style Notifikasi Error --- */
+.login-alert {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 14px;
+  border: 1px solid #fecaca;
+}
+
+/* --- Style Link Lupa Password --- */
+.forgot-password-link {
+  display: block;
+  text-align: right;
+  margin-top: 8px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #6b7280;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.forgot-password-link:hover {
+  color: #ef4444; /* Merah Brand */
+  text-decoration: underline;
+}
+
+/* --- Style Notifikasi Error (Shared) --- */
+.login-alert {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 14px;
+  border: 1px solid #fecaca;
+}
+
+/* --- Style Link Lupa Password (Shared) --- */
+.forgot-password-link {
+  display: block;
+  text-align: right;
+  margin-top: 8px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #6b7280;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.forgot-password-link:hover {
+  color: #ef4444; /* Merah Brand */
+  text-decoration: underline;
+}
+
+/* Animations */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 35px 25px;
+  }
+
+  .logo-image {
+    width: 38px;
+    height: 38px;
+  }
+
+  .logo-text {
+    font-size: 26px;
+  }
+
+  .welcome-title {
+    font-size: 22px;
+  }
+
+  .role-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Style Tombol Kembali */
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #6b7280; /* Warna abu-abu */
+  cursor: pointer;
+  margin-bottom: 20px; /* Sedikit diperlebar agar tidak terlalu mepet */
+  font-size: 14px;
+  font-weight: 500;
+  align-self: flex-start;
+  padding: 0;
+  transition: color 0.2s ease, transform 0.2s ease; /* Animasi halus */
+}
+
+/* Efek saat mouse diarahkan (Hover) */
+.back-button:hover {
+  color: #374151; /* Warna abu-abu lebih gelap */
+  transform: translateX(-3px); /* Efek geser sedikit ke kiri */
+}
+
+/* Efek saat diklik (Active) */
+.back-button:active {
+  color: #111827;
+  transform: translateX(0);
+}
+/* Tambahkan ini di bagian bawah file LoginShared.css */
+
+.google-login-wrapper {
+  margin-bottom: 20px;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #dadce0;
+  border-radius: 50px; /* Membuat bentuk pill/kapsul */
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3c4043;
+  gap: 10px; /* Jarak antara ikon dan teks */
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.google-btn:hover {
+  background-color: #f7fafe;
+  border-color: #d2e3fc;
+  box-shadow: 0 1px 2px rgba(60,64,67,0.3);
+}
+
+.google-btn img {
+  width: 18px;
+  height: 18px;
+}

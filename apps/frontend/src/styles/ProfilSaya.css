@@ -1,0 +1,96 @@
+.dokter-layout {
+  display: flex;
+  background: #f5f6fa;
+  min-height: 100vh;
+}
+
+.dokter-main {
+  margin-left: 250px;
+  padding: 30px;
+  width: calc(100% - 250px);
+}
+
+/* ======== HEADER ======== */
+.profil-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profil-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.btn-refresh {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ======== CARD ======== */
+.profil-card {
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 16px;
+  margin-top: 22px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  border: 1px solid #f4d7d7;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* ======== FORM GRID ======== */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field.full {
+  grid-column: span 2;
+}
+
+label {
+  font-size: 13px;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+}
+
+/* ======== BUTTONS ======== */
+.btn-wrapper {
+  margin-top: 18px;
+  text-align: right;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}

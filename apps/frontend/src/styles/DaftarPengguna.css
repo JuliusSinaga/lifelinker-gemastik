@@ -1,0 +1,306 @@
+/* Root Variables */
+:root {
+  --primary-red: #d92b2b;
+  --primary-dark: #b91c1c;
+  --text-dark: #1f2937;
+  --text-light: #6b7280;
+  --border-light: #e5e7eb;
+}
+
+/* Wrapper */
+.daftar-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fef2f2 0%, #fff5f5 50%, #fef7f0 100%);
+  padding: 30px 20px;
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Container */
+.daftar-container {
+  max-width: 780px;
+  margin: 0 auto;
+  background: white;
+  padding: 30px 35px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(217, 43, 43, 0.1);
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header */
+.daftar-header {
+  text-align: center;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(217, 43, 43, 0.1);
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.logo-image {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.logo .red { color: var(--primary-red); }
+
+.judul {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--primary-red);
+  margin: 12px 0 6px 0;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  margin-top: 6px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Form Section */
+.form-section {
+  margin-bottom: 22px;
+}
+
+.form-section h3 {
+  font-size: 1rem;
+  font-weight: 800;
+  margin-bottom: 14px;
+  color: var(--text-dark);
+  padding-bottom: 8px;
+  border-bottom: 2px solid rgba(217, 43, 43, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-section h3::before {
+  content: "";
+  width: 3px;
+  height: 18px;
+  background: linear-gradient(135deg, var(--primary-red), var(--primary-dark));
+  border-radius: 2px;
+}
+
+/* Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+/* Form Element */
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: var(--text-dark);
+}
+
+.form-group input,
+.form-group select {
+  border: 2px solid var(--border-light);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--primary-red);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(217, 43, 43, 0.1);
+}
+
+.form-group input::placeholder {
+  color: var(--text-light);
+}
+
+/* ==============================
+   FIXED SUBMIT BUTTON — MERAH
+=================================*/
+.btn-submit {
+  background-color: #e63946 !important;
+  color: white !important;
+  padding: 12px 32px !important;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: block;
+  margin: 30px auto 10px auto !important;
+  transition: 0.25s ease;
+  width: auto !important;
+  box-shadow: 0 4px 15px rgba(230, 57, 70, 0.35);
+}
+
+.btn-submit:hover {
+  background-color: #d62828 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(230, 57, 70, 0.45);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+/* Login Link */
+.login-link {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 0.875rem;
+  color: var(--text-light);
+}
+
+.login-link a {
+  color: var(--primary-red);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+  color: var(--primary-dark);
+}
+
+/* Notifikasi */
+.notif {
+  text-align: center;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  animation: slideDown 0.4s ease-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Style Tombol Kembali (Register) --- */
+.back-button-register {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #6b7280; /* Warna abu-abu */
+  cursor: pointer;
+  margin-bottom: 15px; /* Jarak ke header */
+  font-size: 14px;
+  font-weight: 500;
+  padding: 0;
+  transition: all 0.2s ease;
+  align-self: flex-start; /* Pastikan tombol di kiri */
+}
+
+/* Efek Hover */
+.back-button-register:hover {
+  color: #374151; /* Lebih gelap saat hover */
+  transform: translateX(-3px); /* Geser kiri sedikit */
+}
+
+/* Efek Klik */
+.back-button-register:active {
+  color: #111827;
+  transform: translateX(0);
+}
+
+/* --- Style Tombol Kembali --- */
+.back-button-register {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 0;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
+
+.back-button-register:hover {
+  color: #374151;
+  transform: translateX(-3px);
+}
+
+/* --- Style Divider (Garis ATAU) --- */
+.dp-divider {
+  display: flex;
+  align-items: center;
+  margin: 25px 0 15px;
+  width: 100%;
+}
+
+.dp-divider-line {
+  flex: 1;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dp-divider-text {
+  padding: 0 10px;
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.notif-sukses {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  color: #155724;
+  border: 2px solid #28a745;
+}
+
+.notif-error {
+  background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+  color: #721c24;
+  border: 2px solid #dc3545;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

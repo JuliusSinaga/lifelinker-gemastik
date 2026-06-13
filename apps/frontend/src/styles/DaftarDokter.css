@@ -1,0 +1,351 @@
+/* DaftarDokter.css
+   Cocokkan dengan kelas di DaftarDokter.jsx (dd-*)
+   Layout responsif, tombol merah statis, rapi seperti desain.
+*/
+
+/* ========== Variables ========== */
+:root{
+  --page-bg: #f3f6f8;
+  --card-bg: #ffffff;
+  --muted: #6b7280;
+  --text: #0f1724;
+  --accent: #d63b3b;       /* tombol merah flat */
+  --accent-dark: #bf3333;
+  --card-radius: 14px;
+  --input-radius: 10px;
+  --max-width: 920px;
+  --gap: 16px;
+  --shadow-card: 0 10px 30px rgba(15,23,42,0.06);
+  --shadow-btn: 0 8px 20px rgba(214,59,59,0.25);
+  --font-base: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* ========== Reset / base ========== */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body{
+  margin: 0;
+  font-family: var(--font-base);
+  background: var(--page-bg);
+  color: var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height: 1.35;
+  font-size: 15px;
+}
+
+/* ========== Page wrapper & card ========== */
+.dd-page {
+  display: flex;
+  justify-content: center;
+  padding: 28px 20px;
+  min-height: 100vh;
+  background: var(--page-bg);
+}
+
+.dd-card {
+  width: 100%;
+  max-width: var(--max-width);
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: 28px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+/* ========== Title & info ========== */
+.dd-title {
+  font-size: 30px;
+  font-weight: 800;
+  text-align: center;
+  margin: 0 0 12px;
+}
+
+.dd-info {
+  display:flex;
+  gap:12px;
+  align-items:center;
+  background: #f0fbff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #03435a;
+  margin: 10px 0 20px;
+  border: 1px solid rgba(3,67,90,0.06);
+}
+.dd-info-icon{
+  width:36px;height:36px;min-width:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  background: rgba(3,67,90,0.06); color:#03435a; font-weight:700;
+}
+.dd-info-text { font-size:14px; }
+
+/* ========== Form layout ========== */
+.dd-form { display:flex; flex-direction:column; gap: var(--gap); margin-top: 6px; }
+
+.dd-section-title {
+  font-size: 18px;
+  margin: 6px 0 6px;
+  font-weight:700;
+  color: var(--text);
+  padding-top: 8px;
+  border-top: 1px solid rgba(15,23,36,0.06);
+}
+
+/* Two-column row */
+.dd-row {
+  display:flex;
+  gap: 16px;
+  align-items:flex-start;
+  flex-wrap:wrap;
+}
+
+/* field */
+.dd-field {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-width: 180px;
+}
+.dd-field.full { flex-basis: 100%; min-width: 0; }
+
+/* labels */
+.dd-field label { font-weight:700; font-size:13px; color:var(--text); }
+
+/* inputs */
+.dd-field input[type="text"],
+.dd-field input[type="email"],
+.dd-field input[type="password"],
+.dd-field input[type="tel"],
+.dd-field input[type="date"],
+.dd-field select,
+.dd-field textarea {
+  background: #f7fafb;
+  border: 1px solid rgba(15,23,36,0.04);
+  padding: 12px 14px;
+  border-radius: var(--input-radius);
+  font-size:14px;
+  color: #0f1724;
+  outline:none;
+  transition: box-shadow .12s ease, border-color .12s ease;
+}
+
+/* focus */
+.dd-field input:focus,
+.dd-field select:focus,
+.dd-field textarea:focus{
+  box-shadow: 0 8px 20px rgba(16,24,40,0.06);
+  border-color: rgba(47,128,237,0.18);
+}
+
+/* placeholder */
+.dd-field input::placeholder{ color:#9aa4b2; }
+
+/* date icon spacing */
+.dd-field input[type="date"] { padding-right: 36px; }
+
+/* ========== Submit button (static, no animation) ========== */
+.dd-submit-wrap { display:flex; justify-content:center; margin-top: 6px; }
+
+.dd-submit {
+  display:block;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 800;
+  font-size:16px;
+  text-align:center;
+  width:100%;
+  max-width:420px;
+  margin: 18px auto 0; /* center */
+  padding:14px 24px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  box-shadow: var(--shadow-btn);
+  transition: none !important; /* no animation */
+}
+
+/* hover/active forced no-change */
+.dd-submit:hover,
+.dd-submit:active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: var(--shadow-btn) !important;
+  transform: none !important;
+}
+
+/* disabled */
+.dd-submit:disabled {
+  background: #e2a3a3 !important;
+  box-shadow: none !important;
+  cursor:not-allowed;
+  opacity: 1 !important;
+}
+
+/* ========== Footer link ========== */
+.dd-footer { text-align:center; margin-top: 12px; color: var(--muted); }
+.dd-link { color: var(--accent); font-weight:700; text-decoration:none; }
+
+/* ========== Responsive ========== */
+@media (max-width: 880px) {
+  .dd-row { flex-direction: column; }
+  .dd-title { font-size: 26px; }
+  .dd-card { padding: 18px; border-radius: 12px; }
+  .dd-submit { padding: 12px 18px; font-size: 15px; max-width: 100%; }
+}
+
+@media (max-width: 420px) {
+  .dd-title { font-size: 20px; }
+  .dd-field input { padding: 10px; }
+}
+
+/* ========== Safety overrides ========== */
+/* If some global parent reduces opacity, force button visible */
+.dd-card .dd-submit { opacity:1 !important; filter:none !important; -webkit-filter:none !important; }
+
+
+/* ========== TOMBOL MERAH SOLID FINAL ========== */
+.dd-submit {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin: 25px auto 0;
+
+  padding: 14px 20px;
+  border: none;
+  border-radius: 10px;
+
+  background: #d63333 !important; /* MERAH SOLID */
+  color: #ffffff !important;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+
+  cursor: pointer;
+
+  /* Hilangkan semua animasi */
+  transition: none !important;
+
+  /* Hilangkan efek glow */
+  box-shadow: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* Hover tetap sama — tidak berubah */
+.dd-submit:hover,
+.dd-submit:active {
+  background: #d63333 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Disabled style */
+.dd-submit:disabled {
+  background: #e59a9a !important;
+  color: #ffffff !important;
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
+
+
+/* ======== FIX LINK "Masuk di sini" BIAR MERAH SOLID ======== */
+
+.dd-footer {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 14px;
+  color: #333;
+}
+
+.dd-link {
+  color: #d63333 !important;       /* Merah solid */
+  font-weight: 700;
+  text-decoration: none;
+  opacity: 1 !important;           /* Hilangkan efek redup */
+  filter: none !important;         /* Hilangkan pink glow lama */
+  -webkit-filter: none !important;
+}
+
+.dd-link:hover {
+  color: #b92c2c !important;       /* Merah sedikit lebih gelap */
+  text-decoration: underline;
+}
+
+/* --- Style Tombol Kembali (Daftar Dokter) --- */
+.back-button-dokter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #6b7280; /* Warna abu-abu */
+  cursor: pointer;
+  margin-bottom: 20px; /* Jarak ke judul/notif */
+  font-size: 14px;
+  font-weight: 500;
+  padding: 0;
+  transition: all 0.2s ease;
+  align-self: flex-start; /* Pastikan tombol di kiri */
+}
+
+/* Efek Hover */
+.back-button-dokter:hover {
+  color: #374151; /* Lebih gelap saat hover */
+  transform: translateX(-3px); /* Geser kiri sedikit */
+}
+
+/* Efek Klik */
+.back-button-dokter:active {
+  color: #111827;
+  transform: translateX(0);
+}
+
+/* --- Style Notifikasi --- */
+.dd-notification {
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.dd-notification.success {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+.dd-notification.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* --- Style Divider (Garis ATAU) --- */
+.dd-divider {
+  display: flex;
+  align-items: center;
+  margin: 25px 0 15px;
+}
+
+.dd-divider-line {
+  flex: 1;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dd-divider-text {
+  padding: 0 10px;
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* --- Style State Disabled pada Tombol Submit --- */
+.dd-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #9ca3af; /* Opsional: warna abu-abu saat mati */
+}

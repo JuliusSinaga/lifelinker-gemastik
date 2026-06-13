@@ -1,0 +1,159 @@
+.login-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  justify-content: center;
+  align-items: center;
+}
+
+/* card utama landscape */
+.login-card.landscape {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  width: 850px;
+  max-width: 95%;
+  min-height: 450px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+}
+
+/* isi form login */
+.login-content {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-text {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.logo-text .life {
+  color: #c92a2a;
+}
+
+.logo-text .linker {
+  color: #000;
+}
+
+h2 {
+  margin-bottom: 1.2rem;
+  color: #222;
+  font-size: 1.6rem;
+}
+
+.role-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.role-toggle button {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.role-toggle .active {
+  background-color: #c92a2a;
+  color: white;
+  border: none;
+}
+
+.login-form input {
+  width: 100%;
+  margin-bottom: 0.4rem;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.btn-login {
+  width: 100%;
+  background: #c92a2a;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0.8rem 0;
+}
+
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #ccc;
+}
+
+.divider span {
+  display: block !important;
+  padding: 0 10px;
+  background: transparent;
+}
+
+
+
+.google-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  border: 1px solid #ccc;
+  background: white;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.google-login img {
+  width: 20px;
+}
+
+.register-text {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.register-text a {
+  color: #c92a2a;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+  .login-card.landscape {
+    width: 95%;
+    min-height: auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .login-content {
+    width: 100%;
+  }
+}

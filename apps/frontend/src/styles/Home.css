@@ -1,0 +1,109 @@
+/* Styles for Dashboard Admin page */
+.dashboard-admin{
+  display: flex;
+  height: 100vh;
+  background: #f3f3f3;
+  color: #222;
+  font-family: Inter, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.sidebar{
+  width: 240px;
+  background: #3b3b3b;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+}
+.sidebar .logo{
+  font-weight: 700;
+  font-size: 20px;
+  color: #fff;
+  margin-bottom: 24px;
+}
+.sidebar .logo span{font-weight:400;opacity:0.9;font-size:12px}
+.side-nav{flex:1}
+.nav-item{
+  display:block;
+  padding:12px 14px;
+  margin-bottom:6px;
+  color:#ddd;
+  border-radius:8px;
+  text-decoration:none;
+  cursor:pointer;
+}
+.nav-item:hover{background: rgba(255,255,255,0.03);color:#fff}
+.nav-item.active{background:#d92a2a;color:#fff;font-weight:700}
+.sidebar-bottom{margin-top:12px}
+
+.content{
+  flex:1;
+  padding:28px 36px;
+  overflow:auto;
+}
+.content-header h1{font-size:28px;margin:8px 0 18px}
+
+.metrics-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:16px;
+  margin-bottom:20px;
+}
+.metric-card{
+  background:#fff;
+  border-radius:10px;
+  box-shadow: 0 6px 16px rgba(20,20,20,0.08);
+  display:flex;
+  align-items:center;
+  padding:16px;
+  position:relative;
+  overflow:hidden;
+}
+.metric-accent{width:6px;height:80%;border-radius:6px;margin-right:12px}
+.accent-red{background:#ff6b6b}
+.accent-pink{background:#f7a1a1}
+.accent-rose{background:#ff9a9e}
+.accent-cyan{background:#8bd3ff}
+.accent-purple{background:#caa2ff}
+.accent-orange{background:#ffd59e}
+.metric-body{padding-left:8px}
+.metric-value{font-size:20px;font-weight:800;color:#d43a3a}
+.metric-title{font-size:13px;color:#666;margin-top:6px}
+.metric-sub{font-size:12px;color:#9b9b9b}
+
+.stock-row{margin:12px 0 22px}
+.stock-card{background:#fff;padding:18px;border-radius:10px;box-shadow:0 6px 16px rgba(20,20,20,0.06)}
+.stock-card h3{margin:0 0 12px}
+.blood-types{display:flex;gap:18px}
+.blood-box{flex:1;background:#fff;border-left:6px solid #e94b4b;border-radius:8px;padding:14px;text-align:center}
+.blood-box.green{border-left-color:#1bbf6b}
+.blood-box.orange{border-left-color:#ffb74d}
+.blood-box.blue{border-left-color:#5aa8ff}
+.blood-value{font-weight:800;font-size:20px;color:#d43a3a}
+.blood-label{font-size:12px;color:#777;margin-top:6px}
+
+.lower-grid{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+.card{background:#fff;padding:16px;border-radius:10px;box-shadow:0 6px 16px rgba(20,20,20,0.06)}
+.chart-placeholder{height:160px;display:flex;align-items:center;justify-content:center;color:#aaa;border-radius:6px;background:linear-gradient(180deg,#fff,#fbfbfb);margin-top:10px}
+
+.events-list{margin-top:8px}
+.event-item{background:#f6f6f6;padding:12px;border-radius:8px;margin-bottom:8px}
+.event-title{font-weight:700}
+.event-meta{font-size:12px;color:#666;margin-top:6px}
+
+.notifications-list{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.notification{padding:12px;border-radius:8px;color:#222}
+.notification .notif-title{font-weight:700}
+.notification .notif-msg{font-size:13px;margin-top:6px;color:#333}
+.notification .notif-time{font-size:12px;color:#666;margin-top:8px}
+.notification.blue{background:#d9f0ff}
+.notification.yellow{background:#fff0d9}
+.notification.red{background:#ffd6d6}
+.notification.pink{background:#ffdfe6}
+
+/* Responsive tweaks */
+@media (max-width:1000px){
+  .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  .lower-grid{grid-template-columns:1fr}
+  .sidebar{display:none}
+}

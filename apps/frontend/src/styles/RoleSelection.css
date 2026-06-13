@@ -1,0 +1,328 @@
+/* === Struktur Dasar Halaman === */
+.role-selection-root {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fef2f2 0%, #fff 50%, #fef2f2 100%);
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.role-main-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.role-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* === Header === */
+.role-header {
+  text-align: center;
+  margin-bottom: 50px;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.role-logo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.role-logo-image {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.lifelinker-logo {
+  font-size: 36px;
+  font-weight: 800;
+  color: #222;
+  margin: 0;
+}
+
+.red {
+  color: #b91c1c;
+}
+
+.welcome-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 20px 0 10px;
+  color: #1f2937;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.subtitle {
+  color: #6b7280;
+  font-size: 16px;
+  margin-bottom: 30px;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+/* === Animations === */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* === Cards === */
+.role-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.role-card {
+  background: white;
+  border-radius: 20px;
+  padding: 35px 25px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease;
+  border: 2px solid transparent;
+  animation: scaleIn 0.6s ease-out both;
+}
+
+.role-card:nth-child(1) {
+  animation-delay: 0.3s;
+}
+
+.role-card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.role-card:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+.role-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(185, 28, 28, 0.15);
+  border-color: #b91c1c;
+}
+
+.role-card svg {
+  transition: transform 0.3s ease;
+}
+
+.role-card:hover svg {
+  transform: scale(1.1);
+}
+
+.role-card h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 15px;
+  color: #1f2937;
+}
+
+.role-card p {
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 15px 0 25px;
+  min-height: 60px;
+}
+
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn-red {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
+}
+
+.btn-red:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(185, 28, 28, 0.4);
+}
+
+.btn-red:active {
+  transform: translateY(0);
+}
+
+.btn-gray {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 2px solid #e5e7eb;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-gray:hover {
+  background-color: white;
+  border-color: #b91c1c;
+  color: #b91c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* === Footer === */
+/* === Footer === */
+.role-footer {
+  margin-top: auto; /* biar nempel di bawah */
+  width: 100%;
+  background-color: #ddd;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 25px 0;
+  font-size: 14px;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.footer-left,
+.footer-middle,
+.footer-right {
+  flex: 1;
+  min-width: 220px;
+  margin: 10px 0;
+}
+
+.footer-logo {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* navigasi footer */
+.footer-middle h4 {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.footer-middle p {
+  margin: 0;
+  color: #000;
+  line-height: 1.6;
+}
+
+/* kasih pemisah antar link navigasi */
+.footer-middle p span {
+  color: #000;
+}
+
+.footer-middle p span::after {
+  content: " | ";
+}
+
+.footer-middle p span:last-child::after {
+  content: "";
+}
+
+/* social icon */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 8px;
+}
+
+.social-icons i {
+  font-size: 18px;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.social-icons i:hover {
+  color: #b91c1c;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .role-logo-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .lifelinker-logo {
+    font-size: 28px;
+  }
+
+  .welcome-title {
+    font-size: 26px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .role-card-container {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+
+  .role-card p {
+    min-height: auto;
+  }
+}
