@@ -1,19 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import "../../styles/KonsultasiPage.css"; 
-import {
-  FaPaperPlane,
-  FaVideo,
-  FaEnvelope,
-  FaQuestionCircle,
-  FaUserMd,
-  FaSearch,
-  FaPlus,
-  FaTimes,
-  FaUser
-} from "react-icons/fa";
 import Header from "../../components/Header";
 import axiosClient from "../../service/axiosClient";
+import Icon from "../../components/core/Icon";
+import Button from "../../components/core/Button";
+import Card from "../../components/core/Card";
+import Input from "../../components/core/Input";
 
 const KonsultasiPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -257,216 +250,221 @@ const KonsultasiPage = () => {
     <div className="konsultasi-page">
       <Header showUserProfile={isLoggedIn} />
 
-      <div className="konsultasi-container">
+      <div className="konsultasi-container" style={{ backgroundColor: "var(--color-bg-page)" }}>
         {/* Hero Section */}
-        <div className="hero-section">
-          <img src="/images/Konsultasi.jpg" alt="Konsultasi" className="hero-image" />
-          <div className="hero-overlay">
-            <h1>Layanan Konsultasi Kesehatan</h1>
-            <p>Dapatkan jawaban medis terpercaya langsung dari dokter ahli kami.</p>
+        <div className="hero-section" style={{ position: "relative", height: "300px", overflow: "hidden", borderRadius: "0 0 var(--radius-large) var(--radius-large)", marginBottom: "40px" }}>
+          <img src="/images/Konsultasi.jpg" alt="Konsultasi" className="hero-image" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <div className="hero-overlay" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", color: "white", textAlign: "center", padding: "20px" }}>
+            <h1 style={{ fontFamily: "var(--font-family-brand)", fontSize: "2.5rem", marginBottom: "16px" }}>Layanan Konsultasi Kesehatan</h1>
+            <p style={{ fontSize: "1.2rem", maxWidth: "600px" }}>Dapatkan jawaban medis terpercaya langsung dari dokter ahli kami.</p>
           </div>
         </div>
 
-        <div className="consultation-content">
+        <div className="consultation-content" style={{ display: "grid", gridTemplateColumns: "1fr", gap: "32px", padding: "0 20px 40px", maxWidth: "1200px", margin: "0 auto" }}>
           {/* BAGIAN KIRI: Chat & Video */}
-          <div className="left-section">
+          <div className="left-section" style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
             
             {/* Live Chat Component */}
-            <div className="chat-section">
-              <div className="section-header">
-                <FaUserMd className="section-icon" />
-                <h2>Live Chat dengan Dokter</h2>
+            <Card variant="standard" className="chat-section" style={{ padding: 0, overflow: "hidden", display: "flex", flexDirection: "column", height: "600px" }}>
+              <div className="section-header" style={{ padding: "20px", backgroundColor: "var(--color-surface-background)", borderBottom: "1px solid var(--color-border-divider)", display: "flex", alignItems: "center", gap: "12px" }}>
+                <Icon icon="mdi:doctor" className="section-icon" style={{ fontSize: "24px", color: "var(--color-brand-primary)" }} />
+                <h2 style={{ margin: 0, fontSize: "1.5rem" }}>Live Chat dengan Dokter</h2>
               </div>
 
               {isLoggedIn ? (
-                <div className="chat-interface-container">
+                <div className="chat-interface-container" style={{ display: "flex", flex: 1, overflow: "hidden" }}>
                   {/* Sidebar: List Chat */}
-                  <div className="chat-sidebar">
-                    <div className="sidebar-header">
-                      <h4>Percakapan</h4>
-                      <button className="new-chat-icon-btn" onClick={handleOpenNewChatModal} title="Mulai Baru">
-                        <FaPlus />
-                      </button>
+                  <div className="chat-sidebar" style={{ width: "300px", borderRight: "1px solid var(--color-border-divider)", display: "flex", flexDirection: "column" }}>
+                    <div className="sidebar-header" style={{ padding: "16px", borderBottom: "1px solid var(--color-border-divider)", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "var(--color-surface-background)" }}>
+                      <h4 style={{ margin: 0 }}>Percakapan</h4>
+                      <Button variant="ghost" onClick={handleOpenNewChatModal} title="Mulai Baru" style={{ padding: "8px", borderRadius: "50%" }}>
+                        <Icon icon="mdi:plus" />
+                      </Button>
                     </div>
-                    <div className="chat-list-scroll">
+                    <div className="chat-list-scroll" style={{ flex: 1, overflowY: "auto" }}>
                       {chatSessions.length > 0 ? (
                         chatSessions.map((session) => (
                           <div
                             key={session.id}
                             className={`chat-list-item ${activeConsultationId === session.id ? "active" : ""}`}
                             onClick={() => handleSelectChat(session.id)}
+                            style={{ padding: "16px", borderBottom: "1px solid var(--color-border-divider)", display: "flex", gap: "12px", cursor: "pointer", backgroundColor: activeConsultationId === session.id ? "var(--color-surface-background)" : "transparent", transition: "background-color 0.2s" }}
                           >
-                            <div className="chat-item-avatar">
+                            <div className="chat-item-avatar" style={{ position: "relative", width: "48px", height: "48px", borderRadius: "50%", backgroundColor: "var(--color-brand-primary)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", fontWeight: "bold", overflow: "hidden", flexShrink: 0 }}>
                               {session.avatar ? (
-                                <img src={session.avatar} alt="Doc" onError={(e) => (e.target.style.display = 'none')} />
+                                <img src={session.avatar} alt="Doc" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => (e.target.style.display = 'none')} />
                               ) : (
                                 <div className="avatar-initial">{session.doctorName.charAt(0)}</div>
                               )}
-                              <div className="online-status"></div>
+                              <div className="online-status" style={{ position: "absolute", bottom: "2px", right: "2px", width: "12px", height: "12px", borderRadius: "50%", backgroundColor: "var(--color-status-success)", border: "2px solid var(--color-surface-card)" }}></div>
                             </div>
-                            <div className="chat-item-info">
-                              <h5>{session.doctorName}</h5>
-                              <p>{session.lastMessage}</p>
+                            <div className="chat-item-info" style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                              <h5 style={{ margin: "0 0 4px 0", fontSize: "14px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{session.doctorName}</h5>
+                              <p style={{ margin: 0, fontSize: "12px", color: "var(--color-text-secondary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{session.lastMessage}</p>
                             </div>
                           </div>
                         ))
                       ) : (
-                        <div className="empty-chat-list">
-                          <p>Belum ada percakapan.</p>
-                          <button className="btn-start-chat" onClick={handleOpenNewChatModal}>
+                        <div className="empty-chat-list" style={{ padding: "32px 16px", textAlign: "center", color: "var(--color-text-secondary)" }}>
+                          <p style={{ marginBottom: "16px" }}>Belum ada percakapan.</p>
+                          <Button variant="primary" onClick={handleOpenNewChatModal}>
                             + Mulai Konsultasi
-                          </button>
+                          </Button>
                         </div>
                       )}
                     </div>
                   </div>
 
                   {/* Window: Isi Chat */}
-                  <div className="chat-window">
+                  <div className="chat-window" style={{ flex: 1, display: "flex", flexDirection: "column", backgroundColor: "var(--color-surface-background)" }}>
                     {activeSessionData ? (
-                      <div className="chat-window-header">
-                        <div className="header-details">
-                          {activeSessionData.avatar ? (
-                            <img src={activeSessionData.avatar} alt="Doc" onError={(e) => (e.target.style.display = 'none')} />
-                          ) : (
-                            <div className="avatar-initial header">{activeSessionData.doctorName.charAt(0)}</div>
-                          )}
+                      <div className="chat-window-header" style={{ padding: "16px 24px", borderBottom: "1px solid var(--color-border-divider)", backgroundColor: "var(--color-surface-card)", display: "flex", alignItems: "center", gap: "16px" }}>
+                        <div className="header-details" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                          <div style={{ width: "40px", height: "40px", borderRadius: "50%", backgroundColor: "var(--color-brand-primary)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", overflow: "hidden" }}>
+                            {activeSessionData.avatar ? (
+                              <img src={activeSessionData.avatar} alt="Doc" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => (e.target.style.display = 'none')} />
+                            ) : (
+                              <div className="avatar-initial header">{activeSessionData.doctorName.charAt(0)}</div>
+                            )}
+                          </div>
                           <div>
-                            <h4>{activeSessionData.doctorName}</h4>
-                            <span>{activeSessionData.topic}</span>
+                            <h4 style={{ margin: "0 0 4px 0" }}>{activeSessionData.doctorName}</h4>
+                            <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{activeSessionData.topic}</span>
                           </div>
                         </div>
                       </div>
                     ) : (
-                      <div className="chat-window-header empty">
-                        <h4>Pilih dokter untuk memulai chat</h4>
+                      <div className="chat-window-header empty" style={{ padding: "16px 24px", borderBottom: "1px solid var(--color-border-divider)", backgroundColor: "var(--color-surface-card)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <h4 style={{ margin: 0, color: "var(--color-text-secondary)" }}>Pilih dokter untuk memulai chat</h4>
                       </div>
                     )}
 
-                    <div className="chat-messages-area">
+                    <div className="chat-messages-area" style={{ flex: 1, overflowY: "auto", padding: "24px", display: "flex", flexDirection: "column", gap: "16px" }}>
                       {messages.length > 0 ? (
                         messages.map((msg, index) => (
-                          <div key={index} className={`chat-bubble ${msg.sender}`}>
+                          <div key={index} className={`chat-bubble ${msg.sender}`} style={{ display: "flex", alignItems: "flex-end", gap: "8px", alignSelf: msg.sender === "user" ? "flex-end" : "flex-start", flexDirection: msg.sender === "user" ? "row-reverse" : "row", maxWidth: "80%" }}>
                             {msg.avatar ? (
-                                <div className="bubble-avatar">
-                                    <img src={msg.avatar} alt="Sender" onError={(e) => (e.target.style.display = 'none')} />
+                                <div className="bubble-avatar" style={{ width: "32px", height: "32px", borderRadius: "50%", overflow: "hidden", flexShrink: 0 }}>
+                                    <img src={msg.avatar} alt="Sender" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => (e.target.style.display = 'none')} />
                                 </div>
                             ) : (
-                                <div className="bubble-avatar-placeholder">
-                                    {msg.sender === 'user' ? <FaUser /> : <FaUserMd />}
+                                <div className="bubble-avatar-placeholder" style={{ width: "32px", height: "32px", borderRadius: "50%", backgroundColor: "var(--color-border-input)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                                    <Icon icon={msg.sender === 'user' ? "mdi:account" : "mdi:doctor"} />
                                 </div>
                             )}
                             
-                            <div className="bubble-content">
-                              <p>{msg.message}</p>
+                            <div className="bubble-content" style={{ padding: "12px 16px", borderRadius: "var(--radius-large)", backgroundColor: msg.sender === "user" ? "var(--color-brand-primary)" : "white", color: msg.sender === "user" ? "white" : "var(--color-text-primary)", border: msg.sender !== "user" ? "1px solid var(--color-border-divider)" : "none", borderBottomRightRadius: msg.sender === "user" ? "4px" : "var(--radius-large)", borderBottomLeftRadius: msg.sender !== "user" ? "4px" : "var(--radius-large)" }}>
+                              <p style={{ margin: 0, lineHeight: 1.5, wordBreak: "break-word" }}>{msg.message}</p>
                             </div>
                           </div>
                         ))
                       ) : (
-                        <div className="empty-chat-placeholder">
-                          <FaPaperPlane className="placeholder-icon" />
+                        <div className="empty-chat-placeholder" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "var(--color-text-secondary)", gap: "16px" }}>
+                          <Icon icon="mdi:send" className="placeholder-icon" style={{ fontSize: "48px", color: "var(--color-border-divider)" }} />
                           <p>Sapa dokter untuk memulai konsultasi!</p>
                         </div>
                       )}
                       <div ref={chatEndRef} />
                     </div>
 
-                    <form className="chat-input-area" onSubmit={handleChatSubmit}>
-                      <input
+                    <form className="chat-input-area" onSubmit={handleChatSubmit} style={{ padding: "16px", backgroundColor: "var(--color-surface-card)", borderTop: "1px solid var(--color-border-divider)", display: "flex", gap: "12px" }}>
+                      <Input
                         type="text"
                         placeholder="Ketik pertanyaan Anda..."
                         value={chatMessage}
                         onChange={(e) => setChatMessage(e.target.value)}
                         disabled={isSending}
+                        style={{ flex: 1 }}
                       />
-                      <button type="submit" disabled={isSending}>
-                        <FaPaperPlane />
-                      </button>
+                      <Button type="submit" variant="primary" disabled={isSending || !chatMessage.trim()} style={{ width: "48px", height: "48px", padding: 0, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%" }}>
+                        <Icon icon="mdi:send" />
+                      </Button>
                     </form>
                   </div>
                 </div>
               ) : (
-                <div className="login-prompt">
-                  <p>
-                    Silakan <Link to="/login-pengguna" className="login-link">Login</Link> untuk memulai chat dengan dokter.
+                <div className="login-prompt" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px" }}>
+                  <p style={{ textAlign: "center", color: "var(--color-text-secondary)" }}>
+                    Silakan <Link to="/login-pengguna" className="login-link" style={{ color: "var(--color-brand-primary)", fontWeight: "bold", textDecoration: "none" }}>Login</Link> untuk memulai chat dengan dokter.
                   </p>
                 </div>
               )}
-            </div>
+            </Card>
 
             {/* Video Sessions */}
-            <div className="video-session-section">
-              <div className="section-header">
-                <FaVideo className="section-icon" />
-                <h2>Jadwal Konsultasi Video</h2>
+            <Card variant="standard" className="video-session-section" style={{ padding: "32px" }}>
+              <div className="section-header" style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
+                <Icon icon="mdi:video" className="section-icon" style={{ fontSize: "24px", color: "var(--color-brand-primary)" }} />
+                <h2 style={{ margin: 0, fontSize: "1.5rem" }}>Jadwal Konsultasi Video</h2>
               </div>
-              <div className="video-sessions-list">
+              <div className="video-sessions-list" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {videoSessions.length > 0 ? (
                   videoSessions.map((session) => (
-                    <div key={session.id} className="video-session-card">
-                      <div className="session-info">
-                        <div className="session-avatar">
+                    <div key={session.id} className="video-session-card" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px", border: "1px solid var(--color-border-divider)", borderRadius: "var(--radius-standard)", flexWrap: "wrap", gap: "16px" }}>
+                      <div className="session-info" style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                        <div className="session-avatar" style={{ width: "48px", height: "48px", borderRadius: "50%", backgroundColor: "var(--color-brand-primary)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", overflow: "hidden", flexShrink: 0 }}>
                           {session.avatar ? (
-                            <img src={session.avatar} alt="Doc" onError={(e) => (e.target.src = "/images/default-doc.png")} />
+                            <img src={session.avatar} alt="Doc" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => (e.target.src = "/images/default-doc.png")} />
                           ) : (
                             <div className="avatar-initial">{session.doctor.charAt(0)}</div>
                           )}
                         </div>
                         <div className="session-details">
-                          <div className="doctor-name">{session.doctor}</div>
-                          <div className="session-topic">{session.topic}</div>
-                          <div className="session-time">
+                          <div className="doctor-name" style={{ fontWeight: "bold", marginBottom: "4px" }}>{session.doctor}</div>
+                          <div className="session-topic" style={{ fontSize: "14px", color: "var(--color-text-secondary)", marginBottom: "4px" }}>{session.topic}</div>
+                          <div className="session-time" style={{ fontSize: "12px", color: "var(--color-brand-primary)", fontWeight: "500" }}>
                             📅 {session.date} • ⏰ {session.time}
                           </div>
                         </div>
                       </div>
-                      <button
+                      <Button
+                        variant={session.status === "available" ? "primary" : "secondary"}
                         className={`session-btn ${session.status}`}
                         disabled={session.status === "full"}
                         onClick={() => handleJoinVideo(session.link)}
                       >
                         {session.status === "available" ? "Gabung" : "Selesai"}
-                      </button>
+                      </Button>
                     </div>
                   ))
                 ) : (
-                  <p className="empty-text">Belum ada jadwal sesi video.</p>
+                  <p className="empty-text" style={{ textAlign: "center", color: "var(--color-text-secondary)", padding: "20px" }}>Belum ada jadwal sesi video.</p>
                 )}
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* BAGIAN KANAN: FAQ & Email */}
-          <div className="right-section">
-            <div className="faq-section">
-              <div className="section-header">
-                <FaQuestionCircle className="section-icon" />
-                <h2>FAQ</h2>
+          <div className="right-section" style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+            <Card variant="standard" className="faq-section" style={{ padding: "32px" }}>
+              <div className="section-header" style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
+                <Icon icon="mdi:help-circle" className="section-icon" style={{ fontSize: "24px", color: "var(--color-brand-primary)" }} />
+                <h2 style={{ margin: 0, fontSize: "1.5rem" }}>FAQ</h2>
               </div>
-              <div className="faq-list">
+              <div className="faq-list" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {faqs.map((faq) => (
-                  <div key={faq.id} className="faq-item">
-                    <div className="faq-question">{faq.question}</div>
-                    <div className="faq-answer">{faq.answer}</div>
+                  <div key={faq.id} className="faq-item" style={{ paddingBottom: "16px", borderBottom: faq.id !== faqs.length ? "1px solid var(--color-border-divider)" : "none" }}>
+                    <div className="faq-question" style={{ fontWeight: "bold", marginBottom: "8px" }}>{faq.question}</div>
+                    <div className="faq-answer" style={{ color: "var(--color-text-secondary)", lineHeight: 1.5, fontSize: "14px" }}>{faq.answer}</div>
                   </div>
                 ))}
               </div>
-            </div>
+            </Card>
 
             {/* Email Consultation Widget (UPDATED) */}
-            <div className="email-consultation">
-              <div className="section-header">
-                <FaEnvelope className="section-icon" />
-                <h2>Konsultasi via Email</h2>
+            <Card variant="standard" className="email-consultation" style={{ padding: "32px" }}>
+              <div className="section-header" style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+                <Icon icon="mdi:email" className="section-icon" style={{ fontSize: "24px", color: "var(--color-brand-primary)" }} />
+                <h2 style={{ margin: 0, fontSize: "1.5rem" }}>Konsultasi via Email</h2>
               </div>
-              <div className="email-info-box">
-                <p>Tidak punya waktu live chat? Kirimkan pertanyaan Anda, tim medis kami akan membalas via email.</p>
-                <span className="response-time">⏱️ Respon: 30-60 menit (Jam Kerja)</span>
+              <div className="email-info-box" style={{ backgroundColor: "var(--color-surface-background)", padding: "16px", borderRadius: "var(--radius-standard)", marginBottom: "24px", fontSize: "14px", color: "var(--color-text-secondary)" }}>
+                <p style={{ margin: "0 0 8px 0" }}>Tidak punya waktu live chat? Kirimkan pertanyaan Anda, tim medis kami akan membalas via email.</p>
+                <span className="response-time" style={{ fontWeight: "bold", color: "var(--color-status-warning)" }}>⏱️ Respon: 30-60 menit (Jam Kerja)</span>
               </div>
               
-              <form className="email-form" onSubmit={handleEmailSubmit}>
+              <form className="email-form" onSubmit={handleEmailSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 <div className="ec-form-group">
-                    <input
+                    <Input
                     type="email"
                     placeholder="Email Anda (contoh@email.com)"
                     value={emailForm.email}
@@ -483,62 +481,70 @@ const KonsultasiPage = () => {
                     className="question-textarea"
                     rows="4"
                     required
+                    style={{ width: "100%", padding: "12px 16px", borderRadius: "var(--radius-standard)", border: "1px solid var(--color-border-input)", fontFamily: "inherit", resize: "vertical", minHeight: "100px" }}
                     ></textarea>
                 </div>
                 
-                <button 
+                <Button 
                     type="submit" 
+                    variant="primary"
                     className={`submit-email-btn ${emailStatus}`}
                     disabled={emailStatus === 'sending'}
+                    fullWidth
+                    style={{
+                      backgroundColor: emailStatus === 'success' ? 'var(--color-status-success)' : undefined,
+                      borderColor: emailStatus === 'success' ? 'var(--color-status-success)' : undefined,
+                    }}
                 >
                     {emailStatus === 'sending' ? 'Mengirim...' : 
                      emailStatus === 'success' ? 'Terikirim! ✅' : 
                      'Kirim Pertanyaan'}
-                </button>
+                </Button>
               </form>
-            </div>
+            </Card>
           </div>
         </div>
       </div>
 
       {/* --- MODAL PILIH DOKTER BARU --- */}
       {showNewChatModal && (
-        <div className="modal-overlay" onClick={() => setShowNewChatModal(false)}>
-          <div className="modal-box select-doctor-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Mulai Konsultasi Baru</h3>
-              <button className="close-icon" onClick={() => setShowNewChatModal(false)}>
-                <FaTimes />
-              </button>
+        <div className="modal-overlay" onClick={() => setShowNewChatModal(false)} style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+          <div className="modal-box select-doctor-modal" onClick={(e) => e.stopPropagation()} style={{ backgroundColor: "var(--color-surface-card)", width: "100%", maxWidth: "500px", borderRadius: "var(--radius-large)", overflow: "hidden", display: "flex", flexDirection: "column", maxHeight: "80vh" }}>
+            <div className="modal-header" style={{ padding: "20px 24px", borderBottom: "1px solid var(--color-border-divider)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 style={{ margin: 0 }}>Mulai Konsultasi Baru</h3>
+              <Button variant="ghost" className="close-icon" onClick={() => setShowNewChatModal(false)} style={{ padding: "8px", borderRadius: "50%" }}>
+                <Icon icon="mdi:close" />
+              </Button>
             </div>
 
-            <div className="search-doctor-container">
-              <FaSearch className="search-icon" />
-              <input
+            <div className="search-doctor-container" style={{ padding: "20px 24px", borderBottom: "1px solid var(--color-border-divider)" }}>
+              <Input
                 type="text"
                 placeholder="Cari nama dokter atau spesialis..."
                 value={searchDoctorTerm}
                 onChange={(e) => setSearchDoctorTerm(e.target.value)}
+                icon="mdi:magnify"
               />
             </div>
 
-            <div className="available-doctors-list">
+            <div className="available-doctors-list" style={{ overflowY: "auto", padding: "16px 24px" }}>
               {filteredDoctors.length > 0 ? (
                 filteredDoctors.map((doc) => (
-                  <div key={doc.id} className="doctor-card-item">
-                    <div className="doc-card-avatar">
+                  <div key={doc.id} className="doctor-card-item" style={{ display: "flex", alignItems: "center", gap: "16px", padding: "16px 0", borderBottom: "1px solid var(--color-border-divider)" }}>
+                    <div className="doc-card-avatar" style={{ width: "48px", height: "48px", borderRadius: "50%", backgroundColor: "var(--color-brand-primary)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", overflow: "hidden", flexShrink: 0 }}>
                       {doc.photo_url ? (
-                        <img src={doc.photo_url} alt="Doc" onError={(e) => (e.target.style.display = 'none')} />
+                        <img src={doc.photo_url} alt="Doc" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => (e.target.style.display = 'none')} />
                       ) : (
                         <div className="avatar-initial">{doc.name.charAt(0)}</div>
                       )}
                     </div>
-                    <div className="doc-card-info" onClick={() => startNewChat(doc)}>
-                      <h4>{doc.name}</h4>
-                      <p>{doc.specialization || "Dokter Umum"}</p>
-                      <span className="rs-badge">{doc.hospital || "RS Mitra"}</span>
+                    <div className="doc-card-info" onClick={() => startNewChat(doc)} style={{ flex: 1, cursor: "pointer" }}>
+                      <h4 style={{ margin: "0 0 4px 0" }}>{doc.name}</h4>
+                      <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--color-text-secondary)" }}>{doc.specialization || "Dokter Umum"}</p>
+                      <span className="rs-badge" style={{ fontSize: "12px", padding: "2px 8px", backgroundColor: "var(--color-surface-background)", borderRadius: "12px", border: "1px solid var(--color-border-divider)" }}>{doc.hospital || "RS Mitra"}</span>
                     </div>
-                    <button
+                    <Button
+                      variant="primary"
                       className="select-chat-btn"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -547,11 +553,11 @@ const KonsultasiPage = () => {
                       disabled={isCreatingChat}
                     >
                       {isCreatingChat ? "Memuat..." : "Chat"}
-                    </button>
+                    </Button>
                   </div>
                 ))
               ) : (
-                <p className="no-doc">Tidak ada dokter ditemukan.</p>
+                <p className="no-doc" style={{ textAlign: "center", color: "var(--color-text-secondary)", padding: "20px" }}>Tidak ada dokter ditemukan.</p>
               )}
             </div>
           </div>

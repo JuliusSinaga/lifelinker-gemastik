@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/LupaPassword.css";
 import axiosClient from "../service/axiosClient";
-import { FaArrowLeft, FaEnvelope } from "react-icons/fa";
+import Icon from "../components/core/Icon";
 
 export default function LupaPassword() {
   const [email, setEmail] = useState("");
@@ -39,7 +39,7 @@ export default function LupaPassword() {
       <div className="lp-card">
         {/* Tombol Kembali */}
         <button className="lp-back-btn" onClick={() => navigate("/login-pengguna")}>
-          <FaArrowLeft /> Kembali ke Login
+          <Icon icon="mdi:arrow-left" /> Kembali ke Login
         </button>
 
         <div className="lp-header">
@@ -60,7 +60,7 @@ export default function LupaPassword() {
           <div className="lp-form-group">
             <label htmlFor="email">Email</label>
             <div className="lp-input-wrapper">
-              <FaEnvelope className="lp-input-icon" />
+              <Icon icon="mdi:email" className="lp-input-icon" />
               <input
                 type="email"
                 id="email"

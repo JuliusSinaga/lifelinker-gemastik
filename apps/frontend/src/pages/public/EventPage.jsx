@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../../styles/EventPage.css";
-import {
-  FaCalendarAlt,
-  FaMapMarkerAlt,
-  FaChevronRight,
-  FaUsers,
-  FaFilter,
-  FaCalendarCheck,
-} from "react-icons/fa";
 import Header from "../../components/Header";
-import axiosClient from "../../service/axiosClient"; // 1. Import axiosClient
+import axiosClient from "../../service/axiosClient"; 
+import Icon from "../../components/core/Icon";
+import Button from "../../components/core/Button";
+import Card from "../../components/core/Card";
 
 // Data Dummy untuk Statistik Partisipasi (Belum ada endpoint khusus di backend)
 const participationStats = {
@@ -39,7 +34,6 @@ export default function EventPage() {
   // 1. Cek Login
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const userRole = localStorage.getItem("role");
     if (token) {
       setIsLoggedIn(true);
     }
@@ -96,87 +90,88 @@ export default function EventPage() {
       <Header showUserProfile={isLoggedIn} />
 
       {/* Hero Section */}
-      <section className="event-hero">
+      <section className="event-hero" style={{ backgroundColor: 'var(--color-brand-primary)', padding: '60px 5% 80px', textAlign: 'center' }}>
         <div className="event-hero-content">
-          <h1>
-            <FaCalendarCheck style={{ fontSize: "2rem", marginRight: "10px" }} />
+          <h1 style={{ fontFamily: 'var(--font-family-brand)', color: 'white', fontSize: '36px', marginBottom: '16px' }}>
+            <Icon icon="mdi:calendar-check" width="40" style={{ marginRight: "10px", verticalAlign: 'middle' }} />
             Event Donor Darah
           </h1>
-          <p>
+          <p style={{ fontFamily: 'var(--font-family-primary)', color: 'white', opacity: 0.9, fontSize: '18px' }}>
             Ikuti berbagai kegiatan donor darah dan aksi sosial di sekitar Anda
           </p>
         </div>
       </section>
 
       {/* Main Content */}
-      <main className="event-main">
+      <main className="event-main" style={{ backgroundColor: 'var(--color-bg-page)' }}>
         {loading ? (
-          <div style={{textAlign: "center", padding: "50px"}}>Memuat Event...</div>
+          <div style={{textAlign: "center", padding: "50px", fontFamily: 'var(--font-family-primary)', color: 'var(--color-text-secondary)'}}>Memuat Event...</div>
         ) : (
           <div className="event-container">
             
             {/* Featured Event Section */}
             {featuredEvent && (
               <section className="featured-event-section">
-                <h2>
-                  Event <span className="highlight">Unggulan</span>
+                <h2 style={{ fontFamily: 'var(--font-family-brand)' }}>
+                  Event <span className="highlight" style={{ color: 'var(--color-brand-primary)' }}>Unggulan</span>
                 </h2>
 
-                <div className="featured-event-card">
-                  <div className="featured-event-image">
+                <Card variant="standard" className="featured-event-card" style={{ display: 'flex', overflow: 'hidden', padding: 0 }}>
+                  <div className="featured-event-image" style={{ flex: 1 }}>
                     <img
-                      src={process.env.PUBLIC_URL + `/images/${featuredEvent.image.replace("/images/", "")}`} // Handle path format
+                      src={process.env.PUBLIC_URL + `/images/${featuredEvent.image.replace("/images/", "")}`}
                       alt={featuredEvent.title}
                       onError={(e) => {e.target.onerror = null; e.target.src="/images/bg beranda awal.jpg"}}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   </div>
-                  <div className="featured-event-content">
-                    <h3>{featuredEvent.title}</h3>
+                  <div className="featured-event-content" style={{ flex: 1, padding: '32px', display: 'flex', flexDirection: 'column' }}>
+                    <h3 style={{ fontFamily: 'var(--font-family-primary)', margin: '0 0 16px 0' }}>{featuredEvent.title}</h3>
                     {featuredEvent.description && (
-                      <p style={{marginBottom: '15px', color: '#555'}}>{featuredEvent.description}</p>
+                      <p style={{marginBottom: '24px', color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>{featuredEvent.description}</p>
                     )}
 
-                    <div className="event-details">
-                      <div className="event-detail-item">
-                        <FaCalendarAlt className="event-icon" />
+                    <div className="event-details" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
+                      <div className="event-detail-item" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <Icon icon="mdi:calendar-blank" width="20" style={{ color: 'var(--color-brand-primary)' }} />
                         <span>
                           <strong>Tanggal:</strong> {featuredEvent.date}
                         </span>
                       </div>
-                      <div className="event-detail-item">
-                        <FaMapMarkerAlt className="event-icon" />
+                      <div className="event-detail-item" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <Icon icon="mdi:map-marker" width="20" style={{ color: 'var(--color-brand-primary)' }} />
                         <span>
                           <strong>Lokasi:</strong> {featuredEvent.location}
                         </span>
                       </div>
                     </div>
 
-                    <Link
-                      to={`/event/${featuredEvent.id}`}
-                      className="featured-event-button"
-                    >
-                      Lihat Detail & Daftar <FaChevronRight />
-                    </Link>
+                    <div style={{ marginTop: 'auto' }}>
+                      <Button as={Link} to={`/event/${featuredEvent.id}`} variant="primary">
+                        Lihat Detail & Daftar <Icon icon="mdi:chevron-right" width="20" style={{ marginLeft: '8px' }} />
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                </Card>
               </section>
             )}
 
             {/* Upcoming Events Section */}
-            <section className="upcoming-events-section">
-              <h2>
-                Semua Event <span className="highlight">Mendatang</span>
-              </h2>
+            <section className="upcoming-events-section" style={{ marginTop: '64px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+                <h2 style={{ fontFamily: 'var(--font-family-brand)', margin: 0 }}>
+                  Semua Event <span className="highlight" style={{ color: 'var(--color-brand-primary)' }}>Mendatang</span>
+                </h2>
 
-              {/* Filter */}
-              <div className="events-filter">
-                <div className="filter-item">
-                  <FaFilter className="filter-icon" />
-                  <span>Filter Lokasi:</span>
+                {/* Filter */}
+                <Card variant="standard" style={{ padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '16px', boxShadow: 'var(--shadow-base)' }}>
+                  <Icon icon="mdi:filter" width="20" style={{ color: 'var(--color-text-primary)' }} />
+                  <span style={{ fontWeight: 'bold' }}>Filter Lokasi:</span>
                   <select
                     className="filter-dropdown"
                     value={selectedFilter}
                     onChange={(e) => setSelectedFilter(e.target.value)}
+                    style={{ padding: '8px 12px', borderRadius: 'var(--radius-standard)', border: '1px solid var(--color-border-input)', backgroundColor: 'var(--color-surface-card)', outline: 'none' }}
                   >
                     {filterOptions.map((option) => (
                       <option key={option} value={option}>
@@ -184,47 +179,45 @@ export default function EventPage() {
                       </option>
                     ))}
                   </select>
-                </div>
+                </Card>
               </div>
 
-              <div className="upcoming-events-grid">
+              <div className="upcoming-events-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
                 {upcomingEvents.length > 0 ? (
                   upcomingEvents.map((event) => (
-                    <div key={event.id} className="upcoming-event-card">
-                      <div className="upcoming-event-image">
+                    <Card key={event.id} variant="standard" className="upcoming-event-card" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                      <div className="upcoming-event-image" style={{ height: '200px' }}>
                         <img
                           src={process.env.PUBLIC_URL + `/images/${event.image.replace("/images/", "")}`}
                           alt={event.title}
                           onError={(e) => {e.target.onerror = null; e.target.src="/images/bg beranda awal.jpg"}}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       </div>
-                      <div className="upcoming-event-content">
-                        <h4>{event.title}</h4>
-                        <div className="event-details">
-                          <div className="event-detail-item">
-                            <FaCalendarAlt className="event-icon" />
+                      <div className="upcoming-event-content" style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                        <h4 style={{ fontFamily: 'var(--font-family-primary)', margin: '0 0 16px 0', fontSize: '18px' }}>{event.title}</h4>
+                        <div className="event-details" style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px', flex: 1 }}>
+                          <div className="event-detail-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', color: 'var(--color-text-secondary)', fontSize: '14px' }}>
+                            <Icon icon="mdi:calendar-blank" width="18" style={{ marginTop: '2px', color: 'var(--color-brand-primary)' }} />
                             <span>
                               <strong>Tanggal:</strong> {event.date}
                             </span>
                           </div>
-                          <div className="event-detail-item">
-                            <FaMapMarkerAlt className="event-icon" />
+                          <div className="event-detail-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', color: 'var(--color-text-secondary)', fontSize: '14px' }}>
+                            <Icon icon="mdi:map-marker" width="18" style={{ marginTop: '2px', color: 'var(--color-brand-primary)' }} />
                             <span>
                               <strong>Lokasi:</strong> {event.location}
                             </span>
                           </div>
                         </div>
-                        <Link
-                          to={`/events/${event.id}`}
-                          className="upcoming-event-button"
-                        >
-                          Lihat Detail <FaChevronRight />
-                        </Link>
+                        <Button as={Link} to={`/events/${event.id}`} variant="ghost" fullWidth style={{ justifyContent: 'space-between' }}>
+                          Lihat Detail <Icon icon="mdi:chevron-right" width="20" />
+                        </Button>
                       </div>
-                    </div>
+                    </Card>
                   ))
                 ) : (
-                  <p style={{fontStyle: 'italic', color: '#666'}}>
+                  <p style={{fontStyle: 'italic', color: 'var(--color-text-secondary)', gridColumn: '1 / -1'}}>
                     {featuredEvent ? "Tidak ada event mendatang lainnya." : "Tidak ada event yang ditemukan."}
                   </p>
                 )}
@@ -232,47 +225,49 @@ export default function EventPage() {
             </section>
 
             {/* Participation Stats Section (Static for now) */}
-            <section className="participation-section">
-              <h2>
-                Partisipasi <span className="highlight">Komunitas</span>
+            <section className="participation-section" style={{ marginTop: '64px', marginBottom: '64px' }}>
+              <h2 style={{ fontFamily: 'var(--font-family-brand)' }}>
+                Partisipasi <span className="highlight" style={{ color: 'var(--color-brand-primary)' }}>Komunitas</span>
               </h2>
 
-              <div className="participation-content">
-                <div className="total-participants">
-                  <div className="participants-icon">
-                    <FaUsers />
+              <div className="participation-content" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px' }}>
+                <Card variant="standard" className="total-participants" style={{ backgroundColor: 'var(--color-brand-primary)', display: 'flex', alignItems: 'center', gap: '24px', padding: '32px' }}>
+                  <div className="participants-icon" style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: '24px', borderRadius: '50%' }}>
+                    <Icon icon="mdi:account-group" width="48" style={{ color: 'white' }} />
                   </div>
                   <div className="participants-info">
-                    <div className="participants-number">
+                    <div className="participants-number" style={{ fontSize: '36px', fontWeight: 'bold', fontFamily: 'var(--font-family-brand)', color: 'white' }}>
                       {participationStats.totalParticipants}
                     </div>
-                    <div className="participants-label">
+                    <div className="participants-label" style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '16px' }}>
                       Total Pendaftar Bulan Ini
                     </div>
                   </div>
-                </div>
+                </Card>
 
-                <div className="participation-by-city">
-                  <h3>Pendaftar Per Kota</h3>
-                  <div className="city-stats">
+                <Card variant="standard" className="participation-by-city" style={{ padding: '32px' }}>
+                  <h3 style={{ margin: '0 0 24px 0', fontFamily: 'var(--font-family-primary)' }}>Pendaftar Per Kota</h3>
+                  <div className="city-stats" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     {participationStats.cities.map((city) => (
-                      <div key={city.name} className="city-stat-item">
-                        <div className="city-name">{city.name}</div>
-                        <div className="city-progress">
-                          <div className="progress-bar-container">
+                      <div key={city.name} className="city-stat-item" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                        <div className="city-name" style={{ width: '80px', fontWeight: 'bold' }}>{city.name}</div>
+                        <div className="city-progress" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '16px' }}>
+                          <div className="progress-bar-container" style={{ flex: 1, height: '8px', backgroundColor: 'var(--color-border-divider)', borderRadius: '4px', overflow: 'hidden' }}>
                             <div
                               className="progress-bar-fill"
                               style={{
                                 width: `${(city.participants / 550) * 100}%`,
+                                height: '100%',
+                                backgroundColor: 'var(--color-brand-primary)'
                               }}
                             ></div>
                           </div>
-                          <div className="city-count">{city.participants}</div>
+                          <div className="city-count" style={{ width: '40px', textAlign: 'right', fontWeight: 'bold' }}>{city.participants}</div>
                         </div>
                       </div>
                     ))}
                   </div>
-                </div>
+                </Card>
               </div>
             </section>
           </div>

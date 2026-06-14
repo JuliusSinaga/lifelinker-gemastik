@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "../styles/ResetPassword.css";
 import axiosClient from "../service/axiosClient";
-import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import Icon from "../components/core/Icon";
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
@@ -95,7 +95,7 @@ export default function ResetPassword() {
           <div className="rp-form-group">
             <label>Password Baru</label>
             <div className="rp-input-wrapper">
-              <FaLock className="rp-input-icon" />
+              <Icon icon="mdi:lock" className="rp-input-icon" />
               <input
                 type={showPassword ? "text" : "password"}
                 name="newPassword"
@@ -110,7 +110,7 @@ export default function ResetPassword() {
                 className="rp-eye-btn"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                {showPassword ? <Icon icon="mdi:eye-off" /> : <Icon icon="mdi:eye" />}
               </button>
             </div>
           </div>
@@ -119,7 +119,7 @@ export default function ResetPassword() {
           <div className="rp-form-group">
             <label>Konfirmasi Password</label>
             <div className="rp-input-wrapper">
-              <FaLock className="rp-input-icon" />
+              <Icon icon="mdi:lock" className="rp-input-icon" />
               <input
                 type={showPassword ? "text" : "password"}
                 name="confirmPassword"

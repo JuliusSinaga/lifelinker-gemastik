@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://lifelinker-backend-juliussinaga1377-dpuh4op8.leapcell.dev";
+const baseURL = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
 const axiosClient = axios.create({
   baseURL: baseURL,

@@ -325,7 +325,14 @@
   padding: 20px;
   background: #f8f9fa;
   border-radius: 12px;
-  border-left: 4px solid var(--primary-red);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 15px var(--shadow-light);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--shadow-medium);
 }
 
 .testimonial-header {

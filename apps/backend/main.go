@@ -38,6 +38,7 @@ func main() {
                         &models.DonationHistory{},
                         &models.Consultation{},
                         &models.Message{},
+                        &models.AppSetting{},
                 ); err != nil {
                         log.Printf("Peringatan migrasi: %v", err)
                 } else {

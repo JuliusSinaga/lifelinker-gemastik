@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import DokterSidebar from "../components/SidebarDokter";
 import "../styles/DashboardDokter.css";
 
-import { FaSyncAlt } from "react-icons/fa";
+import Icon from "../components/core/Icon";
+import Button from "../components/core/Button";
+import Card from "../components/core/Card";
 
 // CHART JS
 import { Bar } from "react-chartjs-2";
@@ -36,7 +38,7 @@ export default function DashboardDokter() {
       {
         label: "Jumlah Stok",
         data: [300, 200, 120, 400],
-        backgroundColor: ["#e74c3c", "#3498db", "#f39c12", "#2ecc71"],
+        backgroundColor: ["var(--color-status-error)", "var(--color-status-info)", "var(--color-status-warning)", "var(--color-status-success)"],
         borderRadius: 8,
       },
     ],
@@ -46,67 +48,71 @@ export default function DashboardDokter() {
     <div className="dokter-layout">
       <DokterSidebar />
 
-      <main className="dokter-main">
+      <main className="dokter-main" style={{ padding: "32px", backgroundColor: "var(--color-bg-page)", minHeight: "100vh" }}>
 
         {/* HEADER */}
-        <div className="dashboard-top">
-          <h1 className="dashboard-title">Dashboard Utama</h1>
+        <div className="dashboard-top" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
+          <h1 className="dashboard-title" style={{ fontFamily: "var(--font-family-brand)", margin: 0 }}>Dashboard Utama</h1>
 
-          <button
+          <Button
+            variant="primary"
             className={`btn-refresh ${isRefreshing ? "loading" : ""}`}
             onClick={handleRefresh}
             disabled={isRefreshing}
+            style={{ display: "flex", alignItems: "center", gap: "8px" }}
           >
             {isRefreshing ? (
               <>
-                <FaSyncAlt className="spin" /> Refreshing...
+                <Icon icon="mdi:sync" className="spin" /> Refreshing...
               </>
             ) : (
-              "Refresh Data"
+              <>
+                <Icon icon="mdi:sync" /> Refresh Data
+              </>
             )}
-          </button>
+          </Button>
         </div>
 
         {/* STATISTIK */}
-        <div className="stats-row">
+        <div className="stats-row" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "24px", marginBottom: "32px" }}>
 
-          <div className="stats-card red">
-            <h2>1,247</h2>
-            <p>Total Stok Darah (Unit)</p>
-            <span>RS Siloam Kebon Jeruk</span>
-          </div>
+          <Card variant="standard" className="stats-card red" style={{ padding: "24px", borderTop: "4px solid var(--color-status-error)" }}>
+            <h2 style={{ fontSize: "36px", margin: "0 0 8px 0", fontFamily: "var(--font-family-brand)", color: "var(--color-status-error)" }}>1,247</h2>
+            <p style={{ margin: "0 0 4px 0", fontWeight: "bold" }}>Total Stok Darah (Unit)</p>
+            <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>RS Siloam Kebon Jeruk</span>
+          </Card>
 
-          <div className="stats-card blue">
-            <h2>89</h2>
-            <p>Pendonor Bulan Ini</p>
-            <span>Target: 120 orang</span>
-          </div>
+          <Card variant="standard" className="stats-card blue" style={{ padding: "24px", borderTop: "4px solid var(--color-status-info)" }}>
+            <h2 style={{ fontSize: "36px", margin: "0 0 8px 0", fontFamily: "var(--font-family-brand)", color: "var(--color-status-info)" }}>89</h2>
+            <p style={{ margin: "0 0 4px 0", fontWeight: "bold" }}>Pendonor Bulan Ini</p>
+            <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Target: 120 orang</span>
+          </Card>
 
-          <div className="stats-card orange">
-            <h2>15</h2>
-            <p>Total Event RS Kami</p>
-            <span>12 selesai, 3 berlangsung</span>
-          </div>
+          <Card variant="standard" className="stats-card orange" style={{ padding: "24px", borderTop: "4px solid var(--color-status-warning)" }}>
+            <h2 style={{ fontSize: "36px", margin: "0 0 8px 0", fontFamily: "var(--font-family-brand)", color: "var(--color-status-warning)" }}>15</h2>
+            <p style={{ margin: "0 0 4px 0", fontWeight: "bold" }}>Total Event RS Kami</p>
+            <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>12 selesai, 3 berlangsung</span>
+          </Card>
 
-          <div className="stats-card green">
-            <h2>845</h2>
-            <p>Pendonor Aktif</p>
-            <span>Di rumah sakit kami</span>
-          </div>
+          <Card variant="standard" className="stats-card green" style={{ padding: "24px", borderTop: "4px solid var(--color-status-success)" }}>
+            <h2 style={{ fontSize: "36px", margin: "0 0 8px 0", fontFamily: "var(--font-family-brand)", color: "var(--color-status-success)" }}>845</h2>
+            <p style={{ margin: "0 0 4px 0", fontWeight: "bold" }}>Pendonor Aktif</p>
+            <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Di rumah sakit kami</span>
+          </Card>
 
         </div>
 
         {/* GRAFIK FULL WIDTH */}
-        <div className="graph-full">
-          <div className="graph-card">
-            <h3>Perbandingan Stok Darah</h3>
+        <div className="graph-full" style={{ marginBottom: "32px" }}>
+          <Card variant="standard" className="graph-card" style={{ padding: "24px" }}>
+            <h3 style={{ margin: "0 0 24px 0", fontFamily: "var(--font-family-brand)" }}>Perbandingan Stok Darah</h3>
 
-            <div className="graph-wrapper">
+            <div className="graph-wrapper" style={{ height: "300px" }}>
               <Bar
                 data={chartData}
                 options={{
                   responsive: true,
-                  maintainAspectRatio: false,   // WAJIB supaya full height
+                  maintainAspectRatio: false,   
                   plugins: {
                     legend: { display: false },
                   },
@@ -117,28 +123,44 @@ export default function DashboardDokter() {
               />
             </div>
 
-          </div>
+          </Card>
         </div>
 
         {/* NOTIFIKASI */}
-        <div className="notif-card notif-bottom">
-          <div className="notif-header">
-            <h3>Notifikasi Terbaru</h3>
-            <button className="notif-read">Tandai Sudah Dibaca</button>
+        <Card variant="standard" className="notif-card notif-bottom" style={{ padding: "24px" }}>
+          <div className="notif-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", paddingBottom: "16px", borderBottom: "1px solid var(--color-border-divider)" }}>
+            <h3 style={{ margin: 0, fontFamily: "var(--font-family-brand)" }}>Notifikasi Terbaru</h3>
+            <Button variant="ghost" className="notif-read" style={{ fontSize: "14px" }}>Tandai Sudah Dibaca</Button>
           </div>
 
-          <ul className="notif-list">
-            <li><span className="dot green"></span> Request event "Bakti Sosial" disetujui Admin — <small>2 jam lalu</small></li>
-            <li><span className="dot blue"></span> Konsultasi baru menunggu balasan — <small>5 jam lalu</small></li>
-            <li><span className="dot orange"></span> 5 kantong darah (A+) kedaluwarsa dalam 3 hari — <small>1 hari lalu</small></li>
-            <li><span className="dot red"></span> 12 pendonor baru terdaftar minggu ini — <small>2 hari lalu</small></li>
+          <ul className="notif-list" style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "16px" }}>
+            <li style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", backgroundColor: "var(--color-surface-background)", borderRadius: "var(--radius-standard)" }}>
+                <span className="dot" style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "var(--color-status-success)" }}></span> 
+                <span style={{ flex: 1 }}>Request event "Bakti Sosial" disetujui Admin</span>
+                <small style={{ color: "var(--color-text-secondary)" }}>2 jam lalu</small>
+            </li>
+            <li style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", backgroundColor: "var(--color-surface-background)", borderRadius: "var(--radius-standard)" }}>
+                <span className="dot" style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "var(--color-status-info)" }}></span> 
+                <span style={{ flex: 1 }}>Konsultasi baru menunggu balasan</span>
+                <small style={{ color: "var(--color-text-secondary)" }}>5 jam lalu</small>
+            </li>
+            <li style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", backgroundColor: "var(--color-surface-background)", borderRadius: "var(--radius-standard)" }}>
+                <span className="dot" style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "var(--color-status-warning)" }}></span> 
+                <span style={{ flex: 1 }}>5 kantong darah (A+) kedaluwarsa dalam 3 hari</span>
+                <small style={{ color: "var(--color-text-secondary)" }}>1 hari lalu</small>
+            </li>
+            <li style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", backgroundColor: "var(--color-surface-background)", borderRadius: "var(--radius-standard)" }}>
+                <span className="dot" style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "var(--color-status-error)" }}></span> 
+                <span style={{ flex: 1 }}>12 pendonor baru terdaftar minggu ini</span>
+                <small style={{ color: "var(--color-text-secondary)" }}>2 hari lalu</small>
+            </li>
           </ul>
 
-          <div className="notif-footer">
-            <a href="#">Lihat semua notifikasi</a>
+          <div className="notif-footer" style={{ marginTop: "24px", textAlign: "center" }}>
+            <a href="#" style={{ color: "var(--color-brand-primary)", textDecoration: "none", fontWeight: "bold" }}>Lihat semua notifikasi</a>
           </div>
 
-        </div>
+        </Card>
 
       </main>
     </div>

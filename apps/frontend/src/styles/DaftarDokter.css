@@ -40,16 +40,16 @@ body{
   justify-content: center;
   padding: 28px 20px;
   min-height: 100vh;
-  background: var(--page-bg);
+  background: var(--color-bg-auth);
 }
 
 .dd-card {
   width: 100%;
   max-width: var(--max-width);
   background: var(--card-bg);
-  border-radius: var(--card-radius);
+  border-radius: var(--radius-large);
   padding: 28px;
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-elevated);
   border: 1px solid rgba(0,0,0,0.03);
 }
 

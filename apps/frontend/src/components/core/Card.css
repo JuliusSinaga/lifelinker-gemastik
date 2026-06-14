@@ -1,0 +1,25 @@
+.core-card {
+  background-color: var(--color-surface-card);
+  overflow: hidden;
+}
+
+.core-card-standard {
+  border-radius: var(--radius-standard);
+  box-shadow: var(--shadow-base);
+}
+
+.core-card-elevated {
+  border-radius: var(--radius-elevated);
+  box-shadow: var(--shadow-elevated);
+}
+
+.core-card-doctor {
+  border-radius: var(--radius-doctor);
+  box-shadow: var(--shadow-brand-glow);
+}
+
+.core-card-role {
+  border-radius: var(--radius-standard);
+  box-shadow: var(--shadow-base);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}

@@ -62,4 +62,8 @@ func SetupRoutes(router *gin.Engine) {
 	// Fitur Chat & Status Video
 	router.POST("/consultations/:id/reply", controllers.ReplyConsultation)       // Kirim Pesan
 	router.PUT("/consultations/:id/status", controllers.UpdateConsultationStatus) // Update Status / Link Zoom
+
+	// --- PENGATURAN WEB (LANDING PAGE STATS) ---
+	router.GET("/landing-stats", controllers.GetLandingStats)
+	router.PUT("/admin/landing-stats", controllers.UpdateLandingStats)
 }

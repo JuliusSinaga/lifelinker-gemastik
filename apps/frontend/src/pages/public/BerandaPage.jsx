@@ -3,29 +3,8 @@ import { Link } from "react-router-dom";
 import "../../styles/BerandaPage.css";
 import Header from "../../components/Header";
 import axiosClient from "../../service/axiosClient";
-
-// --- Import Icons (Tambahkan FaCheckCircle, FaTimesCircle, FaRedo) ---
-import {
-  FaHeartbeat,
-  FaSyringe,
-  FaPills,
-  FaStethoscope,
-  FaTired,
-  FaHandHoldingHeart,
-  FaLightbulb,
-  FaExchangeAlt,
-  FaHandsHelping,
-  FaUserFriends,
-  FaBoxes,
-  FaCalendarAlt,
-  FaLifeRing,
-  FaHeart,
-  FaCarCrash,
-  FaUserInjured,
-  FaCheckCircle, // Icon baru untuk hasil positif
-  FaTimesCircle, // Icon baru untuk hasil negatif
-  FaRedo, // Icon untuk ulang
-} from "react-icons/fa";
+import Icon from "../../components/core/Icon";
+import Button from "../../components/core/Button";
 
 export default function BerandaPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -43,27 +22,27 @@ export default function BerandaPage() {
 
   const questions = [
     {
-      icon: <FaHeartbeat />,
+      icon: <Icon icon="mdi:heart-pulse" width="80" style={{ color: 'var(--color-brand-primary)' }} />,
       q: "Apakah Anda dalam kondisi sehat saat ini?",
       expected: "yes", // Jawaban yang diharapkan agar Lolos
     },
     {
-      icon: <FaSyringe />,
+      icon: <Icon icon="mdi:syringe" width="80" style={{ color: 'var(--color-brand-primary)' }} />,
       q: "Apakah Anda memiliki riwayat penyakit menular (hepatitis, HIV, TBC)?",
       expected: "no",
     },
     {
-      icon: <FaPills />,
+      icon: <Icon icon="mdi:pill" width="80" style={{ color: 'var(--color-brand-primary)' }} />,
       q: "Apakah Anda sedang mengonsumsi obat-obatan pengencer darah/antibiotik?",
       expected: "no",
     },
     {
-      icon: <FaStethoscope />,
+      icon: <Icon icon="fontisto:doctor" width="80" style={{ color: 'var(--color-brand-primary)' }} />,
       q: "Apakah dalam 6 bulan terakhir Anda menjalani operasi besar atau tato/tindik?",
       expected: "no",
     },
     {
-      icon: <FaTired />,
+      icon: <Icon icon="mdi:emoticon-sick-outline" width="80" style={{ color: 'var(--color-brand-primary)' }} />,
       q: "Apakah Anda sering mengalami pusing berat atau mudah lelah tanpa sebab?",
       expected: "no",
     },
@@ -100,15 +79,14 @@ export default function BerandaPage() {
 
     const fetchStats = async () => {
       try {
-        const response = await axiosClient.get("/dashboard/admin");
+        const response = await axiosClient.get("/landing-stats");
         const data = response.data.data;
-        const totalKantong = data.stock_count || 0;
 
         setStats({
-          total_users: data.user_count || 0,
-          total_kantong: totalKantong,
+          total_users: data.donor_count || 0,
+          total_kantong: data.kantong_count || 0,
           total_event: data.event_count || 0,
-          nyawa_selamet: totalKantong * 3,
+          nyawa_selamet: data.nyawa_count || 0,
         });
       } catch (error) {
         console.error("Gagal mengambil statistik:", error);
@@ -130,7 +108,7 @@ export default function BerandaPage() {
     <div className="beranda-root">
       <Header showUserProfile={isLoggedIn} />
 
-      {/* 1. HERO Section (TIDAK BERUBAH) */}
+      {/* 1. HERO Section */}
       <section
         className="hero"
         style={{
@@ -151,9 +129,9 @@ export default function BerandaPage() {
                 Bergabunglah dengan ribuan pendonor darah di seluruh Indonesia.
                 Satu Tetes Darah, Ribuan Harapan.
               </p>
-              <Link to="/lokasi-donor" className="btn-primary">
+              <Button as={Link} to="/lokasi-donor" variant="primary">
                 Cari Lokasi Donor
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -174,6 +152,7 @@ export default function BerandaPage() {
                   style={{
                     width: `${progressPercent}%`,
                     transition: "width 0.3s ease",
+                    backgroundColor: 'var(--color-brand-primary)'
                   }}
                 ></div>
               </div>
@@ -193,18 +172,18 @@ export default function BerandaPage() {
                 </div>
 
                 <div className="answers-large">
-                  <button
-                    className="btn-check-yes"
+                  <Button
+                    variant="primary"
                     onClick={() => handleAnswer("yes")}
                   >
                     Ya
-                  </button>
-                  <button
-                    className="btn-check-no"
+                  </Button>
+                  <Button
+                    variant="secondary"
                     onClick={() => handleAnswer("no")}
                   >
                     Tidak
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -214,37 +193,37 @@ export default function BerandaPage() {
               {isEligible ? (
                 // JIKA LOLOS
                 <div className="result-success">
-                  <FaCheckCircle className="result-icon success" />
+                  <Icon icon="mdi:check-circle" className="result-icon success" width="60" style={{ color: 'var(--color-status-success)' }} />
                   <h4>Anda Berpotensi Bisa Donor!</h4>
                   <p>
                     Kondisi dasar Anda memenuhi syarat. Mari selamatkan nyawa
                     sekarang.
                   </p>
                   <div className="result-actions">
-                    <Link to="/lokasi-donor" className="btn-primary">
+                    <Button as={Link} to="/lokasi-donor" variant="primary">
                       Cari Lokasi Sekarang
-                    </Link>
-                    <button className="btn-reset" onClick={resetQuiz}>
-                      <FaRedo /> Cek Ulang
-                    </button>
+                    </Button>
+                    <Button variant="ghost" onClick={resetQuiz}>
+                      <Icon icon="mdi:refresh" width="20" style={{ marginRight: '8px' }} /> Cek Ulang
+                    </Button>
                   </div>
                 </div>
               ) : (
                 // JIKA TIDAK LOLOS
                 <div className="result-fail">
-                  <FaTimesCircle className="result-icon fail" />
+                  <Icon icon="mdi:close-circle" className="result-icon fail" width="60" style={{ color: 'var(--color-status-error)' }} />
                   <h4>Mungkin Belum Saatnya</h4>
                   <p>
                     Berdasarkan jawaban Anda, sebaiknya konsultasikan dulu
                     dengan dokter atau tunggu kondisi membaik.
                   </p>
                   <div className="result-actions">
-                    <Link to="/konsultasi" className="btn-check-yes">
+                    <Button as={Link} to="/konsultasi" variant="primary">
                       Konsultasi Dokter
-                    </Link>
-                    <button className="btn-reset" onClick={resetQuiz}>
-                      <FaRedo /> Cek Ulang
-                    </button>
+                    </Button>
+                    <Button variant="ghost" onClick={resetQuiz}>
+                      <Icon icon="mdi:refresh" width="20" style={{ marginRight: '8px' }} /> Cek Ulang
+                    </Button>
                   </div>
                 </div>
               )}
@@ -253,7 +232,6 @@ export default function BerandaPage() {
         </div>
       </section>
 
-      {/* BAGIAN LAIN TETAP SAMA (About, Stats, Testimoni, dll...) */}
       {/* 3. Apa itu LifeLinker? */}
       <section className="about-section">
         <h2>
@@ -261,7 +239,7 @@ export default function BerandaPage() {
         </h2>
         <div className="about-cards-grid">
           <div className="about-card-item">
-            <FaHandHoldingHeart className="about-icon" />
+            <Icon icon="mdi:hand-heart" className="about-icon" width="64" height="64" style={{ color: 'var(--color-brand-primary)' }} />
             <h3>Visi kami</h3>
             <p>
               Menjadi wadah peduli dan berkontribusi nyata dalam meningkatkan
@@ -269,7 +247,7 @@ export default function BerandaPage() {
             </p>
           </div>
           <div className="about-card-item">
-            <FaLightbulb className="about-icon" />
+            <Icon icon="mdi:lightbulb-on-outline" className="about-icon" width="64" height="64" style={{ color: 'var(--color-brand-primary)' }} />
             <h3>Misi kami</h3>
             <p>
               Mengedukasi masyarakat dan memfasilitasi proses donor yang aman,
@@ -277,7 +255,7 @@ export default function BerandaPage() {
             </p>
           </div>
           <div className="about-card-item">
-            <FaExchangeAlt className="about-icon" />
+            <Icon icon="mdi:swap-horizontal" className="about-icon" width="64" height="64" style={{ color: 'var(--color-brand-primary)' }} />
             <h3>Tujuan Mulia</h3>
             <p>
               Platform digital penghubung pendonor darah dengan mereka yang
@@ -285,7 +263,7 @@ export default function BerandaPage() {
             </p>
           </div>
           <div className="about-card-item">
-            <FaBoxes className="about-icon" />
+            <Icon icon="mdi:package-variant-closed" className="about-icon" width="64" height="64" style={{ color: 'var(--color-brand-primary)' }} />
             <h3>Mudah & Praktis</h3>
             <p>
               Temukan jadwal, daftar event, dan simpan riwayat donor dalam satu
@@ -293,7 +271,7 @@ export default function BerandaPage() {
             </p>
           </div>
           <div className="about-card-item">
-            <FaHandsHelping className="about-icon" />
+            <Icon icon="mdi:handshake" className="about-icon" width="64" height="64" style={{ color: 'var(--color-brand-primary)' }} />
             <h3>Komunitas Solidaritas</h3>
             <p>
               Bergabunglah dengan komunitas pendonor, berbagi cerita, dan saling
@@ -315,28 +293,28 @@ export default function BerandaPage() {
           </p>
           <div className="stats-grid">
             <div className="stat-item-new">
-              <FaUserFriends className="stat-icon" />
+              <Icon icon="mdi:account-group" className="stat-icon" width="40" style={{ color: 'var(--color-text-inverse)' }} />
               <div className="stat-number">
                 {stats.total_users.toLocaleString("id-ID")}
               </div>
               <div className="stat-label">Pendonor Terdaftar</div>
             </div>
             <div className="stat-item-new">
-              <FaBoxes className="stat-icon" />
+              <Icon icon="mdi:package-variant-closed" className="stat-icon" width="40" style={{ color: 'var(--color-text-inverse)' }} />
               <div className="stat-number">
                 {stats.total_kantong.toLocaleString("id-ID")}
               </div>
               <div className="stat-label">Kantong Darah Terkumpul</div>
             </div>
             <div className="stat-item-new">
-              <FaLifeRing className="stat-icon" />
+              <Icon icon="mdi:lifebuoy" className="stat-icon" width="40" style={{ color: 'var(--color-text-inverse)' }} />
               <div className="stat-number">
                 {stats.nyawa_selamet.toLocaleString("id-ID")}
               </div>
               <div className="stat-label">Nyawa Terselamatkan</div>
             </div>
             <div className="stat-item-new">
-              <FaCalendarAlt className="stat-icon" />
+              <Icon icon="mdi:calendar-blank" className="stat-icon" width="40" style={{ color: 'var(--color-text-inverse)' }} />
               <div className="stat-number">
                 {stats.total_event.toLocaleString("id-ID")}
               </div>
@@ -355,7 +333,7 @@ export default function BerandaPage() {
         </p>
         <div className="good-deeds-cards-grid">
           <div className="good-deeds-card-item">
-            <FaHeart className="good-deeds-icon" />
+            <Icon icon="mdi:heart" className="good-deeds-icon" width="64" height="64" style={{ color: 'var(--color-brand-primary)' }} />
             <h3>Operasi Jantung Anak</h3>
             <p>
               <strong>Kemarin:</strong> 5 kantong darah membantu operasi jantung
@@ -363,7 +341,7 @@ export default function BerandaPage() {
             </p>
           </div>
           <div className="good-deeds-card-item">
-            <FaCarCrash className="good-deeds-icon" />
+            <Icon icon="mdi:car-emergency" className="good-deeds-icon" width="64" height="64" style={{ color: 'var(--color-brand-primary)' }} />
             <h3>Korban Kecelakaan</h3>
             <p>
               <strong>3 Hari Lalu:</strong> Stok O+ menyelamatkan korban
@@ -371,7 +349,7 @@ export default function BerandaPage() {
             </p>
           </div>
           <div className="good-deeds-card-item">
-            <FaUserInjured className="good-deeds-icon" />
+            <Icon icon="mdi:hospital-box" className="good-deeds-icon" width="64" height="64" style={{ color: 'var(--color-brand-primary)' }} />
             <h3>Pasien Thalassemia</h3>
             <p>
               <strong>Minggu Lalu:</strong> Kebutuhan transfusi rutin pasien

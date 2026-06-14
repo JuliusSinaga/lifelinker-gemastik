@@ -1,0 +1,70 @@
+.core-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.core-input-label {
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-medium);
+  font-size: 14px;
+  color: var(--color-text-primary);
+}
+
+.core-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.core-input-icon {
+  position: absolute;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  color: var(--color-text-secondary);
+}
+
+.core-input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius-standard);
+  border: 1px solid var(--color-border-input);
+  font-family: var(--font-family-primary);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  background-color: var(--color-surface-card);
+}
+
+.core-input-field:focus {
+  border-color: var(--color-brand-primary);
+}
+
+.core-input-field.has-icon {
+  padding-left: 48px;
+}
+
+.core-input-field.has-error {
+  border-color: var(--color-status-error);
+}
+
+.core-input-error {
+  font-family: var(--font-family-primary);
+  font-size: 12px;
+  color: var(--color-status-error);
+}
+
+/* Custom Select Dropdown Styling */
+select.core-input-field {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
+}

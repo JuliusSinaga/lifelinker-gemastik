@@ -30,6 +30,7 @@ import ManajemenEventAdmin from "./pages/ManajementEventAdmin";
 import ManajemenPendonor from "./pages/ManajemenPendonor";
 import Laporan from "./pages/Laporan";
 import ProfilAdmin from "./pages/ProfilAdmin";
+import PengaturanWebAdmin from "./pages/PengaturanWebAdmin";
 import Logout from "./pages/Logout";
 
 // === Dokter Dashboard Pages ===
@@ -41,7 +42,6 @@ import ProfilDokter from "./pages/ProfilDokter";
 
 // === Components & System ===
 import Footer from "./components/Footer";
-import Header from "./components/Header";
 import ScrollToTop from "./components/ScrollToTop";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/public/NotFoundPage";
@@ -105,6 +105,7 @@ function AppContent() {
             <Route path="/manajemen-pendonor" element={<ManajemenPendonor />} />
             <Route path="/laporan" element={<Laporan />} />
             <Route path="/profile-admin" element={<ProfilAdmin />} />
+            <Route path="/admin/pengaturan" element={<PengaturanWebAdmin />} />
             <Route path="/logout" element={<Logout />} />
           </Route>
 

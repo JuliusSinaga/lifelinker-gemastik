@@ -1,50 +1,76 @@
 import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../components/SidebarAdmin";
 import "../styles/DashboardAdmin.css";
-import axiosClient from "../service/axiosClient"; // 1. Import API Client
+import axiosClient from "../service/axiosClient"; 
+import Card from "../components/core/Card";
+import Icon from "../components/core/Icon";
 
 // --- Sub-components (Tetap Sama) ---
 function MetricCard({ value, title, subtitle, icon }) {
   return (
-    <div className="metric-card">
-      <div className="metric-content">
-        <div className="metric-value">{value}</div>
-        <div className="metric-title">{title}</div>
-        <div className="metric-subtitle">{subtitle}</div>
+    <Card variant="standard" className="metric-card" style={{ padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div className="metric-content" style={{ flex: 1 }}>
+        <div className="metric-value" style={{ fontSize: "32px", fontWeight: "bold", fontFamily: "var(--font-family-brand)", color: "var(--color-text-primary)", marginBottom: "4px" }}>{value}</div>
+        <div className="metric-title" style={{ fontSize: "14px", fontWeight: "bold", color: "var(--color-text-secondary)" }}>{title}</div>
+        <div className="metric-subtitle" style={{ fontSize: "12px", color: "var(--color-text-secondary)", marginTop: "4px" }}>{subtitle}</div>
       </div>
-      <div className="metric-icon">{icon}</div>
-    </div>
+      <div className="metric-icon" style={{ fontSize: "40px", color: "var(--color-brand-primary)", opacity: 0.8, backgroundColor: "var(--color-brand-primary)15", width: "64px", height: "64px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%" }}>
+        <Icon icon={icon} />
+      </div>
+    </Card>
   );
 }
 
 function BloodTypeCard({ type, count, color }) {
+  const colorMap = {
+    red: "var(--color-status-error)",
+    green: "var(--color-status-success)",
+    orange: "var(--color-status-warning)",
+    blue: "var(--color-status-info)"
+  };
+  const themeColor = colorMap[color] || "var(--color-brand-primary)";
+
   return (
-    <div className={`blood-type-card ${color}`}>
-      <div className="blood-count">{count}</div>
-      <div className="blood-type">{type}</div>
-    </div>
+    <Card variant="standard" className={`blood-type-card ${color}`} style={{ padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderTop: `4px solid ${themeColor}` }}>
+      <div className="blood-count" style={{ fontSize: "36px", fontWeight: "bold", fontFamily: "var(--font-family-brand)", color: themeColor, marginBottom: "8px" }}>{count}</div>
+      <div className="blood-type" style={{ fontSize: "14px", fontWeight: "bold", color: "var(--color-text-secondary)" }}>{type}</div>
+    </Card>
   );
 }
 
 function NotificationCard({ title, message, time, type }) {
+  const typeIconMap = {
+    info: { icon: "mdi:information", color: "var(--color-status-info)" },
+    warning: { icon: "mdi:alert", color: "var(--color-status-warning)" },
+    error: { icon: "mdi:close-circle", color: "var(--color-status-error)" },
+    success: { icon: "mdi:check-circle", color: "var(--color-status-success)" }
+  };
+  
+  const iconConfig = typeIconMap[type] || typeIconMap.info;
+
   return (
-    <div className={`notification-card ${type}`}>
-      <div className="notification-title">{title}</div>
-      <div className="notification-message">{message}</div>
-      <div className="notification-time">{time}</div>
-    </div>
+    <Card variant="standard" className={`notification-card ${type}`} style={{ padding: "16px", display: "flex", gap: "16px", alignItems: "flex-start", marginBottom: "16px" }}>
+      <div style={{ fontSize: "24px", color: iconConfig.color }}>
+        <Icon icon={iconConfig.icon} />
+      </div>
+      <div style={{ flex: 1 }}>
+        <div className="notification-title" style={{ fontWeight: "bold", fontSize: "14px", marginBottom: "4px" }}>{title}</div>
+        <div className="notification-message" style={{ fontSize: "13px", color: "var(--color-text-secondary)", marginBottom: "8px" }}>{message}</div>
+        <div className="notification-time" style={{ fontSize: "11px", color: "var(--color-text-secondary)", opacity: 0.7 }}>{time}</div>
+      </div>
+    </Card>
   );
 }
 
 function EventItem({ title, location, date }) {
   return (
-    <div className="event-item">
-      <div className="event-title">{title}</div>
-      <div className="event-details">
-        <span className="event-location">{location}</span>
-        <span className="event-date">{date}</span>
+    <Card variant="standard" className="event-item" style={{ padding: "16px", marginBottom: "16px", display: "flex", flexDirection: "column", gap: "8px", borderLeft: "4px solid var(--color-brand-primary)" }}>
+      <div className="event-title" style={{ fontWeight: "bold", fontSize: "16px" }}>{title}</div>
+      <div className="event-details" style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "var(--color-text-secondary)" }}>
+        <span className="event-location" style={{ display: "flex", alignItems: "center", gap: "4px" }}><Icon icon="mdi:map-marker" /> {location}</span>
+        <span className="event-date" style={{ display: "flex", alignItems: "center", gap: "4px" }}><Icon icon="mdi:calendar" /> {date}</span>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -127,18 +153,18 @@ export default function DashboardAdmin() {
 
   // 4. Data Metrics untuk Render (Menggunakan State)
   const metrics = [
-    { value: stats.userCount.toLocaleString(), title: "User Terdaftar", subtitle: "Seluruh Sumut", icon: "👥" },
-    { value: stats.doctorCount.toLocaleString(), title: "Dokter Terverifikasi", subtitle: "Total Dokter", icon: "👨‍⚕️" },
-    { value: stats.donorCount.toLocaleString(), title: "Pendonor Potensial", subtitle: "User Terdaftar", icon: "🩸" },
-    { value: stats.eventCount.toLocaleString(), title: "Event Aktif", subtitle: "Berbagai Lokasi", icon: "📅" },
-    { value: stats.stockCount.toLocaleString(), title: "Total Stok Darah", subtitle: "Kantong", icon: "🧪" },
-    { value: "-", title: "Event Terlaksana", subtitle: "Data Belum Tersedia", icon: "✅" },
+    { value: stats.userCount.toLocaleString(), title: "User Terdaftar", subtitle: "Seluruh Sumut", icon: "mdi:account-group" },
+    { value: stats.doctorCount.toLocaleString(), title: "Dokter Terverifikasi", subtitle: "Total Dokter", icon: "mdi:doctor" },
+    { value: stats.donorCount.toLocaleString(), title: "Pendonor Potensial", subtitle: "User Terdaftar", icon: "mdi:water" },
+    { value: stats.eventCount.toLocaleString(), title: "Event Aktif", subtitle: "Berbagai Lokasi", icon: "mdi:calendar" },
+    { value: stats.stockCount.toLocaleString(), title: "Total Stok Darah", subtitle: "Kantong", icon: "mdi:flask" },
+    { value: "-", title: "Event Terlaksana", subtitle: "Data Belum Tersedia", icon: "mdi:check-circle" },
   ];
 
   if (loading) {
     return (
-      <div className="dashboard-admin" style={{display:'flex', justifyContent:'center', alignItems:'center', height:'100vh'}}>
-        <p>Memuat Data Dashboard...</p>
+      <div className="dashboard-admin" style={{display:'flex', justifyContent:'center', alignItems:'center', height:'100vh', backgroundColor: 'var(--color-bg-page)'}}>
+        <p style={{ fontFamily: "var(--font-family-brand)", color: "var(--color-text-secondary)" }}>Memuat Data Dashboard...</p>
       </div>
     );
   }
@@ -149,22 +175,22 @@ export default function DashboardAdmin() {
       <SidebarAdmin />
 
       {/* MAIN CONTENT */}
-      <main className="main-content">
-        <header className="content-header">
-          <h1>Dashboard Administrasi</h1>
+      <main className="main-content" style={{ padding: "32px", backgroundColor: "var(--color-bg-page)", minHeight: "100vh" }}>
+        <header className="content-header" style={{ marginBottom: "32px" }}>
+          <h1 style={{ margin: 0, fontFamily: "var(--font-family-brand)" }}>Dashboard Administrasi</h1>
         </header>
 
         {/* METRIC CARDS */}
-        <div className="metrics-grid">
+        <div className="metrics-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "24px", marginBottom: "40px" }}>
           {metrics.map((m, i) => (
             <MetricCard key={i} {...m} />
           ))}
         </div>
 
         {/* BLOOD STOCK */}
-        <div className="blood-stock-card">
-          <h3>Stok Darah Terkini (Real-time)</h3>
-          <div className="blood-types-grid">
+        <div className="blood-stock-card" style={{ marginBottom: "40px" }}>
+          <h3 style={{ margin: "0 0 24px 0", fontFamily: "var(--font-family-brand)" }}>Stok Darah Terkini (Real-time)</h3>
+          <div className="blood-types-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "24px" }}>
             {bloodStockData.map((b, i) => (
               <BloodTypeCard key={i} {...b} />
             ))}
@@ -172,67 +198,68 @@ export default function DashboardAdmin() {
         </div>
 
         {/* BOTTOM GRID */}
-        <div className="bottom-grid">
+        <div className="bottom-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "32px", alignItems: "start" }}>
           {/* LEFT COLUMN */}
-          <div className="left-column">
+          <div className="left-column" style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
             {/* CHART (Static SVG for Visual) */}
-            <div className="chart-card">
-              <h4>Perkembangan Stok Darah</h4>
-              <div className="chart-container">
+            <Card variant="standard" className="chart-card" style={{ padding: "24px" }}>
+              <h4 style={{ margin: "0 0 24px 0", fontFamily: "var(--font-family-brand)" }}>Perkembangan Stok Darah</h4>
+              <div className="chart-container" style={{ width: "100%", overflow: "hidden", backgroundColor: "var(--color-surface-background)", borderRadius: "var(--radius-large)", padding: "24px" }}>
                 <svg
                   className="chart-svg"
                   viewBox="0 0 800 300"
                   preserveAspectRatio="xMidYMid meet"
+                  style={{ width: "100%", height: "auto" }}
                 >
                   <polyline
                     fill="none"
-                    stroke="#dc2626"
+                    stroke="var(--color-brand-primary)"
                     strokeWidth="6"
                     points="80,230 160,180 240,150 320,130 400,160 480,140 560,170 640,150"
                   />
                   {/* Dots chart hiasan */}
-                  <circle cx="80" cy="230" r="10" fill="#dc2626" />
-                  <circle cx="160" cy="180" r="10" fill="#dc2626" />
-                  <circle cx="240" cy="150" r="10" fill="#dc2626" />
-                  <circle cx="320" cy="130" r="10" fill="#dc2626" />
-                  <circle cx="400" cy="160" r="10" fill="#dc2626" />
-                  <circle cx="480" cy="140" r="10" fill="#dc2626" />
-                  <circle cx="560" cy="170" r="10" fill="#dc2626" />
-                  <circle cx="640" cy="150" r="10" fill="#dc2626" />
+                  <circle cx="80" cy="230" r="10" fill="var(--color-brand-primary)" />
+                  <circle cx="160" cy="180" r="10" fill="var(--color-brand-primary)" />
+                  <circle cx="240" cy="150" r="10" fill="var(--color-brand-primary)" />
+                  <circle cx="320" cy="130" r="10" fill="var(--color-brand-primary)" />
+                  <circle cx="400" cy="160" r="10" fill="var(--color-brand-primary)" />
+                  <circle cx="480" cy="140" r="10" fill="var(--color-brand-primary)" />
+                  <circle cx="560" cy="170" r="10" fill="var(--color-brand-primary)" />
+                  <circle cx="640" cy="150" r="10" fill="var(--color-brand-primary)" />
                 </svg>
               </div>
-            </div>
+            </Card>
 
             {/* EVENTS */}
-            <div className="events-card">
-              <h4>Event Terbaru</h4>
+            <Card variant="standard" className="events-card" style={{ padding: "24px" }}>
+              <h4 style={{ margin: "0 0 24px 0", fontFamily: "var(--font-family-brand)" }}>Event Terbaru</h4>
               <div className="events-list">
                 {eventsData.length > 0 ? (
                   eventsData.map((e, i) => <EventItem key={i} {...e} />)
                 ) : (
-                  <p style={{ color: "#888", fontStyle: "italic", padding: "10px" }}>
+                  <p style={{ color: "var(--color-text-secondary)", fontStyle: "italic", padding: "10px", textAlign: "center" }}>
                     Belum ada event terbaru.
                   </p>
                 )}
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* RIGHT COLUMN - NOTIFICATIONS */}
-          <div className="notifications-card">
-            <h4>Notifikasi Terbaru</h4>
+          <Card variant="standard" className="notifications-card" style={{ padding: "24px" }}>
+            <h4 style={{ margin: "0 0 24px 0", fontFamily: "var(--font-family-brand)" }}>Notifikasi Terbaru</h4>
             <div className="notifications-list">
               {notificationsData.length > 0 ? (
                 notificationsData.map((n, i) => (
                   <NotificationCard key={i} {...n} />
                 ))
               ) : (
-                <p style={{ color: "#888", fontStyle: "italic", padding: "10px" }}>
+                <p style={{ color: "var(--color-text-secondary)", fontStyle: "italic", padding: "10px", textAlign: "center" }}>
                   Tidak ada notifikasi baru.
                 </p>
               )}
             </div>
-          </div>
+          </Card>
         </div>
       </main>
     </div>

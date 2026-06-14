@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/ProfilePage.css"; // Pastikan path ini sesuai struktur folder Anda
-import { FaSignOutAlt, FaCheckCircle, FaExclamationTriangle, FaCamera } from "react-icons/fa";
+import "../../styles/ProfilePage.css"; 
 import Header from "../../components/Header";
 import axiosClient from "../../service/axiosClient";
+import Icon from "../../components/core/Icon";
+import Button from "../../components/core/Button";
+import Card from "../../components/core/Card";
+import Input from "../../components/core/Input";
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState("profil");
@@ -255,26 +258,28 @@ export default function ProfilePage() {
     <div className="profile-root">
       <Header />
 
-      <main className="profile-main">
-        <div className="profile-container">
+      <main className="profile-main" style={{ backgroundColor: "var(--color-bg-page)", minHeight: "calc(100vh - 80px)", padding: "40px 20px" }}>
+        <div className="profile-container" style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", gap: "32px", alignItems: "flex-start" }}>
           
           {/* --- SIDEBAR (KIRI) --- */}
-          <div className="profile-sidebar">
+          <div className="profile-sidebar" style={{ width: "320px", display: "flex", flexDirection: "column", gap: "24px" }}>
             {/* Kartu User */}
-            <div className="profile-user-card">
-              <div className="profile-user-avatar">
-                {formData.photo_url ? (
-                    <img 
-                            src={formData.photo_url} 
-                            alt={formData.name} 
-                            onError={(e) => { e.target.onerror = null; e.target.src=`https://ui-avatars.com/api/?name=${formData.name}`}}
-                        />
-                    ) : (
-                        <div className="avatar-initial-circle">{getInitials(formData.name)}</div>
-                    )}
-              </div>
-              <label htmlFor="avatar-upload" className="avatar-edit-btn">
-                    <FaCamera />
+            <Card variant="standard" className="profile-user-card" style={{ padding: "32px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <div className="profile-user-avatar" style={{ position: "relative", marginBottom: "20px" }}>
+                <div style={{ width: "120px", height: "120px", borderRadius: "50%", overflow: "hidden", border: "4px solid white", boxShadow: "var(--shadow-sm)", backgroundColor: "var(--color-brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: "40px", fontWeight: "bold" }}>
+                    {formData.photo_url ? (
+                        <img 
+                                src={formData.photo_url} 
+                                alt={formData.name} 
+                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                onError={(e) => { e.target.onerror = null; e.target.src=`https://ui-avatars.com/api/?name=${formData.name}`}}
+                            />
+                        ) : (
+                            <div className="avatar-initial-circle">{getInitials(formData.name)}</div>
+                        )}
+                </div>
+                <label htmlFor="avatar-upload" className="avatar-edit-btn" style={{ position: "absolute", bottom: "4px", right: "4px", width: "36px", height: "36px", backgroundColor: "white", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", boxShadow: "var(--shadow-sm)", color: "var(--color-text-secondary)", transition: "all 0.2s" }}>
+                    <Icon icon="mdi:camera" style={{ fontSize: "18px" }} />
                 </label>
                 <input 
                     id="avatar-upload" 
@@ -283,203 +288,218 @@ export default function ProfilePage() {
                     style={{ display: "none" }} 
                     onChange={handleAvatarChange}
                 />
-              <h3>{formData.name || "User"}</h3>
-              <p>{formData.city || "Kota belum diisi"}</p>
-            </div>
+              </div>
+              <h3 style={{ margin: "0 0 8px 0", fontFamily: "var(--font-family-brand)", fontSize: "20px" }}>{formData.name || "User"}</h3>
+              <p style={{ margin: 0, color: "var(--color-text-secondary)", fontSize: "14px" }}>{formData.city || "Kota belum diisi"}</p>
+            </Card>
 
             {/* Kartu Donor Digital */}
-            <div className="profile-donor-card">
-              <div className="donor-card-header"><h4>KARTU DONOR DIGITAL</h4></div>
-              <div className="donor-card-blood-type">
-                {formData.blood_type}{formData.rhesus}
+            <Card variant="primary" className="profile-donor-card" style={{ padding: "24px", color: "white", overflow: "hidden", position: "relative" }}>
+              <div style={{ position: "absolute", top: "-20px", right: "-20px", opacity: 0.1, fontSize: "150px" }}>
+                <Icon icon="mdi:water" />
               </div>
-              <div className="donor-card-info">
-                <div className="donor-card-row"><span>Tanggal Lahir</span><span>Jenis Kelamin</span></div>
-                <div className="donor-card-row">
+              <div className="donor-card-header" style={{ marginBottom: "20px", position: "relative", zIndex: 1 }}>
+                <h4 style={{ margin: 0, fontSize: "14px", letterSpacing: "1px", opacity: 0.9 }}>KARTU DONOR DIGITAL</h4>
+              </div>
+              <div className="donor-card-blood-type" style={{ fontSize: "48px", fontWeight: "bold", fontFamily: "var(--font-family-brand)", marginBottom: "24px", display: "flex", alignItems: "center", gap: "8px", position: "relative", zIndex: 1 }}>
+                {formData.blood_type}<span style={{ fontSize: "32px" }}>{formData.rhesus}</span>
+              </div>
+              <div className="donor-card-info" style={{ display: "flex", flexDirection: "column", gap: "12px", position: "relative", zIndex: 1 }}>
+                <div className="donor-card-row" style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", opacity: 0.8 }}>
+                    <span>Tanggal Lahir</span><span>Jenis Kelamin</span>
+                </div>
+                <div className="donor-card-row" style={{ display: "flex", justifyContent: "space-between", fontSize: "14px", fontWeight: "500" }}>
                   <span>{formData.birth_date ? formatDate(formData.birth_date) : "-"}</span>
                   <span>{formData.gender || "-"}</span>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* --- KONTEN UTAMA (KANAN) --- */}
-          <div className="profile-content">
+          <div className="profile-content" style={{ flex: 1, minWidth: 0 }}>
             {/* Navigasi Tab */}
-            <div className="profile-tabs">
-              <button className={`profile-tab ${activeTab === "profil" ? "active" : ""}`} onClick={() => setActiveTab("profil")}>Profil Saya</button>
-              <button className={`profile-tab ${activeTab === "statistik" ? "active" : ""}`} onClick={() => setActiveTab("statistik")}>Statistik & Riwayat</button>
-              <button className={`profile-tab ${activeTab === "pengaturan" ? "active" : ""}`} onClick={() => setActiveTab("pengaturan")}>Pengaturan Akun</button>
+            <div className="profile-tabs" style={{ display: "flex", gap: "8px", marginBottom: "24px", borderBottom: "1px solid var(--color-border-divider)", paddingBottom: "16px", overflowX: "auto" }}>
+              <button className={`profile-tab ${activeTab === "profil" ? "active" : ""}`} onClick={() => setActiveTab("profil")} style={{ padding: "12px 24px", borderRadius: "var(--radius-large)", border: "none", backgroundColor: activeTab === "profil" ? "var(--color-brand-primary)" : "transparent", color: activeTab === "profil" ? "white" : "var(--color-text-secondary)", fontWeight: "bold", cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap" }}>Profil Saya</button>
+              <button className={`profile-tab ${activeTab === "statistik" ? "active" : ""}`} onClick={() => setActiveTab("statistik")} style={{ padding: "12px 24px", borderRadius: "var(--radius-large)", border: "none", backgroundColor: activeTab === "statistik" ? "var(--color-brand-primary)" : "transparent", color: activeTab === "statistik" ? "white" : "var(--color-text-secondary)", fontWeight: "bold", cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap" }}>Statistik & Riwayat</button>
+              <button className={`profile-tab ${activeTab === "pengaturan" ? "active" : ""}`} onClick={() => setActiveTab("pengaturan")} style={{ padding: "12px 24px", borderRadius: "var(--radius-large)", border: "none", backgroundColor: activeTab === "pengaturan" ? "var(--color-brand-primary)" : "transparent", color: activeTab === "pengaturan" ? "white" : "var(--color-text-secondary)", fontWeight: "bold", cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap" }}>Pengaturan Akun</button>
             </div>
 
             {/* TAB 1: FORM EDIT PROFIL */}
             {activeTab === "profil" && (
-              <div className="profile-form-section">
-                <h3>Informasi Pribadi & Medis</h3>
-                <div className="profile-form">
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>Nama Lengkap</label>
-                      <input type="text" name="name" value={formData.name} onChange={handleChange} />
+              <Card variant="standard" className="profile-form-section" style={{ padding: "32px" }}>
+                <h3 style={{ margin: "0 0 24px 0", fontFamily: "var(--font-family-brand)", fontSize: "20px", paddingBottom: "16px", borderBottom: "1px solid var(--color-border-divider)" }}>Informasi Pribadi & Medis</h3>
+                <div className="profile-form" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                  <div className="form-row" style={{ display: "flex", gap: "20px" }}>
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Nama Lengkap</label>
+                      <Input type="text" name="name" value={formData.name} onChange={handleChange} />
                     </div>
-                    <div className="form-group">
-                      <label>Tanggal Lahir</label>
-                      <input type="date" name="birth_date" value={formData.birth_date ? formData.birth_date.split('T')[0] : ""} onChange={handleChange} />
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Tanggal Lahir</label>
+                      <Input type="date" name="birth_date" value={formData.birth_date ? formData.birth_date.split('T')[0] : ""} onChange={handleChange} />
                     </div>
                   </div>
                   
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>Email</label>
-                      <input type="email" name="email" value={formData.email} onChange={handleChange} disabled className="input-disabled"/>
+                  <div className="form-row" style={{ display: "flex", gap: "20px" }}>
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Email</label>
+                      <Input type="email" name="email" value={formData.email} onChange={handleChange} disabled />
                     </div>
-                    <div className="form-group">
-                      <label>Nomor Telepon</label>
-                      <input type="text" name="phone" value={formData.phone} onChange={handleChange} />
-                    </div>
-                  </div>
-
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>Kota Domisili</label>
-                      <input type="text" name="city" value={formData.city} onChange={handleChange} />
-                    </div>
-                    <div className="form-group">
-                      <label>Berat Badan (kg)</label>
-                      <input type="number" name="weight" value={formData.weight} onChange={handleChange} />
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Nomor Telepon</label>
+                      <Input type="text" name="phone" value={formData.phone} onChange={handleChange} />
                     </div>
                   </div>
 
-                  <div className="form-row">
-                     <div className="form-group">
-                        <label>Golongan Darah</label>
-                        <select name="blood_type" value={formData.blood_type} onChange={handleChange}>
+                  <div className="form-row" style={{ display: "flex", gap: "20px" }}>
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Kota Domisili</label>
+                      <Input type="text" name="city" value={formData.city} onChange={handleChange} />
+                    </div>
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Berat Badan (kg)</label>
+                      <Input type="number" name="weight" value={formData.weight} onChange={handleChange} />
+                    </div>
+                  </div>
+
+                  <div className="form-row" style={{ display: "flex", gap: "20px" }}>
+                     <div className="form-group" style={{ flex: 1 }}>
+                        <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Golongan Darah</label>
+                        <select name="blood_type" value={formData.blood_type} onChange={handleChange} style={{ width: "100%", padding: "12px 16px", borderRadius: "var(--radius-standard)", border: "1px solid var(--color-border-input)", fontSize: "16px", outline: "none", transition: "border-color 0.2s" }}>
                             <option value="A">A</option>
                             <option value="B">B</option>
                             <option value="AB">AB</option>
                             <option value="O">O</option>
                         </select>
                      </div>
-                     <div className="form-group">
-                        <label>Rhesus</label>
-                        <select name="rhesus" value={formData.rhesus} onChange={handleChange}>
+                     <div className="form-group" style={{ flex: 1 }}>
+                        <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Rhesus</label>
+                        <select name="rhesus" value={formData.rhesus} onChange={handleChange} style={{ width: "100%", padding: "12px 16px", borderRadius: "var(--radius-standard)", border: "1px solid var(--color-border-input)", fontSize: "16px", outline: "none", transition: "border-color 0.2s" }}>
                             <option value="+">Positif (+)</option>
                             <option value="-">Negatif (-)</option>
                         </select>
                      </div>
                   </div>
 
-                  <div className="form-actions">
-                    <button className="btn-save" onClick={handleSave}>Simpan Perubahan</button>
+                  <div className="form-actions" style={{ display: "flex", justifyContent: "flex-end", marginTop: "16px" }}>
+                    <Button variant="primary" onClick={handleSave} style={{ minWidth: "200px" }}>Simpan Perubahan</Button>
                   </div>
                 </div>
-              </div>
+              </Card>
             )}
 
             {/* TAB 2: STATISTIK & RIWAYAT */}
             {activeTab === "statistik" && (
-              <div className="profile-stats">
-                <div className="stats-summary">
-                  <div className="stat-box">
-                    <div className="stat-number">{stats.totalDonations}</div>
-                    <div className="stat-label">Total Donasi</div>
-                  </div>
-                  <div className="stat-box">
-                    <div className="stat-number">{stats.livesSaved}</div>
-                    <div className="stat-label">Nyawa Terselamatkan</div>
-                  </div>
-                  <div className="stat-box">
-                    <div className="stat-number stat-large">{stats.nextDonor}</div>
-                    <div className="stat-label">Menuju Donor Berikutnya</div>
-                  </div>
+              <div className="profile-stats" style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                <div className="stats-summary" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+                  <Card variant="standard" className="stat-box" style={{ padding: "24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                    <div className="stat-number" style={{ fontSize: "36px", fontWeight: "bold", color: "var(--color-brand-primary)", fontFamily: "var(--font-family-brand)", marginBottom: "8px" }}>{stats.totalDonations}</div>
+                    <div className="stat-label" style={{ color: "var(--color-text-secondary)", fontSize: "14px", fontWeight: "500" }}>Total Donasi</div>
+                  </Card>
+                  <Card variant="standard" className="stat-box" style={{ padding: "24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                    <div className="stat-number" style={{ fontSize: "36px", fontWeight: "bold", color: "var(--color-brand-primary)", fontFamily: "var(--font-family-brand)", marginBottom: "8px" }}>{stats.livesSaved}</div>
+                    <div className="stat-label" style={{ color: "var(--color-text-secondary)", fontSize: "14px", fontWeight: "500" }}>Nyawa Terselamatkan</div>
+                  </Card>
+                  <Card variant="standard" className="stat-box" style={{ padding: "24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                    <div className="stat-number stat-large" style={{ fontSize: "28px", fontWeight: "bold", color: "var(--color-brand-primary)", fontFamily: "var(--font-family-brand)", marginBottom: "8px" }}>{stats.nextDonor}</div>
+                    <div className="stat-label" style={{ color: "var(--color-text-secondary)", fontSize: "14px", fontWeight: "500" }}>Menuju Donor Berikutnya</div>
+                  </Card>
                 </div>
 
-                <div className="history-table">
-                  <h3>Riwayat Donor Terakhir</h3>
-                  <table>
-                    <thead><tr><th>Tanggal</th><th>Lokasi/Keterangan</th><th>Status</th></tr></thead>
-                    <tbody>
-                      {stats.history.length > 0 ? (
-                        stats.history.map((item, idx) => (
-                          <tr key={idx}>
-                            <td>{formatDate(item.donation_date)}</td>
-                            <td>{item.location || "RSUP H. Adam Malik (Default)"}</td>
-                            <td>
-                                <span className={`status-badge ${item.status === 'Approved' ? 'success' : item.status === 'Rejected' ? 'error' : 'warning'}`}>
-                                    {item.status}
-                                </span>
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr><td colSpan="3" className="empty-table-msg">Belum ada riwayat donor.</td></tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
+                <Card variant="standard" className="history-table" style={{ padding: "32px", overflow: "hidden" }}>
+                  <h3 style={{ margin: "0 0 24px 0", fontFamily: "var(--font-family-brand)", fontSize: "20px" }}>Riwayat Donor Terakhir</h3>
+                  <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                      <thead><tr style={{ borderBottom: "2px solid var(--color-border-divider)" }}><th style={{ padding: "16px", color: "var(--color-text-secondary)", fontWeight: "bold" }}>Tanggal</th><th style={{ padding: "16px", color: "var(--color-text-secondary)", fontWeight: "bold" }}>Lokasi/Keterangan</th><th style={{ padding: "16px", color: "var(--color-text-secondary)", fontWeight: "bold" }}>Status</th></tr></thead>
+                      <tbody>
+                        {stats.history.length > 0 ? (
+                          stats.history.map((item, idx) => (
+                            <tr key={idx} style={{ borderBottom: "1px solid var(--color-border-divider)" }}>
+                              <td style={{ padding: "16px" }}>{formatDate(item.donation_date)}</td>
+                              <td style={{ padding: "16px" }}>{item.location || "RSUP H. Adam Malik (Default)"}</td>
+                              <td style={{ padding: "16px" }}>
+                                  <span className={`status-badge ${item.status === 'Approved' ? 'success' : item.status === 'Rejected' ? 'error' : 'warning'}`} style={{
+                                    padding: "6px 12px",
+                                    borderRadius: "20px",
+                                    fontSize: "12px",
+                                    fontWeight: "bold",
+                                    backgroundColor: item.status === 'Approved' ? 'var(--color-status-success)20' : item.status === 'Rejected' ? 'var(--color-status-error)20' : 'var(--color-status-warning)20',
+                                    color: item.status === 'Approved' ? 'var(--color-status-success)' : item.status === 'Rejected' ? 'var(--color-status-error)' : 'var(--color-status-warning)'
+                                  }}>
+                                      {item.status}
+                                  </span>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr><td colSpan="3" className="empty-table-msg" style={{ padding: "32px", textAlign: "center", color: "var(--color-text-secondary)" }}>Belum ada riwayat donor.</td></tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </Card>
               </div>
             )}
 
             {/* TAB 3: PENGATURAN AKUN */}
             {activeTab === "pengaturan" && (
-              <div className="profile-settings">
-                <div className="settings-section">
+              <Card variant="standard" className="profile-settings" style={{ padding: "32px" }}>
+                <div className="settings-section" style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
                   
                   <div className="form-group-full">
-                    <label>Email Akun</label>
-                    <input type="email" value={formData.email} className="settings-input input-disabled" readOnly />
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Email Akun</label>
+                    <Input type="email" value={formData.email} disabled />
                   </div>
                   
-                  <div className="settings-password-row">
+                  <div className="settings-password-row" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                    <h4 style={{ margin: "0 0 -8px 0", fontFamily: "var(--font-family-brand)", fontSize: "18px", paddingBottom: "16px", borderBottom: "1px solid var(--color-border-divider)" }}>Ubah Password</h4>
                     <div className="form-group">
-                        <label>Password Lama</label>
-                        <input 
+                        <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Password Lama</label>
+                        <Input 
                             type="password" 
                             name="oldPassword"
                             placeholder="••••••••" 
-                            className="settings-input" 
                             value={passwordData.oldPassword}
                             onChange={handlePasswordChange}
                         />
                     </div>
                     <div className="form-group">
-                        <label>Password Baru</label>
-                        <input 
+                        <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Password Baru</label>
+                        <Input 
                             type="password" 
                             name="newPassword"
                             placeholder="••••••••" 
-                            className="settings-input" 
                             value={passwordData.newPassword}
                             onChange={handlePasswordChange}
                         />
                     </div>
                     <div className="form-group">
-                        <label>Konfirmasi Password</label>
-                        <input 
+                        <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Konfirmasi Password</label>
+                        <Input 
                             type="password" 
                             name="confirmPassword"
                             placeholder="••••••••" 
-                            className="settings-input" 
                             value={passwordData.confirmPassword}
                             onChange={handlePasswordChange}
                         />
                     </div>
                   </div>
                   
-                  <div className="settings-actions">
-                    <button className="btn-save-settings" onClick={handleChangePassword}>Ganti Password</button>
+                  <div className="settings-actions" style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button variant="outline" onClick={handleChangePassword}>Ganti Password</Button>
                   </div>
 
-                  <div className="settings-logout-section">
-                      <h4 className="settings-logout-title">Zona Keluar</h4>
-                      <p className="logout-desc">Keluar dari akun Anda di perangkat ini.</p>
-                      <button className="btn-logout-settings" onClick={handleLogoutClick}>
-                      <FaSignOutAlt /> Keluar dari Aplikasi
-                    </button>
+                  <div className="settings-logout-section" style={{ marginTop: "24px", paddingTop: "32px", borderTop: "1px solid var(--color-border-divider)", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
+                      <h4 className="settings-logout-title" style={{ margin: 0, fontFamily: "var(--font-family-brand)", fontSize: "18px", color: "var(--color-status-error)" }}>Zona Keluar</h4>
+                      <p className="logout-desc" style={{ margin: 0, color: "var(--color-text-secondary)", fontSize: "14px" }}>Keluar dari akun Anda di perangkat ini.</p>
+                      <Button variant="outline" onClick={handleLogoutClick} style={{ color: "var(--color-status-error)", borderColor: "var(--color-status-error)" }}>
+                      <Icon icon="mdi:logout" style={{ marginRight: "8px" }} /> Keluar dari Aplikasi
+                    </Button>
                   </div>
 
                 </div>
-              </div>
+              </Card>
             )}
           </div>
         </div>
@@ -487,34 +507,36 @@ export default function ProfilePage() {
 
       {/* --- POPUP MODAL (SUKSES/GAGAL) --- */}
       {showSaveModal && (
-        <div className="popup-modal-overlay">
-          <div className="popup-modal">
-            <div className={`popup-icon ${modalType}`}>
-                {modalType === 'success' ? <FaCheckCircle /> : <FaExclamationTriangle />}
+        <div className="popup-modal-overlay" style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+          <Card variant="standard" className="popup-modal" style={{ padding: "40px", textAlign: "center", maxWidth: "400px", width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
+            <div className={`popup-icon ${modalType}`} style={{ fontSize: "64px", color: modalType === 'success' ? 'var(--color-status-success)' : 'var(--color-status-error)' }}>
+                <Icon icon={modalType === 'success' ? 'mdi:check-circle' : 'mdi:alert'} />
             </div>
-            <h3>{modalType === 'success' ? 'Berhasil' : 'Gagal'}</h3>
-            <p>{modalMessage}</p>
-            <button className="btn-popup-ok" onClick={() => setShowSaveModal(false)}>OK</button>
-          </div>
+            <h3 style={{ margin: 0, fontFamily: "var(--font-family-brand)", fontSize: "24px" }}>{modalType === 'success' ? 'Berhasil' : 'Gagal'}</h3>
+            <p style={{ margin: 0, color: "var(--color-text-secondary)" }}>{modalMessage}</p>
+            <Button variant="primary" onClick={() => setShowSaveModal(false)} style={{ marginTop: "16px", minWidth: "120px" }}>OK</Button>
+          </Card>
         </div>
       )}
 
       {/* --- MODAL LOGOUT --- */}
       {showLogoutModal && (
-        <div className="logout-modal-overlay">
-          <div className="logout-modal">
-            <div className="logout-icon-wrapper"><FaSignOutAlt /></div>
-            <h3>Konfirmasi Logout</h3>
-            <p>Apakah Anda yakin ingin keluar?</p>
-            <div className="logout-actions">
-              <button className="btn-modal-cancel" onClick={() => setShowLogoutModal(false)}>
-                Batal
-              </button>
-              <button className="btn-modal-confirm" onClick={confirmLogout}>
-                Ya, Keluar
-              </button>
+        <div className="logout-modal-overlay" style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+          <Card variant="standard" className="logout-modal" style={{ padding: "40px", textAlign: "center", maxWidth: "400px", width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
+            <div className="logout-icon-wrapper" style={{ width: "80px", height: "80px", borderRadius: "50%", backgroundColor: "var(--color-status-error)15", color: "var(--color-status-error)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "40px" }}>
+                <Icon icon="mdi:logout" />
             </div>
-          </div>
+            <h3 style={{ margin: 0, fontFamily: "var(--font-family-brand)", fontSize: "24px" }}>Konfirmasi Logout</h3>
+            <p style={{ margin: 0, color: "var(--color-text-secondary)" }}>Apakah Anda yakin ingin keluar?</p>
+            <div className="logout-actions" style={{ display: "flex", gap: "16px", width: "100%", marginTop: "16px" }}>
+              <Button variant="outline" onClick={() => setShowLogoutModal(false)} style={{ flex: 1 }}>
+                Batal
+              </Button>
+              <Button variant="primary" onClick={confirmLogout} style={{ flex: 1, backgroundColor: "var(--color-status-error)", borderColor: "var(--color-status-error)" }}>
+                Ya, Keluar
+              </Button>
+            </div>
+          </Card>
         </div>
       )}
     </div>

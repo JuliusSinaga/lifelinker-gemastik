@@ -1,14 +1,6 @@
 import React from "react";
 import "../styles/Footer.css";
-import {
-  FaFacebook,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedin,
-  FaPhone,
-  FaEnvelope,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
+import Icon from "./core/Icon";
 
 function Footer() {
   return (
@@ -30,17 +22,17 @@ function Footer() {
             donasi darah.
           </p>
           <div className="app-footer-social">
-            <a href="#" aria-label="Facebook">
-              <FaFacebook />
+            <a href="#!" aria-label="Facebook">
+              <Icon icon="ic:baseline-facebook" width="24" />
             </a>
-            <a href="#" aria-label="Twitter">
-              <FaTwitter />
+            <a href="#!" aria-label="Twitter">
+              <Icon icon="formkit:twitter" width="24" />
             </a>
-            <a href="#" aria-label="Instagram">
-              <FaInstagram />
+            <a href="#!" aria-label="Instagram">
+              <Icon icon="ri:instagram-fill" width="24" />
             </a>
-            <a href="#" aria-label="LinkedIn">
-              <FaLinkedin />
+            <a href="#!" aria-label="LinkedIn">
+              <Icon icon="mdi:linkedin" width="24" />
             </a>
           </div>
         </div>
@@ -88,15 +80,15 @@ function Footer() {
           <h4>Hubungi Kami</h4>
           <div className="app-footer-contact">
             <div className="app-contact-item">
-              <FaPhone />
+              <Icon icon="mdi:phone" width="20" />
               <span>+62 21 1234 5678</span>
             </div>
             <div className="app-contact-item">
-              <FaEnvelope />
+              <Icon icon="mdi:email" width="20" />
               <span>info@lifelinker.id</span>
             </div>
             <div className="app-contact-item">
-              <FaMapMarkerAlt />
+              <Icon icon="mdi:map-marker" width="20" />
               <span>Sitoluama, Sumatera Utara</span>
             </div>
           </div>

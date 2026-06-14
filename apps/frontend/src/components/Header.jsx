@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { 
-  FaExclamationTriangle, 
-  FaUserCircle, 
-  FaBars, 
-  FaTimes, 
-  FaUser, 
-  FaTachometerAlt, 
-  FaSignOutAlt, 
-  FaChevronDown 
-} from "react-icons/fa"; 
+import Icon from "./core/Icon";
+import Button from "./core/Button";
+import Avatar from "./core/Avatar";
 import "../styles/Header.css";
 
 export default function Header() {
@@ -22,7 +15,6 @@ export default function Header() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Fungsi untuk cek status login & ambil data user terbaru
   const checkLoginStatus = () => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
@@ -37,11 +29,8 @@ export default function Header() {
   };
 
   useEffect(() => {
-    checkLoginStatus(); // Cek saat pertama kali load
-    
-    // Dengarkan event 'user-login' (yang di-trigger saat login atau update profil)
+    checkLoginStatus();
     window.addEventListener("user-login", checkLoginStatus);
-    
     return () => window.removeEventListener("user-login", checkLoginStatus);
   }, []);
 
@@ -68,28 +57,23 @@ export default function Header() {
     return location.pathname.startsWith(path);
   };
 
-  const getInitials = (name) => name ? name.charAt(0).toUpperCase() : "U";
-
   return (
     <>
       <header className="app-header">
         <nav className="app-nav">
-          {/* LOGO */}
           <Link to="/" className="app-logo">
             <img
               src={process.env.PUBLIC_URL + "/images/lifelinker-logo.png"}
               alt="LifeLinker"
               className="app-logo-image"
             />
-            <span className="app-logo-text">LifeLinker</span>
+            <span className="app-logo-text" style={{ fontFamily: 'var(--font-family-brand)', color: 'var(--color-brand-primary)' }}>LifeLinker</span>
           </Link>
 
-          {/* MOBILE MENU TOGGLE */}
           <div className="mobile-menu-icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+            {isMobileMenuOpen ? <Icon icon="mdi:close" width="24" /> : <Icon icon="mdi:menu" width="24" />}
           </div>
 
-          {/* NAVIGATION LINKS */}
           <div className={`nav-menu-wrapper ${isMobileMenuOpen ? "active" : ""}`}>
             <ul className="app-nav-links">
               <li><Link to="/" className={`app-nav-link ${isActive("/") ? "active" : ""}`} onClick={() => setIsMobileMenuOpen(false)}>Beranda</Link></li>
@@ -105,66 +89,52 @@ export default function Header() {
               )}
             </ul>
 
-            {/* ACTION BUTTONS (Login/User) */}
             <div className="app-nav-actions">
               {isLoggedIn && user ? (
                 <div 
                     className="app-user-info" 
                     onClick={() => setShowDropdown(!showDropdown)} 
-                    style={{cursor: 'pointer'}}
+                    style={{cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px'}}
                 >
-                  <div className="user-name-wrapper">
-                      <span className="user-name">Halo, {user.nama || user.name}</span>
-                      <FaChevronDown style={{ fontSize: '10px', color: '#6b7280', marginLeft: '5px' }} />
+                  <div className="user-name-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span className="user-name" style={{ fontFamily: 'var(--font-family-primary)', fontWeight: 'var(--font-weight-medium)' }}>Halo, {user.nama || user.name}</span>
+                      <Icon icon="mdi:chevron-down" width="16" style={{ color: 'var(--color-text-secondary)' }} />
                   </div>
                   
-                  {/* --- AVATAR DINAMIS --- */}
-                  <div className="app-user-avatar">
-                    {user.photo_url ? (
-                        <img 
-                            src={user.photo_url} 
-                            alt="User" 
-                            style={{width:'100%', height:'100%', borderRadius:'50%', objectFit:'cover'}}
-                            onError={(e) => {
-                                e.target.style.display = 'none'; // Sembunyikan gambar rusak
-                                e.target.parentElement.innerText = getInitials(user.nama || user.name); // Tampilkan inisial
-                            }}
-                        />
-                    ) : (
-                        getInitials(user.nama || user.name)
-                    )}
-                  </div>
-                  {/* ---------------------- */}
+                  <Avatar src={user.photo_url} name={user.nama || user.name} size={40} />
 
-                  {/* Dropdown Menu */}
                   {showDropdown && (
                     <div className="user-dropdown">
                         <Link to="/profile" className="dropdown-item" onClick={() => setShowDropdown(false)}>
-                            <FaUser style={{fontSize: '14px'}}/> Profil Saya
+                            <Icon icon="mdi:account" width="16" style={{ marginRight: '8px' }}/> Profil Saya
                         </Link>
                         
                         {user.role === 'admin' && (
                             <Link to="/dashboard-admin" className="dropdown-item" onClick={() => setShowDropdown(false)}>
-                                <FaTachometerAlt style={{fontSize: '14px'}}/> Dashboard Admin
+                                <Icon icon="mdi:view-dashboard" width="16" style={{ marginRight: '8px' }}/> Dashboard Admin
                             </Link>
                         )}
                         
                         {user.role === 'dokter' && (
                             <Link to="/dashboard-dokter" className="dropdown-item" onClick={() => setShowDropdown(false)}>
-                                <FaTachometerAlt style={{fontSize: '14px'}}/> Dashboard Dokter
+                                <Icon icon="mdi:view-dashboard" width="16" style={{ marginRight: '8px' }}/> Dashboard Dokter
                             </Link>
                         )}
                         
-                        <div onClick={handleLogoutClick} className="dropdown-item logout">
-                            <FaSignOutAlt style={{fontSize: '14px'}}/> Keluar
+                        <div onClick={handleLogoutClick} className="dropdown-item logout" style={{ color: 'var(--color-status-error)' }}>
+                            <Icon icon="mdi:logout" width="16" style={{ marginRight: '8px' }}/> Keluar
                         </div>
                     </div>
                   )}
                 </div>
               ) : (
-                <div className="auth-buttons">
-                  <Link to="/pilih-role" className="app-btn-login" onClick={() => setIsMobileMenuOpen(false)}>Login</Link>
-                  <Link to="/pilih-role" className="app-btn-register" onClick={() => setIsMobileMenuOpen(false)}>Daftar</Link>
+                <div className="auth-buttons" style={{ display: 'flex', gap: '8px' }}>
+                  <Link to="/pilih-role" style={{ textDecoration: 'none' }} onClick={() => setIsMobileMenuOpen(false)}>
+                    <Button variant="outline" size="small">Login</Button>
+                  </Link>
+                  <Link to="/pilih-role" style={{ textDecoration: 'none' }} onClick={() => setIsMobileMenuOpen(false)}>
+                    <Button variant="pill" size="small">Daftar</Button>
+                  </Link>
                 </div>
               )}
             </div>
@@ -172,23 +142,22 @@ export default function Header() {
         </nav>
       </header>
 
-      {/* ===================== LOGOUT MODAL ===================== */}
       {showLogoutModal && (
         <div className="header-modal-overlay">
-          <div className="header-modal">
-            <div className="modal-icon-warning">
-              <FaExclamationTriangle />
+          <div className="header-modal" style={{ backgroundColor: 'var(--color-surface-card)', borderRadius: 'var(--radius-standard)', padding: '24px', textAlign: 'center', boxShadow: 'var(--shadow-elevated)' }}>
+            <div className="modal-icon-warning" style={{ color: 'var(--color-status-warning)', fontSize: '48px', marginBottom: '16px' }}>
+              <Icon icon="mdi:alert-circle-outline" width="48" />
             </div>
-            <h3>Konfirmasi Logout</h3>
-            <p>Apakah Anda yakin ingin keluar dari akun ini?</p>
+            <h3 style={{ fontFamily: 'var(--font-family-primary)', margin: '0 0 8px 0' }}>Konfirmasi Logout</h3>
+            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '24px' }}>Apakah Anda yakin ingin keluar dari akun ini?</p>
 
-            <div className="header-modal-actions">
-              <button className="btn-header-cancel" onClick={() => setShowLogoutModal(false)}>
+            <div className="header-modal-actions" style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
+              <Button variant="secondary" onClick={() => setShowLogoutModal(false)}>
                 Batal
-              </button>
-              <button className="btn-header-confirm" onClick={confirmLogout}>
+              </Button>
+              <Button variant="primary" onClick={confirmLogout} style={{ backgroundColor: 'var(--color-status-error)' }}>
                 Ya, Keluar
-              </button>
+              </Button>
             </div>
           </div>
         </div>

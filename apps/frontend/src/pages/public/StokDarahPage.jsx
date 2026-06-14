@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../../styles/StokDarahPage.css";
-import {
-  FaMapMarkerAlt,
-  FaFilter,
-  FaClock,
-  FaChevronRight,
-  FaMapPin,
-  FaHospital,
-} from "react-icons/fa";
 import Header from "../../components/Header";
-import axiosClient from "../../service/axiosClient"; // 1. Import API Client
+import axiosClient from "../../service/axiosClient";
+import Icon from "../../components/core/Icon";
+import Button from "../../components/core/Button";
+import Card from "../../components/core/Card";
+import Badge from "../../components/core/Badge";
 
 export default function StokDarahPage() {
   const [selectedFilter, setSelectedFilter] = useState("Semua Kota");
@@ -122,28 +118,29 @@ export default function StokDarahPage() {
       <Header showUserProfile={isLoggedIn} />
 
       {/* Hero Section */}
-      <section className="stok-hero">
+      <section className="stok-hero" style={{ backgroundColor: 'var(--color-brand-primary)', padding: '60px 5% 80px', textAlign: 'center' }}>
         <div className="stok-hero-content">
-          <h1>🩸 Stok Darah Rumah Sakit</h1>
-          <p>Cek ketersediaan stok darah di rumah sakit dan PMI terdekat</p>
+          <h1 style={{ fontFamily: 'var(--font-family-brand)', color: 'white', fontSize: '36px', marginBottom: '16px' }}>🩸 Stok Darah Rumah Sakit</h1>
+          <p style={{ fontFamily: 'var(--font-family-primary)', color: 'white', opacity: 0.9, fontSize: '18px' }}>Cek ketersediaan stok darah di rumah sakit dan PMI terdekat</p>
         </div>
       </section>
 
       {/* Main Content */}
-      <main className="stok-main">
-        {/* Filter Section */}
-        <div className="filter-section">
+      <main className="stok-main" style={{ backgroundColor: 'var(--color-bg-page)', paddingBottom: '60px' }}>
+        {/* Filter Section (Floating) */}
+        <div className="filter-section" style={{ maxWidth: '1000px', margin: '-40px auto 40px auto', padding: '0 20px', position: 'relative', zIndex: 10 }}>
           <div className="filter-container">
-            <div className="filter-card">
-              <div className="filter-item">
-                <span className="filter-label">
-                  <FaFilter className="filter-icon" />
+            <Card variant="standard" className="filter-card" style={{ padding: '24px', display: 'flex', gap: '24px', alignItems: 'center', boxShadow: 'var(--shadow-elevated)' }}>
+              <div className="filter-item" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <span className="filter-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>
+                  <Icon icon="mdi:filter" className="filter-icon" />
                   Filter Kota:
                 </span>
                 <select
                   className="filter-dropdown"
                   value={selectedFilter}
                   onChange={(e) => setSelectedFilter(e.target.value)}
+                  style={{ padding: '12px', borderRadius: 'var(--radius-standard)', border: '1px solid var(--color-border-input)', backgroundColor: 'var(--color-surface-card)' }}
                 >
                   {filterOptions.map((option) => (
                     <option key={option} value={option}>
@@ -153,15 +150,16 @@ export default function StokDarahPage() {
                 </select>
               </div>
 
-              <div className="filter-item">
-                <span className="filter-label">
-                  <FaHospital className="filter-icon" />
+              <div className="filter-item" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <span className="filter-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>
+                  <Icon icon="mdi:hospital-building" className="filter-icon" />
                   Golongan Darah:
                 </span>
                 <select
                   className="filter-dropdown"
                   value={selectedBloodType}
                   onChange={(e) => setSelectedBloodType(e.target.value)}
+                  style={{ padding: '12px', borderRadius: 'var(--radius-standard)', border: '1px solid var(--color-border-input)', backgroundColor: 'var(--color-surface-card)' }}
                 >
                   {bloodTypeOptions.map((option) => (
                     <option key={option} value={option}>
@@ -170,20 +168,20 @@ export default function StokDarahPage() {
                   ))}
                 </select>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
 
         {/* Loading State */}
         {loading ? (
-          <div style={{ textAlign: "center", padding: "50px" }}>Memuat Stok Darah...</div>
+          <div style={{ textAlign: "center", padding: "50px", fontFamily: 'var(--font-family-primary)', color: 'var(--color-text-secondary)' }}>Memuat Stok Darah...</div>
         ) : (
-          <div className="stok-container">
+          <div className="stok-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
             {/* Results Info */}
             <div
               style={{
                 marginBottom: "20px",
-                color: "#666",
+                color: "var(--color-text-secondary)",
                 fontSize: "14px",
                 fontWeight: "500",
               }}
@@ -192,25 +190,25 @@ export default function StokDarahPage() {
             </div>
 
             {/* Hospital Cards */}
-            <div className="hospitals-grid">
+            <div className="hospitals-grid" style={{ display: 'grid', gap: '24px' }}>
               {filteredHospitals.length > 0 ? (
                 filteredHospitals.map((hospital) => (
-                  <div key={hospital.id} className="hospital-card">
+                  <Card key={hospital.id} variant="standard" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     <div className="hospital-card-header">
                       <div className="hospital-basic-info">
-                        <span className="hospital-city-tag">{hospital.city}</span>
-                        <h3>{hospital.name}</h3>
-                        <div className="hospital-meta">
-                          <div className="meta-item">
-                            <FaMapMarkerAlt className="meta-icon" />
+                        <Badge variant="primary" style={{ marginBottom: '12px' }}>{hospital.city}</Badge>
+                        <h3 style={{ margin: '0 0 12px 0', fontFamily: 'var(--font-family-primary)' }}>{hospital.name}</h3>
+                        <div className="hospital-meta" style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: 'var(--color-text-secondary)', fontSize: '14px' }}>
+                          <div className="meta-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                            <Icon icon="mdi:map-marker" className="meta-icon" width="18" style={{ marginTop: '2px', color: 'var(--color-brand-primary)' }} />
                             <span>{hospital.address}</span>
                           </div>
-                          <div className="meta-item">
-                            <FaClock className="meta-icon" />
+                          <div className="meta-item" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <Icon icon="mdi:clock-outline" className="meta-icon" width="18" style={{ color: 'var(--color-brand-primary)' }} />
                             <span>{hospital.operationalHours}</span>
                           </div>
-                          <div className="meta-item">
-                            <FaMapPin className="meta-icon" />
+                          <div className="meta-item" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <Icon icon="mdi:pin" className="meta-icon" width="18" style={{ color: 'var(--color-brand-primary)' }} />
                             <span>{hospital.distance}</span>
                           </div>
                         </div>
@@ -219,51 +217,53 @@ export default function StokDarahPage() {
 
                     {/* Blood Stock Summary */}
                     <div className="blood-stock-summary">
-                      <h4>Status Stok Darah:</h4>
-                      <div className="blood-types-grid">
+                      <h4 style={{ margin: '0 0 12px 0' }}>Status Stok Darah:</h4>
+                      <div className="blood-types-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '12px' }}>
                         {hospital.bloodStock && Object.entries(hospital.bloodStock).map(
                           ([type, data]) => (
                             <div
                               key={type}
                               className={`blood-type-badge ${data.statusClass}`}
+                              style={{ 
+                                display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '12px', 
+                                borderRadius: 'var(--radius-standard)', border: '1px solid var(--color-border-input)',
+                                backgroundColor: data.statusClass === 'critical' ? 'rgba(220, 38, 38, 0.1)' : data.statusClass === 'safe' ? 'rgba(16, 185, 129, 0.1)' : 'var(--color-surface-background)'
+                              }}
                             >
-                              <span className="blood-type">{type}</span>
-                              <span className="blood-units">
+                              <span className="blood-type" style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--color-brand-primary)' }}>{type}</span>
+                              <span className="blood-units" style={{ fontSize: '14px', color: 'var(--color-text-primary)', fontWeight: 'bold' }}>
                                 {data.units} Kantong
                               </span>
-                              <span className="blood-status">{data.status}</span>
+                              <span className="blood-status" style={{ fontSize: '12px', color: data.statusClass === 'critical' ? 'var(--color-status-error)' : data.statusClass === 'safe' ? 'var(--color-status-success)' : 'var(--color-text-secondary)' }}>{data.status}</span>
                             </div>
                           )
                         )}
                         {(!hospital.bloodStock || Object.keys(hospital.bloodStock).length === 0) && (
-                            <p style={{fontSize:'12px', color:'#888'}}>Data stok belum tersedia.</p>
+                            <p style={{fontSize:'12px', color:'var(--color-text-secondary)'}}>Data stok belum tersedia.</p>
                         )}
                       </div>
                     </div>
 
                     {/* Urgent Needs */}
                     {hospital.urgentNeeds && hospital.urgentNeeds.length > 0 && (
-                      <div className="urgent-needs">
-                        <strong>Kebutuhan Mendesak</strong>
-                        <div className="urgent-blood-types">
+                      <div className="urgent-needs" style={{ backgroundColor: 'rgba(220, 38, 38, 0.05)', padding: '16px', borderRadius: 'var(--radius-standard)', border: '1px dashed var(--color-status-error)' }}>
+                        <strong style={{ display: 'block', marginBottom: '8px', color: 'var(--color-status-error)' }}>Kebutuhan Mendesak</strong>
+                        <div className="urgent-blood-types" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                           {hospital.urgentNeeds.map((type) => (
-                            <span key={type} className="urgent-blood-badge">
+                            <Badge key={type} variant="danger">
                               {type}
-                            </span>
+                            </Badge>
                           ))}
                         </div>
                       </div>
                     )}
 
-                    <div className="hospital-card-actions">
-                      <Link
-                        to={`/stok-darah/${hospital.id}`}
-                        className="detail-button"
-                      >
-                        Lihat Detail Stok <FaChevronRight />
-                      </Link>
+                    <div className="hospital-card-actions" style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid var(--color-border-divider)' }}>
+                      <Button as={Link} to={`/stok-darah/${hospital.id}`} variant="ghost" fullWidth style={{ justifyContent: 'space-between' }}>
+                        Lihat Detail Stok <Icon icon="mdi:chevron-right" width="20" />
+                      </Button>
                     </div>
-                  </div>
+                  </Card>
                 ))
               ) : (
                 <div
@@ -271,16 +271,17 @@ export default function StokDarahPage() {
                     gridColumn: "1 / -1",
                     textAlign: "center",
                     padding: "40px",
-                    background: "white",
-                    borderRadius: "16px",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                    background: "var(--color-surface-card)",
+                    borderRadius: "var(--radius-large)",
+                    boxShadow: "var(--shadow-base)",
                   }}
                 >
                   <p
                     style={{
                       fontSize: "16px",
-                      color: "#666",
+                      color: "var(--color-text-secondary)",
                       margin: 0,
+                      fontWeight: "500",
                     }}
                   >
                     Tidak ada rumah sakit yang sesuai dengan filter yang dipilih.

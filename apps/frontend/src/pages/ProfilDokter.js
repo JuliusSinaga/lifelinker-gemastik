@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import DokterSidebar from "../components/SidebarDokter";
 import "../styles/ProfilDokter.css";
 import axiosClient from "../service/axiosClient";
-import { FaCheckCircle, FaTimesCircle, FaUserMd } from "react-icons/fa";
+import Icon from "../components/core/Icon";
+import Button from "../components/core/Button";
+import Card from "../components/core/Card";
+import Input from "../components/core/Input";
 
 export default function ProfilDokter() {
   // State Data Dokter
@@ -131,179 +134,175 @@ export default function ProfilDokter() {
     <div className="dokter-layout">
       <DokterSidebar />
 
-      <main className="dokter-main">
-        <div className="profil-header">
-          <h1 className="page-title">Profil Saya</h1>
+      <main className="dokter-main" style={{ padding: "32px", backgroundColor: "var(--color-bg-page)", minHeight: "100vh" }}>
+        <div className="profil-header" style={{ marginBottom: "32px" }}>
+          <h1 className="page-title" style={{ fontFamily: "var(--font-family-brand)", margin: 0 }}>Profil Saya</h1>
         </div>
 
-        <div className="pd-container">
+        <div className="pd-container" style={{ display: "flex", flexDirection: "column", gap: "24px", maxWidth: "900px", margin: "0 auto" }}>
             {/* KARTU IDENTITAS SINGKAT */}
-            <div className="pd-card profile-summary">
-                <div className="pd-avatar">
-                    <FaUserMd />
+            <Card variant="standard" className="pd-card profile-summary" style={{ display: "flex", alignItems: "center", gap: "24px", padding: "32px" }}>
+                <div className="pd-avatar" style={{ width: "80px", height: "80px", borderRadius: "50%", backgroundColor: "var(--color-brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: "40px" }}>
+                    <Icon icon="mdi:doctor" />
                 </div>
-                <div className="pd-info">
-                    <h2>{doctorData.name || "Nama Dokter"}</h2>
-                    <p>{doctorData.specialization || "Spesialisasi Belum Diisi"}</p>
-                    <span className="pd-badge">{doctorData.hospital || "Rumah Sakit"}</span>
+                <div className="pd-info" style={{ flex: 1 }}>
+                    <h2 style={{ margin: "0 0 8px 0", fontSize: "24px", fontFamily: "var(--font-family-brand)" }}>{doctorData.name || "Nama Dokter"}</h2>
+                    <p style={{ margin: "0 0 12px 0", color: "var(--color-text-secondary)" }}>{doctorData.specialization || "Spesialisasi Belum Diisi"}</p>
+                    <span className="pd-badge" style={{ backgroundColor: "var(--color-brand-primary)15", color: "var(--color-brand-primary)", padding: "6px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "bold" }}>{doctorData.hospital || "Rumah Sakit"}</span>
                 </div>
-            </div>
+            </Card>
 
             {/* FORM DATA PROFESIONAL */}
-            <div className="pd-card">
-            <h2 className="pd-section-title">Informasi Profesional & Pribadi</h2>
+            <Card variant="standard" className="pd-card" style={{ padding: "32px" }}>
+            <h2 className="pd-section-title" style={{ margin: "0 0 24px 0", fontSize: "20px", fontFamily: "var(--font-family-brand)", borderBottom: "1px solid var(--color-border-divider)", paddingBottom: "16px" }}>Informasi Profesional & Pribadi</h2>
 
-            <div className="pd-grid">
-                <div className="pd-form-group full-width">
-                    <label>Nama Lengkap (dengan gelar)</label>
-                    <input 
+            <div className="pd-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "32px" }}>
+                <div className="pd-form-group full-width" style={{ gridColumn: "1 / -1" }}>
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Nama Lengkap (dengan gelar)</label>
+                    <Input 
                         type="text" 
                         name="name"
                         value={doctorData.name} 
                         onChange={handleProfileChange}
-                        className="pd-input"
                     />
                 </div>
 
                 <div className="pd-form-group">
-                    <label>Email</label>
-                    <input 
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Email</label>
+                    <Input 
                         type="email" 
                         value={doctorData.email} 
                         readOnly 
-                        className="pd-input input-readonly"
+                        className="input-readonly"
                         title="Email tidak dapat diubah"
+                        style={{ backgroundColor: "var(--color-surface-background)" }}
                     />
                 </div>
 
                 <div className="pd-form-group">
-                    <label>Nomor Telepon</label>
-                    <input 
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Nomor Telepon</label>
+                    <Input 
                         type="text" 
                         name="phone"
                         value={doctorData.phone} 
                         onChange={handleProfileChange}
-                        className="pd-input"
                     />
                 </div>
 
                 <div className="pd-form-group">
-                    <label>Nomor STR</label>
-                    <input 
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Nomor STR</label>
+                    <Input 
                         type="text" 
                         name="str_number"
                         value={doctorData.str_number} 
                         onChange={handleProfileChange}
-                        className="pd-input"
                     />
                 </div>
 
                 <div className="pd-form-group">
-                    <label>Spesialisasi</label>
-                    <input 
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Spesialisasi</label>
+                    <Input 
                         type="text" 
                         name="specialization"
                         value={doctorData.specialization} 
                         onChange={handleProfileChange}
-                        className="pd-input"
                     />
                 </div>
 
                 <div className="pd-form-group">
-                    <label>Instansi / Rumah Sakit</label>
-                    <input 
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Instansi / Rumah Sakit</label>
+                    <Input 
                         type="text" 
                         name="hospital"
                         value={doctorData.hospital} 
                         onChange={handleProfileChange}
-                        className="pd-input"
                     />
                 </div>
 
-                <div className="pd-form-group full-width">
-                    <label>Kota Domisili</label>
-                    <input 
+                <div className="pd-form-group full-width" style={{ gridColumn: "1 / -1" }}>
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Kota Domisili</label>
+                    <Input 
                         type="text" 
                         name="city"
                         value={doctorData.city} 
                         onChange={handleProfileChange}
-                        className="pd-input"
                     />
                 </div>
             </div>
 
-            <button 
+            <Button 
+                variant="primary"
                 className="pd-btn-save" 
                 onClick={handleSaveProfile}
                 disabled={loadingProfile}
+                style={{ width: "100%", padding: "14px" }}
             >
                 {loadingProfile ? "Menyimpan..." : "Simpan Perubahan"}
-            </button>
-            </div>
+            </Button>
+            </Card>
 
             {/* FORM GANTI PASSWORD */}
-            <div className="pd-card">
-            <h2 className="pd-section-title">Ubah Kata Sandi</h2>
+            <Card variant="standard" className="pd-card" style={{ padding: "32px" }}>
+            <h2 className="pd-section-title" style={{ margin: "0 0 24px 0", fontSize: "20px", fontFamily: "var(--font-family-brand)", borderBottom: "1px solid var(--color-border-divider)", paddingBottom: "16px" }}>Ubah Kata Sandi</h2>
 
-            <div className="pd-grid">
+            <div className="pd-grid" style={{ display: "flex", flexDirection: "column", gap: "20px", marginBottom: "32px" }}>
                 <div className="pd-form-group full-width">
-                    <label>Password Saat Ini</label>
-                    <input 
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Password Saat Ini</label>
+                    <Input 
                         type="password" 
                         name="current"
                         value={passwords.current} 
                         onChange={handlePasswordChange}
-                        className="pd-input"
                     />
                 </div>
 
                 <div className="pd-form-group">
-                    <label>Password Baru</label>
-                    <input 
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Password Baru</label>
+                    <Input 
                         type="password" 
                         name="new"
                         value={passwords.new} 
                         onChange={handlePasswordChange}
-                        className="pd-input"
                     />
                 </div>
 
                 <div className="pd-form-group">
-                    <label>Konfirmasi Password</label>
-                    <input 
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Konfirmasi Password</label>
+                    <Input 
                         type="password" 
                         name="confirm"
                         value={passwords.confirm} 
                         onChange={handlePasswordChange}
-                        className="pd-input"
                     />
                 </div>
             </div>
 
-            <button 
+            <Button 
+                variant="outline"
                 className="pd-btn-password" 
                 onClick={handleSavePassword}
                 disabled={loadingPassword}
+                style={{ width: "100%", padding: "14px" }}
             >
                 {loadingPassword ? "Memproses..." : "Ubah Kata Sandi"}
-            </button>
-            </div>
+            </Button>
+            </Card>
         </div>
       </main>
 
       {/* POPUP MODAL */}
       {popup.show && (
-        <div className="modal-overlay" onClick={closePopup}>
-          <div className="modal-content-popup" onClick={(e) => e.stopPropagation()}>
-            <div className={`popup-icon ${popup.type}`}>
-                {popup.type === "success" ? <FaCheckCircle /> : <FaTimesCircle />}
+        <div className="modal-overlay" onClick={closePopup} style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+          <Card variant="standard" className="modal-content-popup" onClick={(e) => e.stopPropagation()} style={{ padding: "40px", textAlign: "center", width: "100%", maxWidth: "400px", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
+            <div className={`popup-icon ${popup.type}`} style={{ fontSize: "64px", color: popup.type === "success" ? "var(--color-status-success)" : "var(--color-status-error)" }}>
+                {popup.type === "success" ? <Icon icon="mdi:check-circle" /> : <Icon icon="mdi:close-circle" />}
             </div>
-            <h3 className="popup-title">
+            <h3 className="popup-title" style={{ margin: 0, fontFamily: "var(--font-family-brand)", fontSize: "24px" }}>
                 {popup.type === "success" ? "Berhasil!" : "Gagal!"}
             </h3>
-            <p className="popup-message">{popup.message}</p>
-            <button className="popup-btn" onClick={closePopup}>OK</button>
-          </div>
+            <p className="popup-message" style={{ margin: 0, color: "var(--color-text-secondary)" }}>{popup.message}</p>
+            <Button variant="primary" className="popup-btn" onClick={closePopup} style={{ width: "100%", marginTop: "16px" }}>OK</Button>
+          </Card>
         </div>
       )}
 

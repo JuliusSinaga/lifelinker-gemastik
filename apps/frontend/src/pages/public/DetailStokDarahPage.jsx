@@ -1,20 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import "../../styles/DetailStokDarahPage.css";
-import {
-  FaPhone,
-  FaWhatsapp,
-  FaMapMarkerAlt,
-  FaFilter,
-  FaCheckCircle,
-  FaArrowLeft,
-  FaHospital,
-  FaClock,
-  FaClipboardList,
-  FaTint,
-} from "react-icons/fa";
 import Header from "../../components/Header";
 import axiosClient from "../../service/axiosClient";
+import Icon from "../../components/core/Icon";
+import Button from "../../components/core/Button";
 
 const procedureInfo = [
   "Siapkan surat permintaan darah resmi dari dokter yang merawat.",
@@ -121,15 +111,15 @@ export default function DetailStokDarahPage() {
   // Render Loading / Error
   if (loading)
     return (
-      <div style={{ textAlign: "center", padding: "50px" }}>
+      <div style={{ textAlign: "center", padding: "50px", fontFamily: "var(--font-family-primary)", color: "var(--color-text-secondary)" }}>
         Memuat data stok...
       </div>
     );
   if (!hospital)
     return (
       <div style={{ textAlign: "center", padding: "50px" }}>
-        <h2>Data tidak ditemukan</h2>
-        <button onClick={() => navigate("/stok-darah")}>Kembali</button>
+        <h2 style={{ fontFamily: "var(--font-family-brand)", color: "var(--color-text-primary)" }}>Data tidak ditemukan</h2>
+        <Button onClick={() => navigate("/stok-darah")} variant="primary">Kembali</Button>
       </div>
     );
 
@@ -159,69 +149,56 @@ export default function DetailStokDarahPage() {
       <Header />
 
       {/* Hospital Info Section */}
-      <section className="hospital-info-section" style={{ paddingTop: "40px" }}>
+      <section className="hospital-info-section" style={{ paddingTop: "40px", backgroundColor: "var(--color-bg-page)" }}>
         <div className="hospital-container">
-          <div className="back-button">
-            <Link to="/stok-darah" className="back-link">
-              <FaArrowLeft /> Kembali ke Daftar Rumah Sakit
-            </Link>
+          <div className="back-button" style={{ marginBottom: "20px" }}>
+            <Button as={Link} to="/stok-darah" variant="ghost" style={{ paddingLeft: 0, color: "var(--color-text-secondary)" }}>
+              <Icon icon="mdi:arrow-left" width="20" style={{ marginRight: "8px" }} /> Kembali ke Daftar Rumah Sakit
+            </Button>
           </div>
 
-          <div className="hospital-info">
-            <h1>
-              <FaHospital
-                style={{
-                  display: "inline",
-                  marginRight: "12px",
-                  color: "var(--primary-red)",
-                }}
-              />
+          <div className="hospital-info" style={{ backgroundColor: "var(--color-surface-card)", padding: "32px", borderRadius: "var(--radius-large)", boxShadow: "var(--shadow-base)", border: "1px solid var(--color-border-divider)" }}>
+            <h1 style={{ fontFamily: "var(--font-family-brand)", color: "var(--color-text-primary)", display: "flex", alignItems: "center", gap: "12px", margin: "0 0 24px 0" }}>
+              <Icon icon="mdi:hospital-building" width="32" style={{ color: "var(--color-brand-primary)" }} />
               {hospital.name}
             </h1>
-            <div className="hospital-details">
-              <div className="detail-item">
-                <FaMapMarkerAlt className="detail-icon" />
+            <div className="hospital-details" style={{ display: "flex", flexDirection: "column", gap: "12px", color: "var(--color-text-secondary)", marginBottom: "32px" }}>
+              <div className="detail-item" style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                <Icon icon="mdi:map-marker" width="20" style={{ color: "var(--color-brand-primary)", marginTop: "2px" }} />
                 <span>{hospital.address}</span>
               </div>
-              <div className="detail-item">
-                <FaClock className="detail-icon" />
+              <div className="detail-item" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <Icon icon="mdi:clock-outline" width="20" style={{ color: "var(--color-brand-primary)" }} />
                 <span>
                   <strong>Jam Operasional:</strong> {hospital.operationalHours}
                 </span>
               </div>
             </div>
 
-            <div className="action-buttons">
-              <button className="btn-contact">
-                <FaPhone /> Hubungi
-              </button>
-              <button className="btn-whatsapp">
-                <FaWhatsapp /> WhatsApp
-              </button>
-              <a
+            <div className="action-buttons" style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+              <Button variant="primary" className="btn-contact">
+                <Icon icon="mdi:phone" width="20" style={{ marginRight: "8px" }} /> Hubungi
+              </Button>
+              <Button variant="secondary" className="btn-whatsapp" style={{ backgroundColor: "#25D366", color: "white", borderColor: "#25D366" }}>
+                <Icon icon="mdi:whatsapp" width="20" style={{ marginRight: "8px" }} /> WhatsApp
+              </Button>
+              <Button as="a"
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
                   hospital.name + " " + hospital.address
                 )}`}
                 target="_blank"
                 rel="noreferrer"
-                className="btn-maps"
-                style={{
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                }}
+                variant="ghost"
               >
-                <FaMapMarkerAlt /> Google Maps
-              </a>
+                <Icon icon="mdi:map-marker" width="20" style={{ marginRight: "8px" }} /> Google Maps
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <main className="stok-main">
+      <main className="stok-main" style={{ backgroundColor: "var(--color-bg-page)" }}>
         <div className="stok-container">
           {/* --- BAGIAN STATISTIK YANG DIPERBAIKI (GRID LAYOUT) --- */}
           <div
@@ -229,7 +206,7 @@ export default function DetailStokDarahPage() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: "20px",
+              gap: "24px",
               marginBottom: "40px",
             }}
           >
@@ -237,23 +214,25 @@ export default function DetailStokDarahPage() {
             <div
               className="stat-card critical"
               style={{
-                background: "#fee2e2",
-                border: "1px solid #ef4444",
-                borderRadius: "12px",
-                padding: "20px",
+                background: "rgba(220, 38, 38, 0.1)",
+                border: "1px solid rgba(220, 38, 38, 0.2)",
+                borderRadius: "var(--radius-large)",
+                padding: "24px",
                 textAlign: "center",
               }}
             >
               <div
                 style={{
-                  fontSize: "2.5rem",
+                  fontFamily: "var(--font-family-brand)",
+                  fontSize: "3rem",
                   fontWeight: "bold",
-                  color: "#ef4444",
+                  color: "var(--color-status-error)",
+                  marginBottom: "8px"
                 }}
               >
                 {criticalCount}
               </div>
-              <div style={{ color: "#7f1d1d", fontWeight: "600" }}>
+              <div style={{ color: "var(--color-status-error)", fontWeight: "600", fontFamily: "var(--font-family-primary)" }}>
                 Golongan Kritis
               </div>
             </div>
@@ -262,23 +241,25 @@ export default function DetailStokDarahPage() {
             <div
               className="stat-card standard"
               style={{
-                background: "#fef3c7",
-                border: "1px solid #f59e0b",
-                borderRadius: "12px",
-                padding: "20px",
+                background: "rgba(245, 158, 11, 0.1)",
+                border: "1px solid rgba(245, 158, 11, 0.2)",
+                borderRadius: "var(--radius-large)",
+                padding: "24px",
                 textAlign: "center",
               }}
             >
               <div
                 style={{
-                  fontSize: "2.5rem",
+                  fontFamily: "var(--font-family-brand)",
+                  fontSize: "3rem",
                   fontWeight: "bold",
-                  color: "#f59e0b",
+                  color: "var(--color-status-warning)",
+                  marginBottom: "8px"
                 }}
               >
                 {standardCount}
               </div>
-              <div style={{ color: "#78350f", fontWeight: "600" }}>
+              <div style={{ color: "#B45309", fontWeight: "600", fontFamily: "var(--font-family-primary)" }}>
                 Golongan Standar
               </div>
             </div>
@@ -287,23 +268,25 @@ export default function DetailStokDarahPage() {
             <div
               className="stat-card safe"
               style={{
-                background: "#d1fae5",
-                border: "1px solid #10b981",
-                borderRadius: "12px",
-                padding: "20px",
+                background: "rgba(16, 185, 129, 0.1)",
+                border: "1px solid rgba(16, 185, 129, 0.2)",
+                borderRadius: "var(--radius-large)",
+                padding: "24px",
                 textAlign: "center",
               }}
             >
               <div
                 style={{
-                  fontSize: "2.5rem",
+                  fontFamily: "var(--font-family-brand)",
+                  fontSize: "3rem",
                   fontWeight: "bold",
-                  color: "#10b981",
+                  color: "var(--color-status-success)",
+                  marginBottom: "8px"
                 }}
               >
                 {safeCount}
               </div>
-              <div style={{ color: "#064e3b", fontWeight: "600" }}>
+              <div style={{ color: "var(--color-status-success)", fontWeight: "600", fontFamily: "var(--font-family-primary)" }}>
                 Golongan Aman
               </div>
             </div>
@@ -311,15 +294,16 @@ export default function DetailStokDarahPage() {
           {/* ----------------------------------------------------- */}
 
           {/* Filter Section */}
-          <div className="filter-section">
-            <div className="filter-label">
-              <FaFilter className="filter-icon" />
+          <div className="filter-section" style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "24px" }}>
+            <div className="filter-label" style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: "bold", color: "var(--color-text-primary)" }}>
+              <Icon icon="mdi:filter" className="filter-icon" />
               <span>Filter Status Stok:</span>
             </div>
             <select
               className="filter-dropdown"
               value={selectedFilter}
               onChange={(e) => setSelectedFilter(e.target.value)}
+              style={{ padding: "10px 16px", borderRadius: "var(--radius-standard)", border: "1px solid var(--color-border-input)", backgroundColor: "var(--color-surface-card)" }}
             >
               {filterOptions.map((option) => (
                 <option key={option} value={option}>
@@ -330,43 +314,46 @@ export default function DetailStokDarahPage() {
           </div>
 
           {/* Blood Stock Table */}
-          <div className="blood-table-container">
-            <table className="blood-table">
-              <thead>
+          <div className="blood-table-container" style={{ backgroundColor: "var(--color-surface-card)", borderRadius: "var(--radius-large)", overflow: "hidden", border: "1px solid var(--color-border-divider)", marginBottom: "40px" }}>
+            <table className="blood-table" style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead style={{ backgroundColor: "var(--color-surface-background)" }}>
                 <tr>
-                  <th>Golongan Darah</th>
-                  <th>Status & Ketersediaan</th>
-                  <th>Jumlah (Kantong)</th>
+                  <th style={{ padding: "16px", textAlign: "left", borderBottom: "1px solid var(--color-border-divider)", color: "var(--color-text-secondary)" }}>Golongan Darah</th>
+                  <th style={{ padding: "16px", textAlign: "left", borderBottom: "1px solid var(--color-border-divider)", color: "var(--color-text-secondary)" }}>Status & Ketersediaan</th>
+                  <th style={{ padding: "16px", textAlign: "right", borderBottom: "1px solid var(--color-border-divider)", color: "var(--color-text-secondary)" }}>Jumlah (Kantong)</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredData.length > 0 ? (
                   filteredData.map((item, index) => (
-                    <tr key={index} className="blood-row">
-                      <td className="blood-type-cell">
+                    <tr key={index} className="blood-row" style={{ borderBottom: "1px solid var(--color-border-divider)" }}>
+                      <td className="blood-type-cell" style={{ padding: "20px 16px" }}>
                         <span
                           className="blood-type-text"
                           style={{
-                            background: "#f3f4f6",
-                            padding: "10px 15px",
-                            borderRadius: "8px",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            background: "var(--color-surface-background)",
+                            padding: "10px 16px",
+                            borderRadius: "var(--radius-standard)",
                             fontSize: "1.2rem",
                             fontWeight: "bold",
-                            color: "#374151",
+                            color: "var(--color-text-primary)",
+                            border: "1px solid var(--color-border-divider)"
                           }}
                         >
-                          <FaTint
-                            style={{ color: "#ef4444", marginRight: "5px" }}
+                          <Icon icon="mdi:water"
+                            style={{ color: "var(--color-brand-primary)", marginRight: "8px" }}
                           />
                           {item.type}
                         </span>
                       </td>
-                      <td className="status-cell" style={{ width: "50%" }}>
+                      <td className="status-cell" style={{ width: "50%", padding: "20px 16px" }}>
                         <div
                           style={{
                             display: "flex",
                             flexDirection: "column",
-                            gap: "5px",
+                            gap: "8px",
                           }}
                         >
                           <span
@@ -379,16 +366,16 @@ export default function DetailStokDarahPage() {
                               fontWeight: "bold",
                               backgroundColor:
                                 item.statusClass === "critical"
-                                  ? "#fee2e2"
+                                  ? "rgba(220, 38, 38, 0.1)"
                                   : item.statusClass === "safe"
-                                  ? "#d1fae5"
-                                  : "#fef3c7",
+                                  ? "rgba(16, 185, 129, 0.1)"
+                                  : "rgba(245, 158, 11, 0.1)",
                               color:
                                 item.statusClass === "critical"
-                                  ? "#ef4444"
+                                  ? "var(--color-status-error)"
                                   : item.statusClass === "safe"
-                                  ? "#10b981"
-                                  : "#f59e0b",
+                                  ? "var(--color-status-success)"
+                                  : "var(--color-status-warning)",
                             }}
                           >
                             {item.status}
@@ -397,7 +384,7 @@ export default function DetailStokDarahPage() {
                             className="progress-bar"
                             style={{
                               height: "8px",
-                              background: "#e5e7eb",
+                              background: "var(--color-border-divider)",
                               borderRadius: "4px",
                               overflow: "hidden",
                             }}
@@ -416,13 +403,13 @@ export default function DetailStokDarahPage() {
                           </div>
                         </div>
                       </td>
-                      <td className="units-cell">
+                      <td className="units-cell" style={{ padding: "20px 16px", textAlign: "right", verticalAlign: "middle" }}>
                         <span
                           className="units-number"
                           style={{
                             fontSize: "1.5rem",
                             fontWeight: "800",
-                            color: "#1f2937",
+                            color: "var(--color-text-primary)",
                           }}
                         >
                           {item.units}
@@ -437,7 +424,7 @@ export default function DetailStokDarahPage() {
                       style={{
                         textAlign: "center",
                         padding: "40px",
-                        color: "#666",
+                        color: "var(--color-text-secondary)",
                       }}
                     >
                       Tidak ada data yang sesuai filter.
@@ -449,18 +436,18 @@ export default function DetailStokDarahPage() {
           </div>
 
           {/* Procedure Section */}
-          <div className="procedure-section">
-            <h3>
-              <FaClipboardList
-                style={{ color: "var(--primary-red)", marginRight: "10px" }}
+          <div className="procedure-section" style={{ backgroundColor: "var(--color-surface-background)", padding: "32px", borderRadius: "var(--radius-large)", border: "1px solid var(--color-border-divider)" }}>
+            <h3 style={{ display: "flex", alignItems: "center", gap: "12px", margin: "0 0 24px 0", color: "var(--color-text-primary)" }}>
+              <Icon icon="mdi:clipboard-text" width="24"
+                style={{ color: "var(--color-brand-primary)" }}
               />
               Informasi & Prosedur Permintaan
             </h3>
-            <div className="procedure-list">
+            <div className="procedure-list" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {procedureInfo.map((info, index) => (
-                <div key={index} className="procedure-item">
-                  <FaCheckCircle className="check-icon" />
-                  <span>{info}</span>
+                <div key={index} className="procedure-item" style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "var(--color-text-secondary)" }}>
+                  <Icon icon="mdi:check-circle" width="20" style={{ color: "var(--color-status-success)", marginTop: "2px", flexShrink: 0 }} />
+                  <span style={{ lineHeight: 1.5 }}>{info}</span>
                 </div>
               ))}
             </div>

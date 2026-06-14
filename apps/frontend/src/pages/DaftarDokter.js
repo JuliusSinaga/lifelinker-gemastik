@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import "../styles/DaftarDokter.css";
 import axiosClient from "../service/axiosClient"; 
 import { useGoogleLogin } from "@react-oauth/google"; 
-import { FaArrowLeft } from "react-icons/fa";
+import Icon from "../components/core/Icon";
+import Input from "../components/core/Input";
+import Button from "../components/core/Button";
 
 export default function DaftarDokter() {
   const navigate = useNavigate();
@@ -147,7 +149,7 @@ export default function DaftarDokter() {
         )}
 
         <button className="back-button-dokter" onClick={() => navigate("/")}>
-            <FaArrowLeft /> Kembali
+            <Icon icon="mdi:arrow-left" /> Kembali
         </button>
 
         <h1 className="dd-title">Pendaftaran Akun Dokter</h1>
@@ -159,185 +161,163 @@ export default function DaftarDokter() {
           </div>
         </div>
 
-        <form className="dd-form" onSubmit={handleSubmit} noValidate>
-          <h3 className="dd-section-title">Informasi Akun</h3>
-
-          <div className="dd-row">
-            <div className="dd-field">
-              <label htmlFor="email">Email</label>
-              <input
+        <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <section className="form-section">
+            <h3 style={{ marginBottom: '16px', color: 'var(--color-text-primary)' }}>Informasi Akun</h3>
+            <div className="dd-row">
+              <Input
+                label="Email"
+                type="email"
                 id="email"
                 name="email"
-                type="email"
                 value={form.email}
                 onChange={handleChange}
                 placeholder="name@example.com"
                 required
+                icon={<Icon icon="mdi:email-outline" width="20" />}
               />
-            </div>
-
-            <div className="dd-field">
-              <label htmlFor="password">Password</label>
-              <input
+              <Input
+                label="Password"
+                type="password"
                 id="password"
                 name="password"
-                type="password"
                 value={form.password}
                 onChange={handleChange}
                 placeholder="Minimal 8 karakter"
                 required
+                icon={<Icon icon="mdi:lock-outline" width="20" />}
               />
             </div>
-          </div>
+          </section>
 
-          <h3 className="dd-section-title">Informasi Profesional & Pribadi</h3>
-
-          <div className="dd-field full">
-            <label htmlFor="name">Nama Lengkap (dengan gelar)</label>
-            <input
+          <section className="form-section">
+            <h3 style={{ marginBottom: '16px', color: 'var(--color-text-primary)' }}>Informasi Profesional & Pribadi</h3>
+            <Input
+              label="Nama Lengkap (dengan gelar)"
+              type="text"
               id="name"
               name="name"
-              type="text"
               value={form.name}
               onChange={handleChange}
               placeholder="Contoh : Dr. Julius Sinaga, Sp.PD"
               required
+              icon={<Icon icon="mdi:account-outline" width="20" />}
             />
-          </div>
 
-          <div className="dd-row">
-            <div className="dd-field">
-              <label htmlFor="str_number">Nomor STR (Wajib)</label>
-              <input
+            <div className="dd-row">
+              <Input
+                label="Nomor STR (Wajib)"
+                type="text"
                 id="str_number"
                 name="str_number"
-                type="text"
                 value={form.str_number}
                 onChange={handleChange}
                 placeholder="Masukkan Nomor Valid Anda"
                 required
+                icon={<Icon icon="mdi:card-account-details-outline" width="20" />}
               />
-            </div>
-
-            <div className="dd-field">
-              <label htmlFor="specialization">Spesialisasi</label>
-              <input
+              <Input
+                label="Spesialisasi"
+                type="text"
                 id="specialization"
                 name="specialization"
-                type="text"
                 value={form.specialization}
                 onChange={handleChange}
                 placeholder="Contoh : Penyakit Dalam"
                 required
+                icon={<Icon icon="mdi:stethoscope" width="20" />}
               />
             </div>
-          </div>
 
-          <div className="dd-field full">
-            <label htmlFor="hospital">Nama Rumah Sakit / Instansi</label>
-            <input
+            <Input
+              label="Nama Rumah Sakit / Instansi"
+              type="text"
               id="hospital"
               name="hospital"
-              type="text"
               value={form.hospital}
               onChange={handleChange}
               placeholder="Contoh : RSUP Porsea"
               required
+              icon={<Icon icon="mdi:hospital-building" width="20" />}
             />
-          </div>
 
-          <div className="dd-row">
-            <div className="dd-field">
-              <label htmlFor="birth_date">Tanggal Lahir</label>
-              <input
+            <div className="dd-row">
+              <Input
+                label="Tanggal Lahir"
+                type="date"
                 id="birth_date"
                 name="birth_date"
-                type="date"
                 value={form.birth_date}
                 onChange={handleChange}
                 required
               />
+              <div className="core-input-wrapper">
+                <label className="core-input-label">Jenis Kelamin</label>
+                <div className="core-input-container">
+                  <select 
+                    id="gender" 
+                    name="gender" 
+                    className="core-input-field"
+                    value={form.gender} 
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Pilih Jenis Kelamin</option>
+                    <option value="male">Laki-laki</option>
+                    <option value="female">Perempuan</option>
+                  </select>
+                </div>
+              </div>
             </div>
-            <div className="dd-field">
-              <label htmlFor="gender">Jenis Kelamin</label>
-              <select 
-                id="gender" 
-                name="gender" 
-                value={form.gender} 
-                onChange={handleChange}
-                required
-              >
-                <option value="">Pilih Jenis Kelamin</option>
-                <option value="male">Laki-laki</option>
-                <option value="female">Perempuan</option>
-              </select>
-            </div>
-          </div>
 
-          <div className="dd-row">
-            <div className="dd-field">
-              <label htmlFor="phone">Nomor Telepon (WhatsApp)</label>
-              <input
+            <div className="dd-row">
+              <Input
+                label="Nomor Telepon (WhatsApp)"
+                type="tel"
                 id="phone"
                 name="phone"
-                type="tel"
                 value={form.phone}
                 onChange={handleChange}
                 placeholder="08123xxxx"
                 required
+                icon={<Icon icon="mdi:phone-outline" width="20" />}
               />
-            </div>
-            <div className="dd-field">
-              <label htmlFor="city">Kota Domisili</label>
-              <input
+              <Input
+                label="Kota Domisili"
+                type="text"
                 id="city"
                 name="city"
-                type="text"
                 value={form.city}
                 onChange={handleChange}
                 placeholder="Contoh : Laguboti"
                 required
+                icon={<Icon icon="mdi:city-variant-outline" width="20" />}
               />
             </div>
+          </section>
+
+          <Button type="submit" variant="primary" fullWidth disabled={!isValid} style={{ marginTop: '8px' }}>
+            Daftar &amp; Kirim Verifikasi
+          </Button>
+
+          <div className="divider" style={{ display: 'flex', alignItems: 'center', textAlign: 'center', margin: '24px 0', color: 'var(--color-text-secondary)' }}>
+            <div style={{ flex: 1, borderBottom: '1px solid var(--color-border-divider)', opacity: 0.2 }}></div>
+            <span style={{ padding: '0 10px', fontSize: '12px', fontWeight: 'bold' }}>ATAU</span>
+            <div style={{ flex: 1, borderBottom: '1px solid var(--color-border-divider)', opacity: 0.2 }}></div>
           </div>
 
-          <div className="dd-submit-wrap">
-            <button 
-                type="submit" 
-                className="dd-submit" 
-                disabled={!isValid} 
-            >
-              Daftar &amp; Kirim Verifikasi
-            </button>
-          </div>
+          <Button variant="secondary" fullWidth onClick={() => googleRegister()} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px' }}>
+            <img
+              src={process.env.PUBLIC_URL + "/images/G-logo.svg"}
+              alt="Google"
+              style={{ width: '20px' }}
+            />
+            Daftar dengan Google
+          </Button>
 
-          {/* DIVIDER menggunakan Class CSS */}
-          <div className="dd-divider">
-            <div className="dd-divider-line"></div>
-            <span className="dd-divider-text">ATAU</span>
-            <div className="dd-divider-line"></div>
-          </div>
-
-          <div className="google-login-wrapper">
-            <button 
-                type="button" 
-                className="google-btn" 
-                onClick={() => googleRegister()}
-            >
-              <img
-                src={process.env.PUBLIC_URL + "/images/G-logo.svg"}
-                alt="Google"
-              />
-              Daftar dengan Google
-            </button>
-          </div>
-
-          <div className="dd-footer">
-            Sudah punya akun?{" "}
-            <Link to="/login-dokter" className="dd-link">
-              Masuk di sini
-            </Link>
-          </div>
+          <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '14px', color: 'var(--color-text-secondary)' }}>
+            Sudah punya akun? <Link to="/login-dokter" style={{ color: 'var(--color-brand-primary)', fontWeight: 'bold', textDecoration: 'none' }}>Masuk di sini</Link>
+          </p>
         </form>
       </div>
     </div>

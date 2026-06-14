@@ -129,7 +129,6 @@
 }
 
 .app-footer-bottom {
-  border-top: 1px solid #34495e;
   background-color: var(--bg-darker);
   padding: 20px 0;
   width: 100%;

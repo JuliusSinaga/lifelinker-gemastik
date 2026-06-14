@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import "../styles/LoginShared.css"; // Menggunakan CSS Shared
-import "../styles/LoginDokter.css"; // Jika ada style khusus dokter
+import "../styles/LoginShared.css"; 
+import "../styles/LoginDokter.css"; 
 import { useNavigate, Link } from "react-router-dom";
 import axiosClient from "../service/axiosClient";
 import { useGoogleLogin } from "@react-oauth/google";
-import { FaArrowLeft } from "react-icons/fa"; 
+import Icon from "../components/core/Icon";
+import Button from "../components/core/Button";
+import Card from "../components/core/Card";
+import Input from "../components/core/Input";
 
 const LoginDokter = () => {
   const navigate = useNavigate();
@@ -94,106 +97,113 @@ const LoginDokter = () => {
 
   return (
     <>
-      <div className="login-container">
-        <div className="login-card">
+      <div className="login-container" style={{ background: "var(--color-bg-auth)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+        <Card variant="standard" className="login-card" style={{ maxWidth: "480px", width: "100%", padding: "40px", position: "relative" }}>
 
           {/* TOMBOL KEMBALI */}
-          <button className="back-button" onClick={() => navigate("/")}>
-              <FaArrowLeft /> Kembali
-          </button>
+          <Button variant="ghost" className="back-button" onClick={() => navigate("/")} style={{ position: "absolute", top: "24px", left: "24px", display: "flex", alignItems: "center", gap: "8px", color: "var(--color-text-secondary)" }}>
+              <Icon icon="mdi:arrow-left" /> Kembali
+          </Button>
           
           {/* Logo */}
-          <div className="logo-wrapper">
+          <div className="logo-wrapper" style={{ textAlign: "center", marginTop: "24px", marginBottom: "32px" }}>
             <img
               src={process.env.PUBLIC_URL + "/images/lifelinker-logo.png"}
               alt="LifeLinker Logo"
               className="logo-image"
+              style={{ width: "64px", marginBottom: "16px" }}
             />
-            <h2 className="logo-text">
-              <span className="logo-life">Life</span>
-              <span className="logo-bold">Linker</span>
+            <h2 className="logo-text" style={{ fontFamily: "var(--font-family-brand)", fontSize: "28px", margin: 0 }}>
+              <span className="logo-life" style={{ color: "var(--color-brand-primary)" }}>Life</span>
+              <span className="logo-bold" style={{ color: "var(--color-text-primary)", fontWeight: "800" }}>Linker</span>
             </h2>
           </div>
 
           {/* Judul */}
-          <h3 className="welcome-title">Selamat Datang, Dok!</h3>
+          <h3 className="welcome-title" style={{ textAlign: "center", fontFamily: "var(--font-family-brand)", marginBottom: "24px", fontSize: "24px" }}>Selamat Datang, Dok!</h3>
 
-          {/* Pilihan Role */}
-          <div className="role-buttons">
-            <button
-              className={role === "pengguna" ? "role-btn active" : "role-btn"}
+          {/* Role Tabs */}
+          <div className="role-buttons" style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+            <Button
+              variant={role === "pengguna" ? "primary" : "ghost"}
+              fullWidth
               onClick={() => {
                 setRole("pengguna");
                 navigate("/login-pengguna");
               }}
             >
               Pengguna
-            </button>
-
-            <button
-              className={role === "dokter" ? "role-btn active" : "role-btn"}
+            </Button>
+            <Button
+              variant={role === "dokter" ? "primary" : "ghost"}
+              fullWidth
               onClick={() => setRole("dokter")}
             >
               Dokter
-            </button>
+            </Button>
           </div>
 
-          {/* Pesan Error (Style dari CSS) */}
+          {/* Pesan Error */}
           {error && (
-            <div className="login-alert">
+            <div style={{ backgroundColor: 'rgba(241, 59, 59, 0.1)', color: 'var(--color-status-error)', padding: '12px', borderRadius: 'var(--radius-standard)', marginBottom: '16px', fontSize: '14px', textAlign: 'center' }}>
               {error}
             </div>
           )}
 
           {/* Form Login */}
-          <form onSubmit={handleLogin} className="login-form">
-            <input
+          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <Input
               type="email"
               name="email"
               placeholder="Alamat Email"
-              className="form-input"
               value={formData.email}
               onChange={handleChange}
               required
+              icon={<Icon icon="mdi:email-outline" width="20" />}
             />
-            <input
+            <Input
               type="password"
               name="password"
               placeholder="Password"
-              className="form-input"
               value={formData.password}
               onChange={handleChange}
               required
+              icon={<Icon icon="mdi:lock-outline" width="20" />}
             />
             
-            {/* LINK LUPA PASSWORD DITAMBAHKAN DI SINI */}
-            <Link to="/lupa-password" className="forgot-password-link">
+            {/* LINK LUPA PASSWORD */}
+            <div style={{ textAlign: 'right' }}>
+              <Link to="/lupa-password" style={{ color: 'var(--color-text-secondary)', fontSize: '14px', textDecoration: 'none' }}>
                 Lupa Kata Sandi?
-            </Link>
+              </Link>
+            </div>
 
-            <button type="submit" className="btn-login">
-              Masuk Sebagai Dokter
-            </button>
+            <Button type="submit" variant="primary" fullWidth style={{ marginTop: '8px' }}>
+              Masuk
+            </Button>
           </form>
 
-          <div className="divider"><span>ATAU</span></div>
-
-          {/* Login Google Custom Button */}
-          <div className="google-login-wrapper">
-            <button className="google-btn" onClick={() => googleLogin()}>
-              <img
-                src={process.env.PUBLIC_URL + "/images/G-logo.svg"}
-                alt="Google"
-              />
-              Masuk dengan Google
-            </button>
+          <div className="divider" style={{ display: 'flex', alignItems: 'center', textAlign: 'center', margin: '24px 0', color: 'var(--color-text-secondary)' }}>
+            <div style={{ flex: 1, borderBottom: '1px solid var(--color-border-divider)', opacity: 0.2 }}></div>
+            <span style={{ padding: '0 10px', fontSize: '12px', fontWeight: 'bold' }}>ATAU</span>
+            <div style={{ flex: 1, borderBottom: '1px solid var(--color-border-divider)', opacity: 0.2 }}></div>
           </div>
 
-          {/* Link daftar */}
-          <p className="register-text">
-            Belum punya akun dokter? <Link to="/daftar-dokter">Daftar Sekarang</Link>
+          {/* BUTTON GOOGLE CUSTOM */}
+          <Button variant="secondary" fullWidth onClick={() => googleLogin()} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px' }}>
+            <img
+              src={process.env.PUBLIC_URL + "/images/G-logo.svg"}
+              alt="Google"
+              style={{ width: '20px' }}
+            />
+            Masuk dengan Google
+          </Button>
+
+          {/* Link Daftar */}
+          <p style={{ textAlign: 'center', marginTop: '24px', fontSize: '14px', color: 'var(--color-text-secondary)' }}>
+            Belum punya akun dokter? <Link to="/daftar-dokter" style={{ color: 'var(--color-brand-primary)', fontWeight: 'bold', textDecoration: 'none' }}>Daftar Sekarang</Link>
           </p>
-        </div>
+        </Card>
       </div>
     </>
   );

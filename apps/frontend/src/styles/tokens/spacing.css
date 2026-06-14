@@ -1,0 +1,27 @@
+:root {
+  /* Spacing Scale (8px based) */
+  --spacing-1: 8px;
+  --spacing-2: 16px;
+  --spacing-3: 24px;
+  --spacing-4: 32px;
+  --spacing-5: 40px;
+  --spacing-6: 48px;
+  --spacing-7: 56px;
+  --spacing-8: 64px;
+  --spacing-10: 80px;
+
+  /* Border Radius */
+  --radius-chip: 10px;
+  --radius-standard: 15px;
+  --radius-large: 20px;
+  --radius-elevated: 25px;
+  --radius-doctor: 34px;
+  --radius-pill: 60px;
+  --radius-circle: 50%;
+
+  /* Box Shadows */
+  --shadow-base: 0px 4px 15px rgba(0, 0, 0, 0.05);
+  --shadow-elevated: 0px 10px 40px rgba(0, 0, 0, 0.08);
+  --shadow-brand-glow: 0px 8px 25px rgba(192, 14, 14, 0.2);
+  --shadow-footer-inset: inset 0px 4px 10px rgba(0, 0, 0, 0.02);
+}

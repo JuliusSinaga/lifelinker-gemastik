@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/NotFoundPage.css";
-import { FaHeartBroken, FaExclamationTriangle, FaArrowLeft, FaHome } from "react-icons/fa";
+import Icon from "../../components/core/Icon";
 
 // Komponen ini bisa menerima props 'type' jika ingin digunakan untuk error lain (misal 500)
 export default function NotFoundPage({ type = "404" }) {
@@ -13,19 +13,19 @@ export default function NotFoundPage({ type = "404" }) {
       code: "404",
       title: "Halaman Tidak Ditemukan",
       message: "Maaf, halaman yang Anda cari mungkin telah dihapus, dipindahkan, atau alamat URL salah.",
-      icon: <FaHeartBroken className="error-icon pulse" />,
+      icon: <Icon icon="mdi:heart-broken" className="error-icon pulse" />,
     },
     "500": {
       code: "500",
       title: "Terjadi Kesalahan Server",
       message: "Maaf, server kami sedang mengalami gangguan. Silakan coba beberapa saat lagi.",
-      icon: <FaExclamationTriangle className="error-icon" />,
+      icon: <Icon icon="mdi:alert" className="error-icon" />,
     },
     "403": {
       code: "403",
       title: "Akses Ditolak",
       message: "Maaf, Anda tidak memiliki izin untuk mengakses halaman ini.",
-      icon: <FaExclamationTriangle className="error-icon" />,
+      icon: <Icon icon="mdi:alert" className="error-icon" />,
     },
   };
 
@@ -47,12 +47,12 @@ export default function NotFoundPage({ type = "404" }) {
           {/* Tombol Kembali ke Halaman Sebelumnya */}
           <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/beranda')} 
           className="btn-back">
-            <FaArrowLeft /> Kembali
+            <Icon icon="mdi:arrow-left" /> Kembali
           </button>
 
           {/* Tombol Ke Beranda */}
           <Link to="/beranda" className="btn-home">
-            <FaHome /> Ke Beranda
+            <Icon icon="mdi:home" /> Ke Beranda
           </Link>
         </div>
       </div>

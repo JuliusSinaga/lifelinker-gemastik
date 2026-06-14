@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import SidebarAdmin from "../components/SidebarAdmin";
 import "../styles/ProfileAdmin.css"; 
 import axiosClient from "../service/axiosClient";
-import { FaCheckCircle, FaTimesCircle, FaCamera } from "react-icons/fa"; // Import Icon
+import Card from "../components/core/Card";
+import Button from "../components/core/Button";
+import Input from "../components/core/Input";
+import Icon from "../components/core/Icon";
 
 export default function ProfilAdmin() {
   // State Data Admin
@@ -155,116 +158,129 @@ export default function ProfilAdmin() {
 
   // Metrics
   const metrics = [
-    { value: "20,847", title: "User Terdaftar", subtitle: "Seluruh Sumut", icon: "👥" },
-    { value: "342", title: "Dokter Terverifikasi", subtitle: "30 Rumah Sakit", icon: "👨‍⚕️" },
-    { value: "10,275", title: "Pendonor Aktif", subtitle: "Seluruh Provinsi", icon: "🩸" },
-    { value: "47", title: "Event", subtitle: "Di berbagai RS", icon: "📅" },
+    { value: "20,847", title: "User Terdaftar", subtitle: "Seluruh Sumut", icon: "mdi:account-group", colorClass: "blue" },
+    { value: "342", title: "Dokter Terverifikasi", subtitle: "30 Rumah Sakit", icon: "mdi:doctor", colorClass: "yellow" },
+    { value: "10,275", title: "Pendonor Aktif", subtitle: "Seluruh Provinsi", icon: "mdi:water", colorClass: "green" },
+    { value: "47", title: "Event", subtitle: "Di berbagai RS", icon: "mdi:calendar", colorClass: "purple" },
   ];
 
   return (
     <div className="admin-layout">
       <SidebarAdmin />
 
-      <main className="admin-main">
-        <div className="profil-header">
-          <h1 className="page-title">Profil Administrator</h1>
+      <main className="admin-main" style={{ padding: "32px", backgroundColor: "var(--color-bg-page)", minHeight: "100vh" }}>
+        <div className="profil-header" style={{ marginBottom: "32px" }}>
+          <h1 className="page-title" style={{ margin: "0 0 8px 0", fontFamily: "var(--font-family-brand)" }}>Profil Administrator</h1>
         </div>
 
         {/* METRICS */}
-        <div className="metrics-grid">
-          {metrics.map((m, idx) => (
-            <div className="metric-card" key={idx}>
-              <div className="metric-content">
-                <div className="metric-value">{m.value}</div>
-                <div className="metric-title">{m.title}</div>
-                <div className="metric-subtitle">{m.subtitle}</div>
-              </div>
-              <div className="metric-icon">{m.icon}</div>
-            </div>
-          ))}
+        <div className="metrics-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "24px", marginBottom: "40px" }}>
+          {metrics.map((m, idx) => {
+            const colorMap = {
+                blue: "var(--color-status-info)",
+                yellow: "var(--color-status-warning)",
+                green: "var(--color-status-success)",
+                purple: "var(--color-brand-primary)"
+            };
+            const iconColor = colorMap[m.colorClass] || "var(--color-brand-primary)";
+
+            return (
+                <Card variant="standard" className="metric-card" key={idx} style={{ padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div className="metric-content" style={{ flex: 1 }}>
+                    <div className="metric-value" style={{ fontSize: "32px", fontWeight: "bold", fontFamily: "var(--font-family-brand)", color: "var(--color-text-primary)", marginBottom: "4px" }}>{m.value}</div>
+                    <div className="metric-title" style={{ fontSize: "14px", fontWeight: "bold", color: "var(--color-text-secondary)" }}>{m.title}</div>
+                    <div className="metric-subtitle" style={{ fontSize: "12px", color: "var(--color-text-secondary)", marginTop: "4px" }}>{m.subtitle}</div>
+                  </div>
+                  <div className="metric-icon" style={{ fontSize: "40px", color: iconColor, opacity: 0.8, backgroundColor: `${iconColor}15`, width: "64px", height: "64px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%" }}>
+                    <Icon icon={m.icon} />
+                  </div>
+                </Card>
+            );
+          })}
         </div>
 
-        <div className="profil-content-wrapper">
+        <div className="profil-content-wrapper" style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
             
             {/* KARTU EDIT PROFIL */}
-            <div className="profile-card main-profile-card">
-            <h2 className="section-title">Edit Informasi Profil</h2>
+            <Card variant="standard" className="profile-card main-profile-card" style={{ padding: "32px" }}>
+            <h2 className="section-title" style={{ margin: "0 0 24px 0", fontFamily: "var(--font-family-brand)" }}>Edit Informasi Profil</h2>
 
-            <div className="profile-grid">
-                <div className="profile-left">
+            <div className="profile-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "40px" }}>
+                <div className="profile-left" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 <div className="form-group">
-                    <label>Nama Lengkap</label>
-                    <input
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Nama Lengkap</label>
+                    <Input
                     type="text"
                     name="name"
                     value={adminData.name}
                     onChange={handleProfileChange}
-                    className="pa-input"
+                    style={{ width: "100%" }}
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>Email</label>
-                    <input
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Email</label>
+                    <Input
                     type="email"
                     value={adminData.email}
                     readOnly
-                    className="pa-input input-readonly"
+                    style={{ width: "100%", backgroundColor: "var(--color-surface-background)" }}
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>Nomor Telepon</label>
-                    <input
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Nomor Telepon</label>
+                    <Input
                     type="text"
                     name="phone"
                     value={adminData.phone}
                     onChange={handleProfileChange}
                     placeholder="+62..."
-                    className="pa-input"
+                    style={{ width: "100%" }}
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>Departemen / Role</label>
-                    <input
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Departemen / Role</label>
+                    <Input
                     type="text"
                     value={`${adminData.department} - ${adminData.role}`}
                     readOnly
-                    className="pa-input input-readonly"
+                    style={{ width: "100%", backgroundColor: "var(--color-surface-background)" }}
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>Status Akun</label>
-                    <div><span className="status-badge-active">🟢 Aktif</span></div>
+                    <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Status Akun</label>
+                    <div><span className="status-badge-active" style={{ backgroundColor: "var(--color-status-success)15", color: "var(--color-status-success)", padding: "8px 16px", borderRadius: "16px", fontWeight: "bold", fontSize: "14px", display: "inline-flex", alignItems: "center", gap: "8px" }}><Icon icon="mdi:checkbox-blank-circle" style={{ fontSize: "10px" }} /> Aktif</span></div>
                 </div>
 
-                <button 
-                    className="pa-btn-save" 
+                <Button 
+                    variant="primary"
                     onClick={handleSaveProfile}
                     disabled={loadingProfile}
+                    style={{ marginTop: "16px", alignSelf: "flex-start" }}
                 >
                     {loadingProfile ? "Menyimpan..." : "Simpan Perubahan"}
-                </button>
+                </Button>
                 </div>
 
-                <div className="profile-right">
-                <h3>Foto Profil</h3>
-                <div className="avatar-preview-container">
+                <div className="profile-right" style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "24px", backgroundColor: "var(--color-surface-background)", borderRadius: "var(--radius-large)", alignSelf: "start" }}>
+                <h3 style={{ margin: "0 0 16px 0", fontSize: "16px", color: "var(--color-text-secondary)" }}>Foto Profil</h3>
+                <div className="avatar-preview-container" style={{ width: "120px", height: "120px", borderRadius: "50%", overflow: "hidden", backgroundColor: "var(--color-brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px", border: "4px solid white", boxShadow: "var(--shadow-sm)" }}>
                     {adminData.photo ? (
-                        <img src={adminData.photo} alt="Preview" className="avatar-image" />
+                        <img src={adminData.photo} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     ) : (
-                        <div className="avatar-placeholder">
+                        <div className="avatar-placeholder" style={{ fontSize: "48px", fontWeight: "bold", color: "white" }}>
                             {adminData.name ? adminData.name.charAt(0).toUpperCase() : "A"}
                         </div>
                     )}
                 </div>
                 
-                <p className="photo-name">{adminData.name}</p>
-                <p className="photo-role">{adminData.role}</p>
+                <p className="photo-name" style={{ margin: "0 0 4px 0", fontWeight: "bold", fontSize: "18px", color: "var(--color-text-primary)" }}>{adminData.name}</p>
+                <p className="photo-role" style={{ margin: "0 0 24px 0", fontSize: "14px", color: "var(--color-text-secondary)" }}>{adminData.role}</p>
 
-                <div className="photo-actions">
+                <div className="photo-actions" style={{ display: "flex", gap: "12px" }}>
                     <input 
                         type="file" 
                         ref={fileInputRef} 
@@ -272,79 +288,82 @@ export default function ProfilAdmin() {
                         style={{display: 'none'}} 
                         accept="image/*"
                     />
-                    <button className="pa-btn-upload" onClick={triggerFileSelect}>
-                        <FaCamera style={{marginRight:'5px'}}/> Ganti Foto
-                    </button>
-                    <button className="pa-btn-delete" onClick={handleRemovePhoto}>
-                        Hapus
-                    </button>
+                    <Button variant="primary" onClick={triggerFileSelect} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <Icon icon="mdi:camera" /> Ganti Foto
+                    </Button>
+                    {adminData.photo && (
+                        <Button variant="outline" onClick={handleRemovePhoto}>
+                            Hapus
+                        </Button>
+                    )}
                 </div>
                 </div>
             </div>
-            </div>
+            </Card>
 
             {/* KARTU GANTI PASSWORD */}
-            <div className="profile-card password-card">
-            <h2 className="section-title">Ubah Kata Sandi</h2>
-            <div className="password-grid">
+            <Card variant="standard" className="password-card" style={{ padding: "32px" }}>
+            <h2 className="section-title" style={{ margin: "0 0 24px 0", fontFamily: "var(--font-family-brand)" }}>Ubah Kata Sandi</h2>
+            <div className="password-grid" style={{ display: "grid", gridTemplateColumns: "1fr", gap: "16px", maxWidth: "500px" }}>
                 <div className="form-group">
-                <label>Password Saat Ini</label>
-                <input
+                <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Password Saat Ini</label>
+                <Input
                     type="password"
                     name="current"
                     value={passwords.current}
                     onChange={handlePasswordChange}
-                    className="pa-input"
+                    style={{ width: "100%" }}
                 />
                 </div>
                 <div className="form-group">
-                <label>Password Baru</label>
-                <input
+                <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Password Baru</label>
+                <Input
                     type="password"
                     name="new"
                     value={passwords.new}
                     onChange={handlePasswordChange}
-                    className="pa-input"
+                    style={{ width: "100%" }}
                 />
                 </div>
                 <div className="form-group">
-                <label>Konfirmasi Password</label>
-                <input
+                <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Konfirmasi Password</label>
+                <Input
                     type="password"
                     name="confirm"
                     value={passwords.confirm}
                     onChange={handlePasswordChange}
-                    className="pa-input"
+                    style={{ width: "100%" }}
                 />
                 </div>
             </div>
-            <button 
-                className="pa-btn-save-password" 
+            <Button 
+                variant="primary"
                 onClick={handleSavePassword}
                 disabled={loadingPassword}
+                style={{ marginTop: "24px" }}
             >
                 {loadingPassword ? "Memproses..." : "Update Password"}
-            </button>
-            </div>
+            </Button>
+            </Card>
 
         </div>
       </main>
 
       {/* --- POPUP MODAL --- */}
       {popup.show && (
-        <div className="modal-overlay" onClick={closePopup}>
-          <div className="modal-content-popup" onClick={(e) => e.stopPropagation()}>
-            <div className={`popup-icon ${popup.type}`}>
-                {popup.type === "success" ? <FaCheckCircle /> : <FaTimesCircle />}
+        <div className="modal-overlay" onClick={closePopup} style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+          <Card variant="standard" className="modal-content-popup" onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: "400px", padding: "32px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "16px" }}>
+            <div className={`popup-icon ${popup.type}`} style={{ fontSize: "64px", color: popup.type === "success" ? "var(--color-status-success)" : "var(--color-status-error)" }}>
+                {popup.type === "success" ? <Icon icon="mdi:check-circle" /> : <Icon icon="mdi:close-circle" />}
             </div>
-            <h3 className="popup-title">
+            <h3 className="popup-title" style={{ margin: 0, fontFamily: "var(--font-family-brand)", fontSize: "24px" }}>
                 {popup.type === "success" ? "Berhasil!" : "Gagal!"}
             </h3>
-            <p className="popup-message">{popup.message}</p>
-            <button className="popup-btn" onClick={closePopup}>
+            <p className="popup-message" style={{ margin: 0, color: "var(--color-text-secondary)" }}>{popup.message}</p>
+            <Button variant="primary" onClick={closePopup} style={{ marginTop: "16px", minWidth: "120px" }}>
                 OK
-            </button>
-          </div>
+            </Button>
+          </Card>
         </div>
       )}
 

@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Font Families */
+  --font-family-primary: 'Plus Jakarta Sans', sans-serif;
+  --font-family-brand: 'Plus Jakarta Sans', sans-serif;
+  --font-family-hero: 'Plus Jakarta Sans', sans-serif;
+  --font-family-data: 'Inter', sans-serif;
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
