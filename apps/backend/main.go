@@ -10,6 +10,7 @@ import (
         "github.com/gin-gonic/gin"
         "github.com/joho/godotenv"
 
+        "github.com/JuliusSinaga/LifeLinker-PPW11/backend/controllers"
         "github.com/JuliusSinaga/LifeLinker-PPW11/backend/database"
         "github.com/JuliusSinaga/LifeLinker-PPW11/backend/models"
         "github.com/JuliusSinaga/LifeLinker-PPW11/backend/routes"
