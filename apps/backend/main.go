@@ -24,6 +24,9 @@ func main() {
         // Connect Database
         database.ConnectDB()
 
+		// Initialize Firebase for FCM Push Notifications
+		controllers.InitFirebase()
+
         // Auto Migration DINONAKTIFKAN di production
         // Alasan: AutoMigrate di Supabase pooler (port 6543) menyebabkan query information_schema
         // hang 150-265 detik dan membuat Leapcell timeout.
@@ -39,6 +42,7 @@ func main() {
                         &models.Consultation{},
                         &models.Message{},
                         &models.AppSetting{},
+                        &models.Education{}, // [BARU] Modul Edukasi
                 ); err != nil {
                         log.Printf("Peringatan migrasi: %v", err)
                 } else {

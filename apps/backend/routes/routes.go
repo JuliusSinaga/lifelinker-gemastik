@@ -2,68 +2,83 @@ package routes
 
 import (
 	"github.com/JuliusSinaga/LifeLinker-PPW11/backend/controllers"
+	"github.com/JuliusSinaga/LifeLinker-PPW11/backend/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRoutes(router *gin.Engine) {
-	// --- AUTHENTICATION ---
-	router.POST("/users", controllers.CreateUser)          // Register
-	router.POST("/login", controllers.Login)               // Login
-	router.POST("/login/google", controllers.GoogleLogin)  // Login Google
-	
-	// Password Management
-	router.POST("/forgot-password", controllers.ForgotPassword)
-	router.POST("/reset-password", controllers.ResetPassword)
+	// --- PUBLIC ROUTES ---
+	public := router.Group("/")
+	{
+		// Authentication & Registration
+		public.POST("/users", controllers.CreateUser)          // Register
+		public.POST("/login", controllers.Login)               // Login
+		public.POST("/login/google", controllers.GoogleLogin)  // Login Google
+		public.POST("/forgot-password", controllers.ForgotPassword)
+		public.POST("/reset-password", controllers.ResetPassword)
 
-	// --- USER MANAGEMENT & PROFILE ---
-	router.GET("/users", controllers.GetUsers)             // List Users (Testing/Admin)
-	router.PUT("/users/:id", controllers.UpdateUser)       // [BARU] Update Profil (Nama, Kota, dll)
-	router.PUT("/users/:id/password", controllers.UpdatePassword) // Ganti Password
-	router.DELETE("/users/:id", controllers.DeleteUser)    // Hapus User (Admin)
-	router.PUT("/users/:id/verify", controllers.VerifyDoctor) // Verifikasi Dokter (Admin)
-	router.POST("/users/:id/avatar", controllers.UploadUserAvatar) // Upload Foto Profil
+		// Public Data
+		public.GET("/lokasi", controllers.GetLokasi)
+		public.GET("/lokasi/:id", controllers.GetLokasiByID)
+		public.GET("/stok-darah", controllers.GetStokDarah)
+		public.GET("/stok-darah/:id", controllers.GetStokDarahByID)
+		public.GET("/events", controllers.GetEvents)
+		public.GET("/events/:id", controllers.GetEventByID)
+		public.GET("/landing-stats", controllers.GetLandingStats)
+		public.GET("/education", controllers.GetEducation)
+	}
 
-	// --- DASHBOARD ADMIN ---
-	router.GET("/dashboard/admin", controllers.DashboardAdmin)
+	// --- PROTECTED ROUTES (Require Authentication) ---
+	protected := router.Group("/")
+	protected.Use(middleware.RequireAuth())
+	{
+		// User Profile Management
+		protected.PUT("/users/:id", controllers.UpdateUser)       
+		protected.PUT("/users/:id/password", controllers.UpdatePassword)
+		protected.POST("/users/:id/avatar", controllers.UploadUserAvatar)
 
-	// --- FITUR PUBLIK & UTAMA ---
+		// Donations
+		protected.GET("/donations", controllers.GetDonations)
+		protected.GET("/donations/:id", controllers.GetDonationByID)
+		protected.POST("/donations", controllers.CreateDonation)
+		protected.PUT("/donations/:id", controllers.UpdateDonation)
 
-	// Lokasi Donor
-	router.GET("/lokasi", controllers.GetLokasi)
-	router.GET("/lokasi/:id", controllers.GetLokasiByID)
-	router.POST("/lokasi", controllers.CreateLokasi)
-	router.PUT("/lokasi/:id", controllers.UpdateLokasi)
-	router.DELETE("/lokasi/:id", controllers.DeleteLokasi)
+		protected.GET("/stok-darah/prediksi", controllers.GetStokPrediction) // [BARU] Prediksi AI
 
-	// Stok Darah
-	router.GET("/stok-darah", controllers.GetStokDarah)
-	router.GET("/stok-darah/:id", controllers.GetStokDarahByID)
-	router.POST("/stok-darah", controllers.UpdateStokDarah)
-	router.DELETE("/stok-darah/:id", controllers.DeleteStokDarah) 
+		// Consultations
+		protected.GET("/consultations", controllers.GetConsultations)
+		protected.GET("/consultations/:id", controllers.GetConsultationByID) 
+		protected.POST("/consultations", controllers.CreateConsultation)
+		protected.POST("/consultations/:id/reply", controllers.ReplyConsultation)       
+		protected.PUT("/consultations/:id/status", controllers.UpdateConsultationStatus) 
+	}
 
-	// Events
-	router.GET("/events", controllers.GetEvents)
-	router.GET("/events/:id", controllers.GetEventByID)
-	router.POST("/events", controllers.CreateEvent)
-	router.PUT("/events/:id", controllers.UpdateEvent)
-	router.DELETE("/events/:id", controllers.DeleteEvent)
+	// --- ADMIN & DOCTOR SPECIFIC ROUTES ---
+	adminRoutes := router.Group("/")
+	adminRoutes.Use(middleware.RequireAuth(), middleware.RequireRole("admin"))
+	{
+		adminRoutes.GET("/dashboard/admin", controllers.DashboardAdmin)
+		adminRoutes.GET("/users", controllers.GetUsers)
+		adminRoutes.DELETE("/users/:id", controllers.DeleteUser)
+		adminRoutes.PUT("/users/:id/verify", controllers.VerifyDoctor)
+		
+		adminRoutes.POST("/lokasi", controllers.CreateLokasi)
+		adminRoutes.PUT("/lokasi/:id", controllers.UpdateLokasi)
+		adminRoutes.DELETE("/lokasi/:id", controllers.DeleteLokasi)
 
-	// Donasi (Riwayat & Pengajuan)
-	router.GET("/donations", controllers.GetDonations)
-	router.GET("/donations/:id", controllers.GetDonationByID)
-	router.POST("/donations", controllers.CreateDonation)
-	router.PUT("/donations/:id", controllers.UpdateDonation)
+		adminRoutes.POST("/stok-darah", controllers.UpdateStokDarah)
+		adminRoutes.DELETE("/stok-darah/:id", controllers.DeleteStokDarah)
+		adminRoutes.GET("/stok-darah/matching", controllers.GetSmartMatching) 
+		adminRoutes.POST("/notifications/send", controllers.SendUrgentNotification) // [BARU] Notifikasi FCM
 
-	// Konsultasi (Chat & Video)
-	router.GET("/consultations", controllers.GetConsultations)
-	router.GET("/consultations/:id", controllers.GetConsultationByID) // [BARU] Detail 1 Konsultasi
-	router.POST("/consultations", controllers.CreateConsultation)
-	
-	// Fitur Chat & Status Video
-	router.POST("/consultations/:id/reply", controllers.ReplyConsultation)       // Kirim Pesan
-	router.PUT("/consultations/:id/status", controllers.UpdateConsultationStatus) // Update Status / Link Zoom
+		adminRoutes.POST("/events", controllers.CreateEvent)
+		adminRoutes.PUT("/events/:id", controllers.UpdateEvent)
+		adminRoutes.DELETE("/events/:id", controllers.DeleteEvent)
 
-	// --- PENGATURAN WEB (LANDING PAGE STATS) ---
-	router.GET("/landing-stats", controllers.GetLandingStats)
-	router.PUT("/admin/landing-stats", controllers.UpdateLandingStats)
+		adminRoutes.POST("/education", controllers.CreateEducation)
+		adminRoutes.PUT("/education/:id", controllers.UpdateEducation)
+		adminRoutes.DELETE("/education/:id", controllers.DeleteEducation)
+
+		adminRoutes.PUT("/admin/landing-stats", controllers.UpdateLandingStats)
+	}
 }

@@ -22,6 +22,9 @@ type User struct {
 	// [PENTING] Tambahan untuk Foto Profil
 	PhotoURL     string `json:"photo_url"` 
 
+	// --- [BARU] Notifikasi FCM ---
+	FCMToken     string `json:"fcm_token"`
+
 	// --- Field Khusus User (Pendonor) ---
 	GolDarah   string `json:"blood_type"`
 	Rhesus     string `json:"rhesus"`

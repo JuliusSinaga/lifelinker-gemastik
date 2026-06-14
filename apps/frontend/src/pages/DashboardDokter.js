@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DokterSidebar from "../components/SidebarDokter";
 import "../styles/DashboardDokter.css";
+import axiosClient from "../service/axiosClient";
 
 import Icon from "../components/core/Icon";
 import Button from "../components/core/Button";
@@ -22,14 +23,45 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 export default function DashboardDokter() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const handleRefresh = () => {
+  const [stokA, setStokA] = useState(0);
+  const [stokB, setStokB] = useState(0);
+  const [stokAB, setStokAB] = useState(0);
+  const [stokO, setStokO] = useState(0);
+  const [totalStok, setTotalStok] = useState(0);
+
+  const fetchStokData = async () => {
+    try {
+      const res = await axiosClient.get("/stok-darah");
+      const data = res.data.data || [];
+      
+      let sumA = 0, sumB = 0, sumAB = 0, sumO = 0;
+      data.forEach(item => {
+        if (item.gol_darah === "A") sumA += item.jumlah_kantong;
+        else if (item.gol_darah === "B") sumB += item.jumlah_kantong;
+        else if (item.gol_darah === "AB") sumAB += item.jumlah_kantong;
+        else if (item.gol_darah === "O") sumO += item.jumlah_kantong;
+      });
+
+      setStokA(sumA);
+      setStokB(sumB);
+      setStokAB(sumAB);
+      setStokO(sumO);
+      setTotalStok(sumA + sumB + sumAB + sumO);
+    } catch (error) {
+      console.error("Gagal mengambil data stok:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStokData();
+  }, []);
+
+  const handleRefresh = async () => {
     if (isRefreshing) return;
 
     setIsRefreshing(true);
-
-    setTimeout(() => {
-      setIsRefreshing(false);
-    }, 1500);
+    await fetchStokData();
+    setIsRefreshing(false);
   };
 
   const chartData = {
@@ -37,7 +69,7 @@ export default function DashboardDokter() {
     datasets: [
       {
         label: "Jumlah Stok",
-        data: [300, 200, 120, 400],
+        data: [stokA, stokB, stokAB, stokO],
         backgroundColor: ["var(--color-status-error)", "var(--color-status-info)", "var(--color-status-warning)", "var(--color-status-success)"],
         borderRadius: 8,
       },
@@ -77,9 +109,9 @@ export default function DashboardDokter() {
         <div className="stats-row" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "24px", marginBottom: "32px" }}>
 
           <Card variant="standard" className="stats-card red" style={{ padding: "24px", borderTop: "4px solid var(--color-status-error)" }}>
-            <h2 style={{ fontSize: "36px", margin: "0 0 8px 0", fontFamily: "var(--font-family-brand)", color: "var(--color-status-error)" }}>1,247</h2>
+            <h2 style={{ fontSize: "36px", margin: "0 0 8px 0", fontFamily: "var(--font-family-brand)", color: "var(--color-status-error)" }}>{totalStok.toLocaleString()}</h2>
             <p style={{ margin: "0 0 4px 0", fontWeight: "bold" }}>Total Stok Darah (Unit)</p>
-            <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>RS Siloam Kebon Jeruk</span>
+            <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Data Aktual Sistem</span>
           </Card>
 
           <Card variant="standard" className="stats-card blue" style={{ padding: "24px", borderTop: "4px solid var(--color-status-info)" }}>

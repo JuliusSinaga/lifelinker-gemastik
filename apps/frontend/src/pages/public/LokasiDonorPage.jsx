@@ -27,13 +27,25 @@ export default function LokasiDonorPage() {
 
   // Fetch Data
   useEffect(() => {
-    const fetchLocations = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axiosClient.get("/lokasi");
-        const dataDB = response.data.data || [];
+        // Fetch Lokasi
+        const locRes = await axiosClient.get("/lokasi");
+        const dataDB = locRes.data.data || [];
+
+        // Fetch Stok Darah (untuk melihat mana yang Kritis)
+        const stokRes = await axiosClient.get("/stok-darah");
+        const stokDB = stokRes.data.data || [];
+        
+        // Cari golongan darah apa saja yang "Kritis"
+        const kritisBloodTypes = stokDB
+          .filter(s => s.ketersediaan === "Kritis")
+          .map(s => `${s.gol_darah}${s.rhesus}`);
+          
+        const hasUrgent = kritisBloodTypes.length > 0;
+        const urgentString = kritisBloodTypes.join(" ");
 
         const mappedLocations = dataDB.map((item, index) => {
-          const isUrgent = index % 2 === 0;
           // Logika sederhana menentukan kota berdasarkan string alamat
           const city = item.alamat_lokasi.includes("Balige")
             ? "Balige"
@@ -46,26 +58,26 @@ export default function LokasiDonorPage() {
             city: city,
             image: item.gambar_lokasi || "/images/bg beranda awal.jpg",
 
-            // Dummy Data
+            // Data aktual vs Dummy
             rating: (4 + Math.random()).toFixed(1),
             distance: `${(2 + index * 1.5).toFixed(1)} km`,
-            donors: 100 + index * 25,
-            urgent: isUrgent,
-            blood: isUrgent ? (index % 3 === 0 ? "A+ O+" : "B+") : "",
-            lat: 3.5186 + index * 0.02,
-            lng: 98.6053 + index * 0.02,
+            donors: item.jumlah_pendaftar || 0,
+            urgent: hasUrgent,
+            blood: hasUrgent ? urgentString : "",
+            lat: item.latitude || (3.5186 + index * 0.02),
+            lng: item.longitude || (98.6053 + index * 0.02),
           };
         });
 
         setLocations(mappedLocations);
       } catch (error) {
-        console.error("Gagal mengambil data lokasi:", error);
+        console.error("Gagal mengambil data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchLocations();
+    fetchData();
   }, []);
 
   // --- 2. LOGIKA FILTERING ---

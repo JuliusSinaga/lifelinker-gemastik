@@ -9,13 +9,40 @@ const axiosClient = axios.create({
   },
 });
 
-// Opsional: Interceptor untuk menangani error response secara global
+// Interceptor untuk menangani request: Menyisipkan token JWT otomatis
+axiosClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Interceptor untuk menangani response: Tangani 401 Unauthorized
 axiosClient.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
-    console.error("API Error:", error.response || error.message);
+    if (error.response && error.response.status === 401) {
+      // Token kadaluarsa atau tidak valid, auto logout
+      console.warn("Unauthorized! Clearing token and redirecting to login.");
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("role");
+      
+      // Jika bukan di halaman login, arahkan ke login pengguna
+      if (window.location.pathname !== '/login-pengguna' && window.location.pathname !== '/login-dokter') {
+          window.location.href = '/login-pengguna';
+      }
+    } else {
+      console.error("API Error:", error.response || error.message);
+    }
     return Promise.reject(error);
   }
 );

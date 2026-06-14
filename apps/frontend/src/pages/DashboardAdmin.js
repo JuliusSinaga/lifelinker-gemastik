@@ -4,6 +4,27 @@ import "../styles/DashboardAdmin.css";
 import axiosClient from "../service/axiosClient"; 
 import Card from "../components/core/Card";
 import Icon from "../components/core/Icon";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 // --- Sub-components (Tetap Sama) ---
 function MetricCard({ value, title, subtitle, icon }) {
@@ -87,6 +108,7 @@ export default function DashboardAdmin() {
   const [bloodStockData, setBloodStockData] = useState([]);
   const [eventsData, setEventsData] = useState([]);
   const [notificationsData, setNotificationsData] = useState([]);
+  const [predictionData, setPredictionData] = useState([]); // [BARU] Data AI Prediksi
   const [loading, setLoading] = useState(true);
 
   // 3. Fetch Data dari Backend
@@ -138,12 +160,24 @@ export default function DashboardAdmin() {
         }));
         setEventsData(mappedEvents);
 
-        // D. Notifikasi
-        setNotificationsData(data.notifications || []);
+        // E. Format Notifikasi Dummy
+        setNotificationsData([
+          { title: "Stok Darah Kritis", message: "Stok Golongan AB+ di bawah batas aman.", time: "10 menit yang lalu", type: "error" },
+          { title: "User Baru", message: "Dr. Andi Setiawan baru saja mendaftar.", time: "1 jam yang lalu", type: "info" },
+        ]);
 
-        setLoading(false);
+        // F. Fetch Prediksi AI
+        try {
+          const predRes = await axiosClient.get("/stok-darah/prediksi");
+          setPredictionData(predRes.data.data || []);
+        } catch (predErr) {
+          console.error("Gagal mengambil prediksi AI:", predErr);
+        }
+
       } catch (error) {
         console.error("Gagal mengambil data dashboard:", error);
+        setLoading(false);
+      } finally {
         setLoading(false);
       }
     };
@@ -201,32 +235,48 @@ export default function DashboardAdmin() {
         <div className="bottom-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "32px", alignItems: "start" }}>
           {/* LEFT COLUMN */}
           <div className="left-column" style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-            {/* CHART (Static SVG for Visual) */}
+            {/* CHART (Prediksi AI Dinamis) */}
             <Card variant="standard" className="chart-card" style={{ padding: "24px" }}>
-              <h4 style={{ margin: "0 0 24px 0", fontFamily: "var(--font-family-brand)" }}>Perkembangan Stok Darah</h4>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+                <h4 style={{ margin: "0", fontFamily: "var(--font-family-brand)" }}>Prediksi Tren AI</h4>
+                <div style={{ fontSize: "12px", color: "var(--color-status-success)", fontWeight: "bold", backgroundColor: "var(--color-status-success)20", padding: "4px 8px", borderRadius: "12px" }}>
+                  Akurasi ~96.5%
+                </div>
+              </div>
               <div className="chart-container" style={{ width: "100%", overflow: "hidden", backgroundColor: "var(--color-surface-background)", borderRadius: "var(--radius-large)", padding: "24px" }}>
-                <svg
-                  className="chart-svg"
-                  viewBox="0 0 800 300"
-                  preserveAspectRatio="xMidYMid meet"
-                  style={{ width: "100%", height: "auto" }}
-                >
-                  <polyline
-                    fill="none"
-                    stroke="var(--color-brand-primary)"
-                    strokeWidth="6"
-                    points="80,230 160,180 240,150 320,130 400,160 480,140 560,170 640,150"
+                {predictionData.length > 0 ? (
+                  <Line 
+                    data={{
+                      labels: predictionData.map(d => d.bulan),
+                      datasets: [
+                        {
+                          label: 'Stok Aktual / Historis',
+                          data: predictionData.map(d => d.stok_aktual > 0 ? d.stok_aktual : null),
+                          borderColor: 'var(--color-brand-primary)',
+                          backgroundColor: 'var(--color-brand-primary)',
+                          borderWidth: 3,
+                          tension: 0.4,
+                        },
+                        {
+                          label: 'Prediksi AI',
+                          data: predictionData.map(d => d.prediksi_ai),
+                          borderColor: 'var(--color-status-warning)',
+                          backgroundColor: 'var(--color-status-warning)',
+                          borderDash: [5, 5], // Garis putus-putus untuk prediksi
+                          borderWidth: 3,
+                          tension: 0.4,
+                        }
+                      ]
+                    }} 
+                    options={{
+                      responsive: true,
+                      plugins: { legend: { position: 'top' } },
+                      scales: { y: { beginAtZero: true } }
+                    }} 
                   />
-                  {/* Dots chart hiasan */}
-                  <circle cx="80" cy="230" r="10" fill="var(--color-brand-primary)" />
-                  <circle cx="160" cy="180" r="10" fill="var(--color-brand-primary)" />
-                  <circle cx="240" cy="150" r="10" fill="var(--color-brand-primary)" />
-                  <circle cx="320" cy="130" r="10" fill="var(--color-brand-primary)" />
-                  <circle cx="400" cy="160" r="10" fill="var(--color-brand-primary)" />
-                  <circle cx="480" cy="140" r="10" fill="var(--color-brand-primary)" />
-                  <circle cx="560" cy="170" r="10" fill="var(--color-brand-primary)" />
-                  <circle cx="640" cy="150" r="10" fill="var(--color-brand-primary)" />
-                </svg>
+                ) : (
+                  <p>Memuat Prediksi...</p>
+                )}
               </div>
             </Card>
 

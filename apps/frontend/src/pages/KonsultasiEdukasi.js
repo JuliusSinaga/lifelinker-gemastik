@@ -20,10 +20,7 @@ export default function KonsultasiEdukasi() {
   const chatEndRef = useRef(null);
 
   // --- State FAQ & Modal ---
-  const [faqs, setFaqs] = useState([
-    { id: 1, question: "Apakah donor darah memiliki efek samping?", answer: "Efek samping umumnya ringan seperti pusing. Istirahat cukup sebelum donor." },
-    { id: 2, question: "Bolehkah berdonor saat menstruasi?", answer: "Boleh, asalkan Hb normal (>12.5 g/dL) dan tidak sedang nyeri haid berlebih." }
-  ]);
+  const [faqs, setFaqs] = useState([]);
   const [showFaqModal, setShowFaqModal] = useState(false);
   const [newFaq, setNewFaq] = useState({ question: "", answer: "" });
   const [popup, setPopup] = useState({ show: false, type: "", message: "", confirmAction: null });
@@ -54,6 +51,21 @@ export default function KonsultasiEdukasi() {
 
       // Update data utama
       setConsultations(formattedData);
+
+      // Fetch Edukasi / FAQ
+      try {
+        const eduRes = await axiosClient.get("/education");
+        const eduData = eduRes.data.data || [];
+        const formattedFaqs = eduData.map(edu => ({
+          id: edu.ID,
+          question: edu.judul,
+          answer: edu.konten,
+          category: edu.kategori
+        }));
+        setFaqs(formattedFaqs);
+      } catch (eduErr) {
+        console.error("Gagal mengambil data edukasi:", eduErr);
+      }
 
       // Update data terfilter (tanpa merusak pencarian yang sedang aktif)
       setFilteredConsultations(prev => {

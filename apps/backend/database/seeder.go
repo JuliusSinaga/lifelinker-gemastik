@@ -18,6 +18,7 @@ func SeedAll(db *gorm.DB) {
 	SeedDonations(db)     // Butuh User, Dokter & Lokasi
 	SeedConsultations(db) // Butuh User & Dokter
 	SeedMessages(db)      // Butuh Konsultasi
+	SeedEducation(db)     // Edukasi & FAQ
 }
 
 // --- SEEDER LOKASI ---
@@ -38,6 +39,8 @@ func SeedLokasi(db *gorm.DB) {
 			GambarLokasi:         "/images/bg beranda awal.jpg",
 			JumlahPendaftar:      15,  // [BARU] Contoh data awal
 			BatasKuota:           100, // [BARU] Batas kuota
+			Latitude:             3.5186,
+			Longitude:            98.6025,
 		},
 		{
 			NamaLokasi:           "RS HKBP Balige",
@@ -47,6 +50,8 @@ func SeedLokasi(db *gorm.DB) {
 			GambarLokasi:         "/images/bg beranda awal.jpg",
 			JumlahPendaftar:      5,
 			BatasKuota:           50,
+			Latitude:             2.3333,
+			Longitude:            99.0667,
 		},
 		{
 			NamaLokasi:           "RS Pirngadi",
@@ -56,6 +61,8 @@ func SeedLokasi(db *gorm.DB) {
 			GambarLokasi:         "/images/bg beranda awal.jpg",
 			JumlahPendaftar:      45,
 			BatasKuota:           150,
+			Latitude:             3.5950,
+			Longitude:            98.6850,
 		},
 	}
 
@@ -391,4 +398,43 @@ func SeedMessages(db *gorm.DB) {
 	} else {
 		log.Println("Seeding Pesan Chat Berhasil!")
 	}
+}
+
+// --- SEEDER EDUCATION & FAQ ---
+func SeedEducation(db *gorm.DB) {
+	var count int64
+	db.Model(&models.Education{}).Count(&count)
+
+	if count > 0 {
+		log.Println("Data Education sudah ada, lewati seeding.")
+		return
+	}
+
+	educationData := []models.Education{
+		{
+			Judul:    "Syarat Utama Menjadi Pendonor Darah",
+			Konten:   "Untuk menjadi pendonor darah, Anda harus memenuhi syarat berikut: \n1. Berusia 17-60 tahun.\n2. Berat badan minimal 45 kg.\n3. Sehat jasmani dan rohani.\n4. Tidak memiliki riwayat penyakit menular seperti HIV/AIDS, Hepatitis B/C, atau Sifilis.\n5. Tidak sedang mengonsumsi obat tertentu.",
+			Kategori: "Syarat & Ketentuan",
+		},
+		{
+			Judul:    "Persiapan Sebelum Donor Darah",
+			Konten:   "1. Tidur yang cukup minimal 5 jam sebelum donor.\n2. Makan makanan bergizi 3-4 jam sebelum donor.\n3. Minum lebih banyak air putih.\n4. Hindari aktivitas fisik berat sehari sebelum donor.",
+			Kategori: "Persiapan",
+		},
+		{
+			Judul:    "Mitos dan Fakta seputar Donor Darah",
+			Konten:   "Mitos: Donor darah membuat gemuk.\nFakta: Donor darah membakar sekitar 650 kalori per pint (sekitar 450 ml), namun tidak secara langsung menyebabkan penurunan berat badan jangka panjang. Tidak ada kaitan dengan obesitas.",
+			Kategori: "FAQ",
+		},
+		{
+			Judul:    "Apa yang Terjadi Setelah Donor Darah?",
+			Konten:   "Setelah donor, darah Anda akan dikirim ke laboratorium untuk diuji penyakit infeksi menular. Jika aman, darah akan dipisah menjadi komponen (sel darah merah, trombosit, plasma) untuk diberikan kepada pasien yang membutuhkan. Tubuh Anda akan meregenerasi volume cairan dalam 24 jam dan sel darah merah dalam 4-6 minggu.",
+			Kategori: "Informasi",
+		},
+	}
+
+	for _, edu := range educationData {
+		db.Create(&edu)
+	}
+	log.Println("Seeding Education Berhasil!")
 }

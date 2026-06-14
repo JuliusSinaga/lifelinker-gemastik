@@ -74,10 +74,17 @@ func GoogleLogin(c *gin.Context) {
 		}
 	}
 
-	// 4. Response Sukses
+	// 4. Generate JWT Token
+	token, err := utils.GenerateToken(user.ID, user.Role, user.Email)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal generate token"})
+		return
+	}
+
+	// 5. Response Sukses
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Login Google berhasil",
-		"token":   "DUMMY_JWT_TOKEN_12345", // Ganti dengan JWT asli nanti
+		"token":   token,
 		"user":    formatUserResponse(user),
 	})
 }
@@ -113,9 +120,16 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	// Generate JWT Token
+	token, err := utils.GenerateToken(user.ID, user.Role, user.Email)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal generate token"})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Login berhasil",
-		"token":   "DUMMY_JWT_TOKEN_MANUAL_54321",
+		"token":   token,
 		"user":    formatUserResponse(user),
 	})
 }

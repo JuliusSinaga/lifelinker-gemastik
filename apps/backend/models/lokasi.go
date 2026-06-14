@@ -12,6 +12,10 @@ type Lokasi struct {
 	JamOperasionalLokasi string `json:"jam_operasional_lokasi"`
 	GambarLokasi         string `json:"gambar_lokasi"`
 
+	// --- [BARU] FIELD GIS / LOKASI ---
+	Latitude  float64 `json:"latitude" gorm:"default:0.0"`
+	Longitude float64 `json:"longitude" gorm:"default:0.0"`
+
 	// --- [BARU] FIELD KUOTA & PENDAFTAR ---
 	// Field ini penting agar "Status Pendaftaran" di Frontend terhubung ke Database
 	JumlahPendaftar int `json:"jumlah_pendaftar" gorm:"default:0"` // Menyimpan jumlah orang yang sudah daftar
