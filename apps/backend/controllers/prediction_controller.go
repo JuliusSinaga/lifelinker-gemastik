@@ -20,9 +20,9 @@ type MonthlyPrediction struct {
 // GetStokPrediction menghasilkan prediksi stok darah menggunakan rule-based algorithm.
 // Menggunakan historis donasi bulanan dan ketersediaan stok darah saat ini.
 func GetStokPrediction(c *gin.Context) {
-	// Ambil semua riwayat donasi (Selesai)
+	// Ambil semua riwayat donasi (Approved)
 	var donations []models.DonationHistory
-	database.DB.Where("status = ?", "Selesai").Find(&donations)
+	database.DB.Where("status = ?", "Approved").Find(&donations)
 
 	// Hitung total stok saat ini dari models.StokDarah
 	var stokList []models.StokDarah

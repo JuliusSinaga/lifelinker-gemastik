@@ -99,7 +99,7 @@ func GetSmartMatching(c *gin.Context) {
 		canDonate := true
 		for _, donation := range u.Donations {
 			// Jika ada donasi sukses dalam 90 hari terakhir
-			if donation.Status == "Selesai" {
+			if donation.Status == "Approved" {
 				daysSince := now.Sub(donation.DonationDate).Hours() / 24
 				if daysSince < 90 {
 					canDonate = false
@@ -116,20 +116,14 @@ func GetSmartMatching(c *gin.Context) {
 		userLat, userLng := getCityCoordinates(u.Kota)
 		dist := haversine(lokasi.Latitude, lokasi.Longitude, userLat, userLng)
 
-		// 4. Weighted Scoring
-		// Base score for matching blood and being eligible is 100
-		// Deduct points based on distance (closer = higher score). 
-		// Example: max deduction 50 points if distance > 100km.
-		score := 100.0
-		if dist < 10 {
-			score += 50 // Sangat dekat
-		} else if dist < 50 {
-			score += 30 // Cukup dekat
-		} else if dist < 100 {
-			score += 10 // Sedang
+		// 4. Weighted Scoring (Opsi B: Base 50, Bonus Jarak hingga +50)
+		// Kandidat yang lulus kelayakan medis mendapat nilai dasar 50.
+		// Semakin dekat jaraknya dari 50km, semakin tinggi bonusnya (maks +50).
+		score := 50.0 
+		if dist < 50.0 {
+			score += (50.0 - dist) // Setiap km lebih dekat dari 50km bernilai 1 poin bonus
 		}
 
-		// Normalize score to max 100
 		finalScore := math.Min(100.0, score)
 
 		matches = append(matches, MatchedDonor{
@@ -139,8 +133,11 @@ func GetSmartMatching(c *gin.Context) {
 		})
 	}
 
-	// Sort by Score Descending
+	// Sort by Score Descending (Utama), lalu by Distance Ascending (Sekunder)
 	sort.Slice(matches, func(i, j int) bool {
+		if matches[i].Score == matches[j].Score {
+			return matches[i].DistanceKM < matches[j].DistanceKM
+		}
 		return matches[i].Score > matches[j].Score
 	})
 

@@ -53,7 +53,7 @@ func SetupRoutes(router *gin.Engine) {
 		protected.PUT("/consultations/:id/status", controllers.UpdateConsultationStatus) 
 	}
 
-	// --- ADMIN & DOCTOR SPECIFIC ROUTES ---
+	// --- ADMIN ONLY ROUTES ---
 	adminRoutes := router.Group("/")
 	adminRoutes.Use(middleware.RequireAuth(), middleware.RequireRole("admin"))
 	{
@@ -62,23 +62,28 @@ func SetupRoutes(router *gin.Engine) {
 		adminRoutes.DELETE("/users/:id", controllers.DeleteUser)
 		adminRoutes.PUT("/users/:id/verify", controllers.VerifyDoctor)
 		
-		adminRoutes.POST("/lokasi", controllers.CreateLokasi)
-		adminRoutes.PUT("/lokasi/:id", controllers.UpdateLokasi)
-		adminRoutes.DELETE("/lokasi/:id", controllers.DeleteLokasi)
-
-		adminRoutes.POST("/stok-darah", controllers.UpdateStokDarah)
-		adminRoutes.DELETE("/stok-darah/:id", controllers.DeleteStokDarah)
-		adminRoutes.GET("/stok-darah/matching", controllers.GetSmartMatching) 
-		adminRoutes.POST("/notifications/send", controllers.SendUrgentNotification) // [BARU] Notifikasi FCM
-
-		adminRoutes.POST("/events", controllers.CreateEvent)
-		adminRoutes.PUT("/events/:id", controllers.UpdateEvent)
-		adminRoutes.DELETE("/events/:id", controllers.DeleteEvent)
-
-		adminRoutes.POST("/education", controllers.CreateEducation)
-		adminRoutes.PUT("/education/:id", controllers.UpdateEducation)
-		adminRoutes.DELETE("/education/:id", controllers.DeleteEducation)
-
 		adminRoutes.PUT("/admin/landing-stats", controllers.UpdateLandingStats)
+	}
+
+	// --- STAFF ROUTES (Admin & Doctor) ---
+	staffRoutes := router.Group("/")
+	staffRoutes.Use(middleware.RequireAuth(), middleware.RequireRole("admin", "doctor"))
+	{
+		staffRoutes.POST("/lokasi", controllers.CreateLokasi)
+		staffRoutes.PUT("/lokasi/:id", controllers.UpdateLokasi)
+		staffRoutes.DELETE("/lokasi/:id", controllers.DeleteLokasi)
+
+		staffRoutes.POST("/stok-darah", controllers.UpdateStokDarah)
+		staffRoutes.DELETE("/stok-darah/:id", controllers.DeleteStokDarah)
+		staffRoutes.GET("/stok-darah/matching", controllers.GetSmartMatching) 
+		staffRoutes.POST("/notifications/send", controllers.SendUrgentNotification) // [BARU] Notifikasi FCM
+
+		staffRoutes.POST("/events", controllers.CreateEvent)
+		staffRoutes.PUT("/events/:id", controllers.UpdateEvent)
+		staffRoutes.DELETE("/events/:id", controllers.DeleteEvent)
+
+		staffRoutes.POST("/education", controllers.CreateEducation)
+		staffRoutes.PUT("/education/:id", controllers.UpdateEducation)
+		staffRoutes.DELETE("/education/:id", controllers.DeleteEducation)
 	}
 }

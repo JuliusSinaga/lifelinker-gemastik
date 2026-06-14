@@ -77,7 +77,7 @@ func SendUrgentNotification(c *gin.Context) {
 		// 2. Filter Riwayat (Syarat Medis)
 		canDonate := true
 		for _, donation := range u.Donations {
-			if donation.Status == "Selesai" {
+			if donation.Status == "Approved" {
 				daysSince := now.Sub(donation.DonationDate).Hours() / 24
 				if daysSince < 90 {
 					canDonate = false

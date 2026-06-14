@@ -8,6 +8,13 @@ export default function ManajemenStok() {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  
+  // State untuk Smart Matching
+  const [showMatchingModal, setShowMatchingModal] = useState(false);
+  const [matchingResults, setMatchingResults] = useState([]);
+  const [isMatching, setIsMatching] = useState(false);
+  const [matchingForm, setMatchingForm] = useState({ blood_type: "A", rhesus: "+" });
+  const [notificationSent, setNotificationSent] = useState(false);
 
   // State Form Tambah Stok
   const [form, setForm] = useState({
@@ -96,6 +103,39 @@ export default function ManajemenStok() {
     return new Date(dateString).toLocaleDateString("id-ID");
   };
 
+  // 4. Handle Smart Matching
+  const handleSmartMatching = async () => {
+    setIsMatching(true);
+    setNotificationSent(false);
+    try {
+      const res = await axiosClient.get(`/stok-darah/matching?blood_type=${matchingForm.blood_type}&rhesus=${matchingForm.rhesus}`);
+      setMatchingResults(res.data.data || []);
+    } catch (error) {
+      console.error("Gagal matching:", error);
+      alert("Gagal melakukan pencocokan.");
+    } finally {
+      setIsMatching(false);
+    }
+  };
+
+  // 5. Handle Send FCM Notification
+  const handleSendNotification = async () => {
+    try {
+      // Asumsikan lokasi dokter ini id=1 (dummy untuk demo)
+      await axiosClient.post("/notifications/send", {
+        lokasi_id: 1,
+        blood_type: matchingForm.blood_type,
+        rhesus: matchingForm.rhesus,
+        message: `Dibutuhkan segera donor darah ${matchingForm.blood_type}${matchingForm.rhesus} di RS Anda. Klik untuk detail!`
+      });
+      setNotificationSent(true);
+      alert("Notifikasi darurat berhasil dikirim ke kandidat pendonor!");
+    } catch (error) {
+      console.error("Gagal kirim notif:", error);
+      alert("Gagal mengirim notifikasi FCM.");
+    }
+  };
+
   return (
     <div className="ms-container">
       <SidebarDokter />
@@ -108,7 +148,14 @@ export default function ManajemenStok() {
           <div className="ms-card-header">
             <h3>🩸 Stok Darah Terkini</h3>
 
-            <div className="ms-btn-group">
+            <div className="search-bar">
+              <input type="text" placeholder="Cari golongan darah atau No. Kantong..." className="search-input" />
+            </div>
+
+            <div style={{ display: "flex", gap: "12px" }}>
+              <button className="btn-emergency" onClick={() => setShowMatchingModal(true)} style={{ backgroundColor: "var(--color-status-error)", color: "white", border: "none", padding: "10px 20px", borderRadius: "8px", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
+                <span className="icon">🚨</span> Cari Donor Darurat
+              </button>
               <button className="ms-btn-add" onClick={openModal}>
                 ➕ Tambah Stok
               </button>
@@ -254,6 +301,70 @@ export default function ManajemenStok() {
                 <button className="ms-btn-cancel" onClick={closeModal}>Batal</button>
                 <button className="ms-btn-save" onClick={handleSave}>Simpan</button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* MODAL SMART MATCHING */}
+        {showMatchingModal && (
+          <div className="ms-modal-overlay">
+            <div className="ms-modal" style={{ maxWidth: "600px", width: "100%" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                  <h3 className="modal-title" style={{ margin: 0 }}>🚨 Smart Matching Donor Darurat</h3>
+                  <button onClick={() => { setShowMatchingModal(false); setMatchingResults([]); setNotificationSent(false); }} style={{ background: "none", border: "none", fontSize: "1.2rem", cursor: "pointer" }}>✕</button>
+              </div>
+              
+              <p style={{ color: "var(--color-text-secondary)", marginBottom: "20px" }}>Sistem akan mencari pendonor terdekat dengan riwayat kesehatan yang valid (Masa tunggu 90 hari).</p>
+              
+              <div className="form-group-row" style={{ display: "flex", gap: "16px", marginBottom: "24px" }}>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label style={{ display: "block", marginBottom: "8px", fontWeight: "600" }}>Golongan Darah Darurat</label>
+                  <select className="ms-input" value={matchingForm.blood_type} onChange={e => setMatchingForm({...matchingForm, blood_type: e.target.value})}>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="AB">AB</option>
+                    <option value="O">O</option>
+                  </select>
+                </div>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label style={{ display: "block", marginBottom: "8px", fontWeight: "600" }}>Rhesus</label>
+                  <select className="ms-input" value={matchingForm.rhesus} onChange={e => setMatchingForm({...matchingForm, rhesus: e.target.value})}>
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                  </select>
+                </div>
+              </div>
+
+              <button onClick={handleSmartMatching} disabled={isMatching} style={{ width: "100%", marginBottom: "24px", padding: "12px", backgroundColor: "var(--color-brand-primary)", color: "white", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer" }}>
+                {isMatching ? "Mencari Kandidat..." : "Cari Kandidat Berdasarkan Radius & AI"}
+              </button>
+
+              {matchingResults.length > 0 && (
+                <div className="matching-results" style={{ backgroundColor: "var(--color-surface-alt)", padding: "16px", borderRadius: "8px", border: "1px solid var(--color-border)" }}>
+                  <h4 style={{ margin: "0 0 12px 0", color: "var(--color-status-success)" }}>Ditemukan {matchingResults.length} Kandidat Terdekat!</h4>
+                  <ul style={{ listStyle: "none", padding: 0, margin: "0 0 16px 0", maxHeight: "150px", overflowY: "auto" }}>
+                    {matchingResults.map((m, i) => (
+                      <li key={i} style={{ padding: "12px 8px", borderBottom: "1px solid var(--color-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <div>
+                          <strong>{m.user.name}</strong> <br/>
+                          <small style={{ color: "var(--color-text-tertiary)" }}>Jarak: {m.jarak.toFixed(1)} km</small>
+                        </div>
+                        <span style={{ color: "var(--color-brand-primary)", fontWeight: "bold", fontSize: "1.2rem" }}>{m.skor.toFixed(0)} pts</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {!notificationSent ? (
+                    <button onClick={handleSendNotification} style={{ backgroundColor: "var(--color-status-error)", color: "white", width: "100%", padding: "12px", border: "none", borderRadius: "8px", fontWeight: "bold", cursor: "pointer", display: "flex", justifyContent: "center", gap: "8px" }}>
+                      <span>🔔</span> Kirim Push Notification (FCM)
+                    </button>
+                  ) : (
+                    <div style={{ padding: "12px", backgroundColor: "var(--color-status-success)20", color: "var(--color-status-success)", textAlign: "center", borderRadius: "8px", fontWeight: "bold" }}>
+                      ✅ Notifikasi Berhasil Dikirim ke {matchingResults.length} Kandidat!
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}
