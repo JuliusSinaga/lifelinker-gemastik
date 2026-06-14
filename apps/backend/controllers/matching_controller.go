@@ -100,8 +100,7 @@ func GetSmartMatching(c *gin.Context) {
 		for _, donation := range u.Donations {
 			// Jika ada donasi sukses dalam 90 hari terakhir
 			if donation.Status == "Selesai" {
-				parsedDate, _ := time.Parse("2006-01-02", donation.TanggalDonasi)
-				daysSince := now.Sub(parsedDate).Hours() / 24
+				daysSince := now.Sub(donation.DonationDate).Hours() / 24
 				if daysSince < 90 {
 					canDonate = false
 					break
