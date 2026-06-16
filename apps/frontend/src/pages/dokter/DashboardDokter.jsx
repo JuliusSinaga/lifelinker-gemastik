@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import DokterSidebar from "../components/SidebarDokter";
-import "../styles/DashboardDokter.css";
-import axiosClient from "../service/axiosClient";
+import DokterSidebar from "../../components/SidebarDokter";
+import "../../styles/DashboardDokter.css";
+import axiosClient from "../../service/axiosClient";
 
-import Icon from "../components/core/Icon";
-import Button from "../components/core/Button";
-import Card from "../components/core/Card";
+import Icon from "../../components/core/Icon";
+import Button from "../../components/core/Button";
+import Card from "../../components/core/Card";
 
 // CHART JS
 import { Bar } from "react-chartjs-2";
@@ -189,7 +189,7 @@ export default function DashboardDokter() {
           </ul>
 
           <div className="notif-footer" style={{ marginTop: "24px", textAlign: "center" }}>
-            <a href="#" style={{ color: "var(--color-brand-primary)", textDecoration: "none", fontWeight: "bold" }}>Lihat semua notifikasi</a>
+            <button style={{ background: "none", border: "none", cursor: "pointer", color: "var(--color-brand-primary)", textDecoration: "none", fontWeight: "bold", padding: 0, font: "inherit" }}>Lihat semua notifikasi</button>
           </div>
 
         </Card>

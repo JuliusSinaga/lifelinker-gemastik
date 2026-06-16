@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/DaftarDokter.css";
-import axiosClient from "../service/axiosClient"; 
+import "../../styles/DaftarDokter.css";
+import axiosClient from "../../service/axiosClient"; 
 import { useGoogleLogin } from "@react-oauth/google"; 
-import Icon from "../components/core/Icon";
-import Input from "../components/core/Input";
-import Button from "../components/core/Button";
+import Icon from "../../components/core/Icon";
+import Input from "../../components/core/Input";
+import Button from "../../components/core/Button";
 
 export default function DaftarDokter() {
   const navigate = useNavigate();

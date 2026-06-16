@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import "../styles/LoginShared.css"; 
-import "../styles/LoginDokter.css"; 
+import "../../styles/LoginShared.css"; 
+import "../../styles/LoginDokter.css"; 
 import { useNavigate, Link } from "react-router-dom";
-import axiosClient from "../service/axiosClient";
+import axiosClient from "../../service/axiosClient";
 import { useGoogleLogin } from "@react-oauth/google";
-import Icon from "../components/core/Icon";
-import Button from "../components/core/Button";
-import Card from "../components/core/Card";
-import Input from "../components/core/Input";
+import Icon from "../../components/core/Icon";
+import Button from "../../components/core/Button";
+import Card from "../../components/core/Card";
+import Input from "../../components/core/Input";
 
 const LoginDokter = () => {
   const navigate = useNavigate();
@@ -98,7 +98,7 @@ const LoginDokter = () => {
   return (
     <>
       <div className="login-container" style={{ background: "var(--color-bg-auth)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
-        <Card variant="standard" className="login-card" style={{ maxWidth: "480px", width: "100%", padding: "40px", position: "relative" }}>
+        <Card variant="standard" className="login-card" style={{ maxWidth: "440px", width: "100%", padding: "40px", position: "relative" }}>
 
           {/* TOMBOL KEMBALI */}
           <Button variant="ghost" className="back-button" onClick={() => navigate("/")} style={{ position: "absolute", top: "24px", left: "24px", display: "flex", alignItems: "center", gap: "8px", color: "var(--color-text-secondary)" }}>
@@ -131,6 +131,7 @@ const LoginDokter = () => {
                 setRole("pengguna");
                 navigate("/login-pengguna");
               }}
+              style={{ border: role !== "pengguna" ? "1px solid #d1d5db" : "1px solid transparent", borderRadius: "8px" }}
             >
               Pengguna
             </Button>
@@ -138,6 +139,7 @@ const LoginDokter = () => {
               variant={role === "dokter" ? "primary" : "ghost"}
               fullWidth
               onClick={() => setRole("dokter")}
+              style={{ border: role !== "dokter" ? "1px solid #d1d5db" : "1px solid transparent", borderRadius: "8px" }}
             >
               Dokter
             </Button>

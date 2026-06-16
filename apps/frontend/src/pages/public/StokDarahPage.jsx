@@ -120,7 +120,9 @@ export default function StokDarahPage() {
       {/* Hero Section */}
       <section className="stok-hero" style={{ backgroundColor: 'var(--color-brand-primary)', padding: '60px 5% 80px', textAlign: 'center' }}>
         <div className="stok-hero-content">
-          <h1 style={{ fontFamily: 'var(--font-family-brand)', color: 'white', fontSize: '36px', marginBottom: '16px' }}>🩸 Stok Darah Rumah Sakit</h1>
+          <h1 style={{ fontFamily: 'var(--font-family-brand)', color: 'white', fontSize: '36px', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '36px' }}>🩸</span> Stok Darah Rumah Sakit
+          </h1>
           <p style={{ fontFamily: 'var(--font-family-primary)', color: 'white', opacity: 0.9, fontSize: '18px' }}>Cek ketersediaan stok darah di rumah sakit dan PMI terdekat</p>
         </div>
       </section>
@@ -130,17 +132,16 @@ export default function StokDarahPage() {
         {/* Filter Section (Floating) */}
         <div className="filter-section" style={{ maxWidth: '1000px', margin: '-40px auto 40px auto', padding: '0 20px', position: 'relative', zIndex: 10 }}>
           <div className="filter-container">
-            <Card variant="standard" className="filter-card" style={{ padding: '24px', display: 'flex', gap: '24px', alignItems: 'center', boxShadow: 'var(--shadow-elevated)' }}>
-              <div className="filter-item" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <span className="filter-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>
-                  <Icon icon="mdi:filter" className="filter-icon" />
-                  Filter Kota:
+            <Card variant="standard" className="filter-card" style={{ padding: '24px 32px', display: 'flex', gap: '32px', alignItems: 'center', boxShadow: 'var(--shadow-elevated)', justifyContent: 'center' }}>
+              <div className="filter-item" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <span className="filter-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <Icon icon="mdi:filter" className="filter-icon" /> Filter Kota:
                 </span>
                 <select
                   className="filter-dropdown"
                   value={selectedFilter}
                   onChange={(e) => setSelectedFilter(e.target.value)}
-                  style={{ padding: '12px', borderRadius: 'var(--radius-standard)', border: '1px solid var(--color-border-input)', backgroundColor: 'var(--color-surface-card)' }}
+                  style={{ flex: 1, padding: '12px 16px', borderRadius: 'var(--radius-standard)', border: '1px solid var(--color-border-input)', backgroundColor: 'var(--color-surface-card)' }}
                 >
                   {filterOptions.map((option) => (
                     <option key={option} value={option}>
@@ -150,16 +151,15 @@ export default function StokDarahPage() {
                 </select>
               </div>
 
-              <div className="filter-item" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <span className="filter-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>
-                  <Icon icon="mdi:hospital-building" className="filter-icon" />
-                  Golongan Darah:
+              <div className="filter-item" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <span className="filter-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <Icon icon="mdi:blood-bag" className="filter-icon" /> Golongan Darah:
                 </span>
                 <select
                   className="filter-dropdown"
                   value={selectedBloodType}
                   onChange={(e) => setSelectedBloodType(e.target.value)}
-                  style={{ padding: '12px', borderRadius: 'var(--radius-standard)', border: '1px solid var(--color-border-input)', backgroundColor: 'var(--color-surface-card)' }}
+                  style={{ flex: 1, padding: '12px 16px', borderRadius: 'var(--radius-standard)', border: '1px solid var(--color-border-input)', backgroundColor: 'var(--color-surface-card)' }}
                 >
                   {bloodTypeOptions.map((option) => (
                     <option key={option} value={option}>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "../styles/ManajemenPendonor.css";
-import SidebarAdmin from "../components/SidebarAdmin"; 
-import axiosClient from "../service/axiosClient";
-import Card from "../components/core/Card";
-import Button from "../components/core/Button";
-import Input from "../components/core/Input";
-import Icon from "../components/core/Icon";
+import "../../styles/ManajemenPendonor.css";
+import SidebarAdmin from "../../components/SidebarAdmin"; 
+import axiosClient from "../../service/axiosClient";
+import Card from "../../components/core/Card";
+import Button from "../../components/core/Button";
+import Input from "../../components/core/Input";
+import Icon from "../../components/core/Icon";
 
 function MetricCard({ value, title, subtitle, icon, iconColor }) {
   return (

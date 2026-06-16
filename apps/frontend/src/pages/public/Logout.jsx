@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
-import Footer from "../components/Footer";
-import "../styles/Logout.css";
+
+import "../../styles/Logout.css";
 
 export default function Logout() {
   const navigate = useNavigate();

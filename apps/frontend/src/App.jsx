@@ -14,31 +14,31 @@ import DetailStokDarahPage from "./pages/public/DetailStokDarahPage";
 import ProfilePage from "./pages/public/ProfilePage";
 
 // === Login & Auth ===
-import RoleSelection from "./pages/RoleSelection";
-import LoginDokter from "./pages/LoginDokter";
-import LoginPengguna from "./pages/LoginPengguna";
-import DaftarPengguna from "./pages/DaftarPengguna";
-import DaftarDokter from "./pages/DaftarDokter";
-import LupaPassword from "./pages/LupaPassword";
-import ResetPassword from "./pages/ResetPassword";
+import RoleSelection from "./pages/public/RoleSelection";
+import LoginDokter from "./pages/public/LoginDokter";
+import LoginPengguna from "./pages/public/LoginPengguna";
+import DaftarPengguna from "./pages/public/DaftarPengguna";
+import DaftarDokter from "./pages/public/DaftarDokter";
+import LupaPassword from "./pages/public/LupaPassword";
+import ResetPassword from "./pages/public/ResetPassword";
 
 // === Admin Dashboard Pages ===
-import DashboardAdmin from "./pages/DashboardAdmin";
-import ManajemenDokter from "./pages/ManajemenDokter";
-import ManajemenUser from "./pages/ManajemenUser";
-import ManajemenEventAdmin from "./pages/ManajementEventAdmin";
-import ManajemenPendonor from "./pages/ManajemenPendonor";
-import Laporan from "./pages/Laporan";
-import ProfilAdmin from "./pages/ProfilAdmin";
-import PengaturanWebAdmin from "./pages/PengaturanWebAdmin";
-import Logout from "./pages/Logout";
+import DashboardAdmin from "./pages/admin/DashboardAdmin";
+import ManajemenDokter from "./pages/admin/ManajemenDokter";
+import ManajemenUser from "./pages/admin/ManajemenUser";
+import ManajemenEventAdmin from "./pages/admin/ManajementEventAdmin";
+import ManajemenPendonor from "./pages/admin/ManajemenPendonor";
+import Laporan from "./pages/admin/Laporan";
+import ProfilAdmin from "./pages/admin/ProfilAdmin";
+import PengaturanWebAdmin from "./pages/admin/PengaturanWebAdmin";
+import Logout from "./pages/public/Logout";
 
 // === Dokter Dashboard Pages ===
-import DashboardDokter from "./pages/DashboardDokter";
-import ManajemenStok from "./pages/ManajemenStok";
-import ManajemenEvent from "./pages/ManajemenEvent";
-import KonsultasiEdukasi from "./pages/KonsultasiEdukasi";
-import ProfilDokter from "./pages/ProfilDokter";
+import DashboardDokter from "./pages/dokter/DashboardDokter";
+import ManajemenStok from "./pages/dokter/ManajemenStok";
+import ManajemenEvent from "./pages/dokter/ManajemenEvent";
+import KonsultasiEdukasi from "./pages/dokter/KonsultasiEdukasi";
+import ProfilDokter from "./pages/dokter/ProfilDokter";
 
 // === Components & System ===
 import Footer from "./components/Footer";

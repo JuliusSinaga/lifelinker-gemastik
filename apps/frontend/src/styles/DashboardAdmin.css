@@ -10,9 +10,7 @@
 
 /* MAIN CONTENT */
 .main-content {
-  margin-left: 240px;
   padding: 25px;
-  width: calc(100% - 240px);
   transition: 0.3s ease;
 }
 

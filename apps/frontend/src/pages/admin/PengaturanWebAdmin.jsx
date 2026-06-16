@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import SidebarAdmin from "../components/SidebarAdmin";
-import axiosClient from "../service/axiosClient";
-import "../styles/PengaturanWebAdmin.css";
-import Button from "../components/core/Button";
+import SidebarAdmin from "../../components/SidebarAdmin";
+import axiosClient from "../../service/axiosClient";
+import "../../styles/PengaturanWebAdmin.css";
+import Button from "../../components/core/Button";
 
 export default function PengaturanWebAdmin() {
   const [formData, setFormData] = useState({
@@ -60,7 +60,7 @@ export default function PengaturanWebAdmin() {
       <SidebarAdmin />
       <div className="pengaturan-web-content">
         <div className="page-header-admin">
-          <h1>Pengaturan Web (Landing Page)</h1>
+          <h1>Pengaturan Konten Web (Landing Page)</h1>
           <p>Atur statistik "Kekuatan Kolektif Kita" yang ditampilkan di halaman beranda utama.</p>
         </div>
 

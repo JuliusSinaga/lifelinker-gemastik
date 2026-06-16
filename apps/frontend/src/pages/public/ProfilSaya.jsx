@@ -1,6 +1,6 @@
 import React from "react";
-import DokterSidebar from "../components/DokterSidebar";
-import "../styles/ProfilSaya.css";
+import DokterSidebar from "../../components/DokterSidebar";
+import "../../styles/ProfilSaya.css";
 
 export default function ProfilSaya() {
   return (

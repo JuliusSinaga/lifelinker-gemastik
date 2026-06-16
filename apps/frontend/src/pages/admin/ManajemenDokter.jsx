@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/ManajemenDokter.css';
-import SidebarAdmin from "../components/SidebarAdmin";
-import axiosClient from "../service/axiosClient";
-import Card from "../components/core/Card";
-import Button from "../components/core/Button";
-import Input from "../components/core/Input";
-import Icon from "../components/core/Icon";
+import '../../styles/ManajemenDokter.css';
+import SidebarAdmin from "../../components/SidebarAdmin";
+import axiosClient from "../../service/axiosClient";
+import Card from "../../components/core/Card";
+import Button from "../../components/core/Button";
+import Input from "../../components/core/Input";
+import Icon from "../../components/core/Icon";
 
 // MetricCard component
 function MetricCard({ value, title, subtitle, icon, iconColor }) {
   return (
-    <Card variant="standard" className="metric-card" style={{ padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-      <div className="metric-content" style={{ flex: 1 }}>
-        <div className="metric-value" style={{ fontSize: "32px", fontWeight: "bold", fontFamily: "var(--font-family-brand)", color: "var(--color-text-primary)", marginBottom: "4px" }}>{value}</div>
-        <div className="metric-title" style={{ fontSize: "14px", fontWeight: "bold", color: "var(--color-text-secondary)" }}>{title}</div>
-        <div className="metric-subtitle" style={{ fontSize: "12px", color: "var(--color-text-secondary)", marginTop: "4px" }}>{subtitle}</div>
+    <Card variant="standard" className="metric-card" style={{ padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", gap: "16px" }}>
+      <div className="metric-icon" style={{ fontSize: "48px", color: iconColor, opacity: 0.8, backgroundColor: `${iconColor}15`, width: "80px", height: "80px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%" }}>
+        <Icon icon={icon} width="40" />
       </div>
-      <div className="metric-icon" style={{ fontSize: "40px", color: iconColor, opacity: 0.8, backgroundColor: `${iconColor}15`, width: "64px", height: "64px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%" }}>
-        <Icon icon={icon} />
+      <div className="metric-content" style={{ flex: 1 }}>
+        <div className="metric-value" style={{ fontSize: "36px", fontWeight: "bold", fontFamily: "var(--font-family-brand)", color: "var(--color-text-primary)", marginBottom: "4px" }}>{value}</div>
+        <div className="metric-title" style={{ fontSize: "16px", fontWeight: "bold", color: "var(--color-text-secondary)" }}>{title}</div>
+        <div className="metric-subtitle" style={{ fontSize: "12px", color: "var(--color-text-secondary)", marginTop: "4px" }}>{subtitle}</div>
       </div>
     </Card>
   );

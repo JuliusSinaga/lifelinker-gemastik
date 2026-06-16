@@ -32,7 +32,8 @@ func main() {
         // Alasan: AutoMigrate di Supabase pooler (port 6543) menyebabkan query information_schema
         // hang 150-265 detik dan membuat Leapcell timeout.
         // Jalankan migrasi manual sekali via: RUN_MIGRATION=true DB_PORT=5432 go run main.go
-        if os.Getenv("RUN_MIGRATION") == "true" {
+        val := os.Getenv("RUN_MIGRATION")
+        if val == "true" || val == "true\r" || val == "true " {
                 log.Println("Menjalankan AutoMigrate...")
                 if err := database.DB.AutoMigrate(
                         &models.User{},
@@ -54,7 +55,8 @@ func main() {
         }
 
         // Jalankan Seeder (Mengisi Data Awal)
-        // database.SeedAll(database.DB)
+        // Jika tabel baru saja dibuat, disarankan untuk mengaktifkan seeder ini
+        database.SeedAll(database.DB)
 
         // --- SETUP FOLDER UPLOAD ---
         uploadDir := "./public/uploads"

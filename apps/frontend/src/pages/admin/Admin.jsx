@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
-import "../styles/Admin.css";
-import axiosClient from "../service/axiosClient"; 
-import Button from "../components/core/Button";
-import Card from "../components/core/Card";
-import Input from "../components/core/Input";
+import "../../styles/Admin.css";
+import axiosClient from "../../service/axiosClient"; 
+import Button from "../../components/core/Button";
+import Card from "../../components/core/Card";
+import Input from "../../components/core/Input";
 
 export default function Admin() {
   const navigate = useNavigate();

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import SidebarAdmin from "../components/SidebarAdmin";
-import "../styles/ProfileAdmin.css"; 
-import axiosClient from "../service/axiosClient";
-import Card from "../components/core/Card";
-import Button from "../components/core/Button";
-import Input from "../components/core/Input";
-import Icon from "../components/core/Icon";
+import SidebarAdmin from "../../components/SidebarAdmin";
+import "../../styles/ProfileAdmin.css"; 
+
+import Card from "../../components/core/Card";
+import Button from "../../components/core/Button";
+import Input from "../../components/core/Input";
+import Icon from "../../components/core/Icon";
 
 export default function ProfilAdmin() {
   // State Data Admin
@@ -265,7 +265,7 @@ export default function ProfilAdmin() {
                 </Button>
                 </div>
 
-                <div className="profile-right" style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "24px", backgroundColor: "var(--color-surface-background)", borderRadius: "var(--radius-large)", alignSelf: "start" }}>
+                <div className="profile-right" style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "24px", backgroundColor: "var(--color-surface-background)", borderRadius: "var(--radius-large)", alignSelf: "start", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: "1px solid var(--color-border-divider)" }}>
                 <h3 style={{ margin: "0 0 16px 0", fontSize: "16px", color: "var(--color-text-secondary)" }}>Foto Profil</h3>
                 <div className="avatar-preview-container" style={{ width: "120px", height: "120px", borderRadius: "50%", overflow: "hidden", backgroundColor: "var(--color-brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px", border: "4px solid white", boxShadow: "var(--shadow-sm)" }}>
                     {adminData.photo ? (
@@ -353,8 +353,8 @@ export default function ProfilAdmin() {
       {popup.show && (
         <div className="modal-overlay" onClick={closePopup} style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
           <Card variant="standard" className="modal-content-popup" onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: "400px", padding: "32px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "16px" }}>
-            <div className={`popup-icon ${popup.type}`} style={{ fontSize: "64px", color: popup.type === "success" ? "var(--color-status-success)" : "var(--color-status-error)" }}>
-                {popup.type === "success" ? <Icon icon="mdi:check-circle" /> : <Icon icon="mdi:close-circle" />}
+            <div className={`popup-icon ${popup.type}`} style={{ color: popup.type === "success" ? "var(--color-status-success)" : "var(--color-status-error)" }}>
+              {popup.type === "success" ? <Icon icon="mdi:check-circle" width="80" height="80" /> : <Icon icon="mdi:close-circle" width="80" height="80" />}
             </div>
             <h3 className="popup-title" style={{ margin: 0, fontFamily: "var(--font-family-brand)", fontSize: "24px" }}>
                 {popup.type === "success" ? "Berhasil!" : "Gagal!"}

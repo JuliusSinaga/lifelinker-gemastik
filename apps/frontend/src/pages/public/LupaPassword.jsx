@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/LupaPassword.css";
-import axiosClient from "../service/axiosClient";
-import Icon from "../components/core/Icon";
+import "../../styles/LupaPassword.css";
+import axiosClient from "../../service/axiosClient";
+import Icon from "../../components/core/Icon";
 
 export default function LupaPassword() {
   const [email, setEmail] = useState("");

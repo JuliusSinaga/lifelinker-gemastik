@@ -112,31 +112,30 @@ export default function LokasiDonorPage() {
       {/* --- 3. SEARCH SECTION (INPUT CONTROLLED) --- */}
       <section className="lokasi-search-section" style={{ maxWidth: '1000px', margin: '-40px auto 40px auto', padding: '0 20px', position: 'relative', zIndex: 10 }}>
         <div className="lokasi-search-container">
-          <Card variant="standard" className="lokasi-search-card" style={{ padding: '24px', display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', boxShadow: 'var(--shadow-elevated)' }}>
-            <div className="search-input-group" style={{ flex: '1 1 300px' }}>
+          <Card variant="standard" className="lokasi-search-card" style={{ padding: '24px 32px', display: 'flex', flexDirection: 'row', gap: '16px', alignItems: 'center', boxShadow: 'var(--shadow-elevated)', justifyContent: 'space-between' }}>
+            <div className="search-input-group" style={{ flex: '1', position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <Icon icon="mdi:magnify" className="search-icon" style={{ position: "absolute", left: "16px", color: "var(--color-text-secondary)" }} />
               <Input
                 type="text"
                 placeholder="Cari nama rumah sakit atau PMI..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                icon="mdi:magnify"
+                style={{ width: '100%', paddingLeft: "44px" }}
               />
             </div>
-            <div className="search-select-group" style={{ flex: '1 1 200px' }}>
+            <div className="search-select-group" style={{ width: '250px' }}>
               <select
                 className="lokasi-search-select"
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}
                 style={{ width: '100%', padding: '12px 16px', borderRadius: 'var(--radius-standard)', border: '1px solid var(--color-border-input)', backgroundColor: 'var(--color-surface-card)', color: 'var(--color-text-primary)' }}
               >
-                <option value="Semua Kota/Kabupaten">
-                  Semua Kota/Kabupaten
-                </option>
+                <option value="Semua Kota/Kabupaten">Semua Kota/Kabupaten</option>
                 <option value="Medan">Medan</option>
                 <option value="Balige">Balige</option>
               </select>
             </div>
-            <Button variant="primary" className="search-btn" style={{ flex: '0 0 auto' }}>Cari Lokasi</Button>
+            <Button variant="primary" className="search-btn" style={{ whiteSpace: 'nowrap', padding: '12px 32px' }}>Cari Lokasi</Button>
           </Card>
         </div>
       </section>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import DokterSidebar from "../components/SidebarDokter";
-import "../styles/ProfilDokter.css";
-import axiosClient from "../service/axiosClient";
-import Icon from "../components/core/Icon";
-import Button from "../components/core/Button";
-import Card from "../components/core/Card";
-import Input from "../components/core/Input";
+import DokterSidebar from "../../components/SidebarDokter";
+import "../../styles/ProfilDokter.css";
+
+import Icon from "../../components/core/Icon";
+import Button from "../../components/core/Button";
+import Card from "../../components/core/Card";
+import Input from "../../components/core/Input";
 
 export default function ProfilDokter() {
   // State Data Dokter

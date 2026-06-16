@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import "../styles/ResetPassword.css";
-import axiosClient from "../service/axiosClient";
-import Icon from "../components/core/Icon";
+import "../../styles/ResetPassword.css";
+import axiosClient from "../../service/axiosClient";
+import Icon from "../../components/core/Icon";
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();

@@ -9,8 +9,6 @@
 
 .mp-content {
   /* Fix Sidebar Overlap */
-  margin-left: 260px; /* Sesuaikan dengan lebar Sidebar */
-  width: calc(100% - 260px);
   padding: 30px 40px;
   flex: 1;
   overflow-y: auto;

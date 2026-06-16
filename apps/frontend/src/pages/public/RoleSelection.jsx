@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/RoleSelection.css";
-import Button from "../components/core/Button";
-import Card from "../components/core/Card";
-import Icon from "../components/core/Icon";
+import "../../styles/RoleSelection.css";
+import Button from "../../components/core/Button";
+import Card from "../../components/core/Card";
+import Icon from "../../components/core/Icon";
 
 export default function RoleSelection() {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function RoleSelection() {
 
             {/* === Pengguna === */}
             <Card variant="role" style={{ padding: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-              <Icon icon="mdi:account" width="64" style={{ color: 'var(--color-brand-primary)', marginBottom: '16px' }} />
+              <Icon icon="mdi:account" width="96" style={{ color: 'var(--color-brand-primary)', marginBottom: '16px' }} />
               <h3 style={{ fontFamily: 'var(--font-family-primary)', fontSize: '20px', marginBottom: '16px' }}>Pengguna</h3>
               <p style={{ color: 'var(--color-text-secondary)', marginBottom: '32px', flex: 1 }}>
                 Login sebagai pengguna untuk donor darah atau mencari donor.
@@ -59,7 +59,7 @@ export default function RoleSelection() {
 
             {/* === Dokter === */}
             <Card variant="role" style={{ padding: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-              <Icon icon="fontisto:doctor" width="64" style={{ color: 'var(--color-brand-primary)', marginBottom: '16px' }} />
+              <Icon icon="fontisto:doctor" width="96" style={{ color: 'var(--color-brand-primary)', marginBottom: '16px' }} />
               <h3 style={{ fontFamily: 'var(--font-family-primary)', fontSize: '20px', marginBottom: '16px' }}>Dokter</h3>
               <p style={{ color: 'var(--color-text-secondary)', marginBottom: '32px', flex: 1 }}>
                 Login sebagai dokter untuk mengelola sistem donor darah (perlu

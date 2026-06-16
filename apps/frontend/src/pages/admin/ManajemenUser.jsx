@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import SidebarAdmin from "../components/SidebarAdmin"; 
-import axiosClient from "../service/axiosClient";
-import Icon from "../components/core/Icon";
-import Button from "../components/core/Button";
-import Card from "../components/core/Card";
-import Input from "../components/core/Input";
-import "../styles/ManajemenUser.css"; 
+import SidebarAdmin from "../../components/SidebarAdmin"; 
+import axiosClient from "../../service/axiosClient";
+import Icon from "../../components/core/Icon";
+import Button from "../../components/core/Button";
+import Card from "../../components/core/Card";
+import Input from "../../components/core/Input";
+import "../../styles/ManajemenUser.css"; 
 
 export default function ManajemenUser() {
   const [users, setUsers] = useState([]); 

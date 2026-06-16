@@ -7,8 +7,8 @@
 .pengaturan-web-content {
   flex-grow: 1;
   padding: 40px;
+  padding-bottom: 120px;
   max-width: 1200px;
-  margin: 0 auto;
 }
 
 .page-header-admin {
@@ -55,8 +55,8 @@
 
 .form-control-admin {
   padding: 12px 16px;
-  border: 1px solid var(--border-input);
-  border-radius: var(--radius-standard);
+  border: 1px solid #d1d5db; /* Thin stroke */
+  border-radius: 8px; /* Round borders */
   font-size: 14px;
   background-color: white;
   transition: all 0.2s ease;

@@ -9,7 +9,6 @@ const axiosClient = axios.create({
   },
 });
 
-// Interceptor untuk menangani request: Menyisipkan token JWT otomatis
 axiosClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");

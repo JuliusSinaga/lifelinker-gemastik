@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import "../styles/SidebarAdmin.css";
 import Icon from "./core/Icon";
 import Button from "./core/Button";
@@ -8,6 +8,19 @@ export default function SidebarAdmin() {
   const location = useLocation();
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    return localStorage.getItem("sidebarCollapsed") === "true";
+  });
+
+  useEffect(() => {
+    if (isCollapsed) {
+      document.body.classList.add("sidebar-collapsed");
+      localStorage.setItem("sidebarCollapsed", "true");
+    } else {
+      document.body.classList.remove("sidebar-collapsed");
+      localStorage.setItem("sidebarCollapsed", "false");
+    }
+  }, [isCollapsed]);
 
   const active = (path) =>
     location.pathname === path ? "menu-item active" : "menu-item";
@@ -23,7 +36,11 @@ export default function SidebarAdmin() {
       <aside className="admin-sidebar" style={{ backgroundColor: 'var(--color-bg-admin-sidebar)' }}>
 
         {/* ===================== LOGO HEADER ===================== */}
-        <div className="admin-header-logo-box">
+        <div 
+          className="admin-header-logo-box" 
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          style={{ cursor: "pointer" }}
+        >
           <div className="admin-logo-row">
             <img
               src="/images/lifelinker-logo.png"
@@ -43,64 +60,65 @@ export default function SidebarAdmin() {
         {/* ===================== MENU ===================== */}
         <nav className="sidebar-menu">
           <Link to="/dashboard-admin" className={active("/dashboard-admin")}>
-            <Icon icon="mdi:view-dashboard" width="20" style={{ marginRight: '12px' }} />
-            Dashboard
+            <Icon icon="mdi:view-dashboard" width="20" style={{ marginRight: isCollapsed ? '0' : '12px' }} />
+            <span className="menu-item-text">Dashboard</span>
           </Link>
 
           <Link to="/manajemen-dokter" className={active("/manajemen-dokter")}>
-            <Icon icon="fontisto:doctor" width="20" style={{ marginRight: '12px' }} />
-            Manajemen Dokter
+            <Icon icon="fontisto:doctor" width="20" style={{ marginRight: isCollapsed ? '0' : '12px' }} />
+            <span className="menu-item-text">Manajemen Dokter</span>
           </Link>
 
           <Link to="/manajemen-user" className={active("/manajemen-user")}>
-            <Icon icon="mdi:account-group" width="20" style={{ marginRight: '12px' }} />
-            Manajemen User
+            <Icon icon="mdi:account-group" width="20" style={{ marginRight: isCollapsed ? '0' : '12px' }} />
+            <span className="menu-item-text">Manajemen User</span>
           </Link>
 
           <Link
             to="/manajemen-event-admin"
             className={active("/manajemen-event-admin")}
           >
-            <Icon icon="material-symbols:event" width="20" style={{ marginRight: '12px' }} />
-            Manajemen Event
+            <Icon icon="material-symbols:event" width="20" style={{ marginRight: isCollapsed ? '0' : '12px' }} />
+            <span className="menu-item-text">Manajemen Event</span>
           </Link>
 
           <NavLink
             to="/admin/pengaturan"
             className={({ isActive }) => (isActive ? "menu-item active" : "menu-item")}
           >
-            <Icon icon="mdi:cog" width="20" style={{ marginRight: '12px' }} /> Pengaturan Web
+            <Icon icon="mdi:cog" width="20" style={{ marginRight: isCollapsed ? '0' : '12px' }} />
+            <span className="menu-item-text">Pengaturan Konten Web</span>
           </NavLink>
 
           <Link
             to="/manajemen-pendonor"
             className={active("/manajemen-pendonor")}
           >
-            <Icon icon="mdi:hand-heart" width="20" style={{ marginRight: '12px' }} />
-            Manajemen Pendonor
+            <Icon icon="mdi:hand-heart" width="20" style={{ marginRight: isCollapsed ? '0' : '12px' }} />
+            <span className="menu-item-text">Manajemen Pendonor</span>
           </Link>
 
           <Link to="/laporan" className={active("/laporan")}>
-            <Icon icon="mdi:file-document-outline" width="20" style={{ marginRight: '12px' }} />
-            Laporan
+            <Icon icon="mdi:file-document-outline" width="20" style={{ marginRight: isCollapsed ? '0' : '12px' }} />
+            <span className="menu-item-text">Laporan</span>
           </Link>
 
           <Link to="/profile-admin" className={active("/profile-admin")}>
-            <Icon icon="mdi:account" width="20" style={{ marginRight: '12px' }} />
-            Profil Saya
+            <Icon icon="mdi:account" width="20" style={{ marginRight: isCollapsed ? '0' : '12px' }} />
+            <span className="menu-item-text">Profil Saya</span>
           </Link>
         </nav>
 
-        {/* ===================== LOGOUT BUTTON ===================== */}
-        <div style={{ padding: '0 24px', marginTop: 'auto', marginBottom: '24px' }}>
+        {/* ===================== TOGGLE & LOGOUT ===================== */}
+        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', paddingBottom: '24px' }}>
           <Button 
             variant="ghost" 
             fullWidth 
             onClick={() => setShowLogoutModal(true)}
-            style={{ color: 'var(--color-status-error)', justifyContent: 'flex-start', paddingLeft: '16px' }}
+            style={{ color: 'var(--color-status-error)', justifyContent: isCollapsed ? 'center' : 'flex-start', paddingLeft: isCollapsed ? '0' : '15px' }}
           >
-            <Icon icon="mdi:logout" width="20" />
-            Logout
+            <Icon icon="mdi:logout" width="20" style={{ marginRight: isCollapsed ? '0' : '12px' }} />
+            {!isCollapsed && <span className="menu-item-text">Logout</span>}
           </Button>
         </div>
       </aside>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import SidebarAdmin from "../components/SidebarAdmin";
-import "../styles/DashboardAdmin.css";
-import axiosClient from "../service/axiosClient"; 
-import Card from "../components/core/Card";
-import Icon from "../components/core/Icon";
+import SidebarAdmin from "../../components/SidebarAdmin";
+import "../../styles/DashboardAdmin.css";
+import axiosClient from "../../service/axiosClient"; 
+import Card from "../../components/core/Card";
+import Icon from "../../components/core/Icon";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -52,9 +52,9 @@ function BloodTypeCard({ type, count, color }) {
   const themeColor = colorMap[color] || "var(--color-brand-primary)";
 
   return (
-    <Card variant="standard" className={`blood-type-card ${color}`} style={{ padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderTop: `4px solid ${themeColor}` }}>
+    <Card variant="standard" className={`blood-type-card ${color}`} style={{ padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: `${themeColor}20` }}>
       <div className="blood-count" style={{ fontSize: "36px", fontWeight: "bold", fontFamily: "var(--font-family-brand)", color: themeColor, marginBottom: "8px" }}>{count}</div>
-      <div className="blood-type" style={{ fontSize: "14px", fontWeight: "bold", color: "var(--color-text-secondary)" }}>{type}</div>
+      <div className="blood-type" style={{ fontSize: "14px", fontWeight: "bold", color: "var(--color-text-primary)" }}>{type}</div>
     </Card>
   );
 }
@@ -85,7 +85,7 @@ function NotificationCard({ title, message, time, type }) {
 
 function EventItem({ title, location, date }) {
   return (
-    <Card variant="standard" className="event-item" style={{ padding: "16px", marginBottom: "16px", display: "flex", flexDirection: "column", gap: "8px", borderLeft: "4px solid var(--color-brand-primary)" }}>
+    <Card variant="standard" className="event-item" style={{ padding: "16px", marginBottom: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>
       <div className="event-title" style={{ fontWeight: "bold", fontSize: "16px" }}>{title}</div>
       <div className="event-details" style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "var(--color-text-secondary)" }}>
         <span className="event-location" style={{ display: "flex", alignItems: "center", gap: "4px" }}><Icon icon="mdi:map-marker" /> {location}</span>

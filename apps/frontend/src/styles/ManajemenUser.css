@@ -10,10 +10,8 @@
 .admin-content {
   /* Memberi jarak kiri selebar Sidebar agar tidak tertimpa */
   /* Sesuaikan angka 260px dengan lebar SidebarAdmin.css Anda jika berbeda */
-  margin-left: 240px; 
   
   /* Pastikan konten mengambil sisa lebar layar */
-  width: calc(100% - 240px); 
   
   padding: 25px;
   flex: 1;

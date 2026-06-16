@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import "../styles/Laporan.css";
-import SidebarAdmin from "../components/SidebarAdmin";
-import axiosClient from "../service/axiosClient";
-import Card from "../components/core/Card";
-import Button from "../components/core/Button";
-import Input from "../components/core/Input";
-import Icon from "../components/core/Icon";
+import "../../styles/Laporan.css";
+import SidebarAdmin from "../../components/SidebarAdmin";
+import axiosClient from "../../service/axiosClient";
+import Card from "../../components/core/Card";
+import Input from "../../components/core/Input";
+import Icon from "../../components/core/Icon";
 
 // MetricCard Component
 function MetricCard({ value, title, subtitle, icon, iconColor }) {
@@ -24,7 +23,7 @@ function MetricCard({ value, title, subtitle, icon, iconColor }) {
 }
 
 export default function Laporan() {
-  const [pendonors, setPendonors] = useState([]);
+  const [pendonors] = useState([]);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -81,9 +80,6 @@ export default function Laporan() {
   };
 
   // 2. Hitung Metrik Secara Dinamis
-  const totalEvents = events.length;
-  const completedEvents = events.filter(e => e.status === 'completed').length;
-  const upcomingEvents = events.filter(e => e.status === 'approved').length;
   const totalPendonor = pendonors.length;
   const metrics = [
     { value: "20,847", title: "User Terdaftar", subtitle: "Seluruh Sumatera Utara", icon: "mdi:account-group", iconColor: "var(--color-brand-primary)" },

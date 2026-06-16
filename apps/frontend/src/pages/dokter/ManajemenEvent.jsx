@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import DokterSidebar from "../components/SidebarDokter";
-import "../styles/ManajemenEvent.css"; 
-import axiosClient from "../service/axiosClient";
+import DokterSidebar from "../../components/SidebarDokter";
+import "../../styles/ManajemenEvent.css"; 
+import axiosClient from "../../service/axiosClient";
 
 export default function ManajemenEvent() {
   const [events, setEvents] = useState([]);

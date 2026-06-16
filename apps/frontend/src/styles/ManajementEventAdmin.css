@@ -9,10 +9,8 @@
 .mea-content {
   /* --- PERBAIKAN LAYOUT DI SINI --- */
   /* Memberi jarak kiri selebar Sidebar agar tidak tertimpa */
-  margin-left: 240px; /* Sesuaikan dengan lebar SidebarAdmin */
   
   /* Konten mengambil sisa lebar layar */
-  width: calc(100% - 240px);
   
   padding: 25px;
   flex: 1;

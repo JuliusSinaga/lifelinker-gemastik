@@ -3,7 +3,7 @@
 /* ========================= */
 
 .admin-sidebar {
-  width: 240px;
+  width: 280px;
   height: 100vh;
   background: #0f1a30;
   color: white;
@@ -70,12 +70,14 @@
 }
 
 .menu-item {
-  display: block;
+  display: flex;
+  align-items: center;
   padding: 12px 15px;
   color: #d1d5db;
   text-decoration: none;
   border-radius: 10px;
   transition: 0.25s;
+  white-space: nowrap;
 }
 
 .menu-item:hover {
@@ -192,4 +194,91 @@
 .admin-logo-text-group::before,
 .admin-header-logo-box::before {
   content: none !important;
+}
+
+/* ========================= */
+/*      COLLAPSED STATE      */
+/* ========================= */
+
+.admin-sidebar {
+  transition: width 0.3s ease;
+}
+
+body.sidebar-collapsed .admin-sidebar {
+  width: 80px;
+  padding: 25px 10px;
+}
+
+body.sidebar-collapsed .admin-logo-title,
+body.sidebar-collapsed .admin-role,
+body.sidebar-collapsed .menu-item-text {
+  display: none;
+}
+
+body.sidebar-collapsed .admin-logo-row {
+  justify-content: center;
+}
+
+body.sidebar-collapsed .menu-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  width: 45px;
+  height: 45px;
+  margin: 0 auto 10px auto !important;
+  border-radius: 12px;
+}
+
+body.sidebar-collapsed .menu-item svg {
+  margin: 0 !important;
+}
+
+/* Fix global content margin and width */
+.admin-main-content, 
+.admin-content, 
+.pengaturan-web-content, 
+.mp-content,
+.laporan-content,
+.profil-content,
+.main-content,
+.admin-layout main {
+  margin-left: 280px;
+  width: calc(100% - 280px);
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+body.sidebar-collapsed .admin-main-content, 
+body.sidebar-collapsed .admin-content, 
+body.sidebar-collapsed .pengaturan-web-content, 
+body.sidebar-collapsed .mp-content,
+body.sidebar-collapsed .laporan-content,
+body.sidebar-collapsed .profil-content,
+body.sidebar-collapsed .main-content,
+body.sidebar-collapsed .admin-layout main {
+  margin-left: 80px;
+  width: calc(100% - 80px);
+}
+
+/* ========================= */
+/*   ADMIN TABLE CENTERING   */
+/* ========================= */
+
+.laporan-table th, 
+.doctor-table th, 
+.mp-table th, 
+.custom-table th, 
+.mea-table th,
+.event-table th {
+  text-align: center !important;
+}
+
+.laporan-table td, 
+.doctor-table td, 
+.mp-table td, 
+.custom-table td, 
+.mea-table td,
+.event-table td {
+  text-align: center;
+  vertical-align: middle;
 }

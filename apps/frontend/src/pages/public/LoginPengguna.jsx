@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import "../styles/LoginShared.css"; 
+import "../../styles/LoginShared.css"; 
 import { useNavigate, Link } from "react-router-dom";
-import axiosClient from "../service/axiosClient";
+import axiosClient from "../../service/axiosClient";
 import { useGoogleLogin } from "@react-oauth/google";
-import Icon from "../components/core/Icon";
-import Button from "../components/core/Button";
-import Card from "../components/core/Card";
-import Input from "../components/core/Input";
+import Icon from "../../components/core/Icon";
+import Button from "../../components/core/Button";
+import Card from "../../components/core/Card";
+import Input from "../../components/core/Input";
 
 const LoginPengguna = () => {
   const navigate = useNavigate();
@@ -81,28 +81,28 @@ const LoginPengguna = () => {
 
   return (
     <div className="login-container" style={{ background: "var(--color-bg-auth)", minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-      <Card variant="standard" style={{ maxWidth: '400px', width: '100%', padding: '32px', position: 'relative' }}>
+      <Card variant="standard" style={{ maxWidth: '440px', width: '100%', padding: '40px', position: 'relative' }}>
         
         {/* TOMBOL KEMBALI */}
-        <Button variant="ghost" onClick={() => navigate("/")} style={{ position: 'absolute', top: '16px', left: '16px', padding: '8px' }}>
-            <Icon icon="mdi:arrow-left" width="20" style={{ marginRight: '4px' }} /> Kembali
+        <Button variant="ghost" className="back-button" onClick={() => navigate("/")} style={{ position: "absolute", top: "24px", left: "24px", display: "flex", alignItems: "center", gap: "8px", color: "var(--color-text-secondary)" }}>
+            <Icon icon="mdi:arrow-left" /> Kembali
         </Button>
 
         {/* Logo */}
-        <div className="logo-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '24px', marginBottom: '24px' }}>
+        <div className="logo-wrapper" style={{ textAlign: "center", marginTop: "24px", marginBottom: "32px" }}>
           <img
             src={process.env.PUBLIC_URL + "/images/lifelinker-logo.png"}
             alt="LifeLinker Logo"
             className="logo-image"
-            style={{ width: '64px', marginBottom: '8px' }}
+            style={{ width: "64px", marginBottom: "16px" }}
           />
-          <h2 className="logo-text" style={{ fontFamily: 'var(--font-family-brand)', fontSize: '24px', margin: 0 }}>
-            <span style={{ color: 'var(--color-brand-primary)' }}>Life</span>
-            <span style={{ color: 'var(--color-text-primary)' }}>Linker</span>
+          <h2 className="logo-text" style={{ fontFamily: "var(--font-family-brand)", fontSize: "28px", margin: 0 }}>
+            <span style={{ color: "var(--color-brand-primary)" }}>Life</span>
+            <span style={{ color: "var(--color-text-primary)", fontWeight: "800" }}>Linker</span>
           </h2>
         </div>
 
-        <h3 className="welcome-title" style={{ fontFamily: 'var(--font-family-primary)', textAlign: 'center', marginBottom: '24px' }}>Selamat Datang</h3>
+        <h3 className="welcome-title" style={{ textAlign: "center", fontFamily: "var(--font-family-brand)", marginBottom: "24px", fontSize: "24px" }}>Selamat Datang</h3>
 
         {/* Role Tabs */}
         <div className="role-buttons" style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
@@ -110,6 +110,7 @@ const LoginPengguna = () => {
             variant={activeTab === "pengguna" ? "primary" : "ghost"}
             fullWidth
             onClick={() => setActiveTab("pengguna")}
+            style={{ border: activeTab !== "pengguna" ? "1px solid #d1d5db" : "1px solid transparent", borderRadius: "8px" }}
           >
             Pengguna
           </Button>
@@ -120,6 +121,7 @@ const LoginPengguna = () => {
               setActiveTab("dokter");
               navigate("/login-dokter");
             }}
+            style={{ border: activeTab !== "dokter" ? "1px solid #d1d5db" : "1px solid transparent", borderRadius: "8px" }}
           >
             Dokter
           </Button>

@@ -11,8 +11,6 @@
   padding: 30px 40px;
   overflow-y: auto;
   /* Margin kiri untuk kompensasi fixed sidebar jika sidebar-nya fixed */
-  margin-left: 260px; 
-  width: calc(100% - 260px);
 }
 
 .page-title {

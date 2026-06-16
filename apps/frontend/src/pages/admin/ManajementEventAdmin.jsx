@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import SidebarAdmin from "../components/SidebarAdmin";
-import "../styles/ManajementEventAdmin.css";
-import axiosClient from "../service/axiosClient";
-import Card from "../components/core/Card";
-import Button from "../components/core/Button";
-import Input from "../components/core/Input";
-import Icon from "../components/core/Icon";
+import SidebarAdmin from "../../components/SidebarAdmin";
+import "../../styles/ManajementEventAdmin.css";
+import axiosClient from "../../service/axiosClient";
+import Card from "../../components/core/Card";
+import Button from "../../components/core/Button";
+import Input from "../../components/core/Input";
+import Icon from "../../components/core/Icon";
 
 function MetricCard({ value, title, subtitle, icon, colorClass }) {
   const colorMap = {
