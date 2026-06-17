@@ -144,9 +144,9 @@ export default function Header() {
 
       {showLogoutModal && (
         <div className="header-modal-overlay">
-          <div className="header-modal" style={{ backgroundColor: 'var(--color-surface-card)', borderRadius: 'var(--radius-standard)', padding: '24px', textAlign: 'center', boxShadow: 'var(--shadow-elevated)' }}>
-            <div className="modal-icon-warning" style={{ color: 'var(--color-status-warning)', fontSize: '48px', marginBottom: '16px' }}>
-              <Icon icon="mdi:alert-circle-outline" width="48" />
+          <div className="header-modal" style={{ position: 'relative', backgroundColor: 'var(--color-surface-card)', borderRadius: 'var(--radius-standard)', padding: '50px 24px 24px 24px', textAlign: 'center', boxShadow: 'var(--shadow-elevated)', marginTop: '40px', overflow: 'visible', width: '100%', maxWidth: '400px' }}>
+            <div className="modal-icon-warning" style={{ position: 'absolute', top: '-40px', left: '50%', transform: 'translateX(-50%)', color: 'var(--color-status-warning)', backgroundColor: 'white', borderRadius: '50%', padding: '4px', display: 'flex', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+              <Icon icon="mdi:alert-circle-outline" width="80" height="80" />
             </div>
             <h3 style={{ fontFamily: 'var(--font-family-primary)', margin: '0 0 8px 0' }}>Konfirmasi Logout</h3>
             <p style={{ color: 'var(--color-text-secondary)', marginBottom: '24px' }}>Apakah Anda yakin ingin keluar dari akun ini?</p>

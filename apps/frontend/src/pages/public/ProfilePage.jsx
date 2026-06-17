@@ -13,7 +13,7 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   
   // --- STATE MODAL & POPUP ---
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [modalType, setModalType] = useState("success"); // 'success' atau 'error'
   const [modalMessage, setModalMessage] = useState("");
@@ -230,17 +230,6 @@ export default function ProfilePage() {
     }
   };
 
-  // Fungsi Logout
-  const handleLogoutClick = () => setShowLogoutModal(true);
-  
-  const confirmLogout = () => {
-    setShowLogoutModal(false);
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.dispatchEvent(new Event("user-login"));
-    navigate("/login-pengguna");
-  };
-
   // Helper Format Tanggal
   const formatDate = (dateString) => {
     if (!dateString) return "-";
@@ -319,10 +308,10 @@ export default function ProfilePage() {
           {/* --- KONTEN UTAMA (KANAN) --- */}
           <div className="profile-content" style={{ flex: 1, minWidth: 0 }}>
             {/* Navigasi Tab */}
-            <div className="profile-tabs" style={{ display: "flex", gap: "8px", marginBottom: "24px", borderBottom: "1px solid var(--color-border-divider)", paddingBottom: "16px", overflowX: "auto" }}>
-              <button className={`profile-tab ${activeTab === "profil" ? "active" : ""}`} onClick={() => setActiveTab("profil")} style={{ padding: "12px 24px", borderRadius: "var(--radius-large)", border: "none", backgroundColor: activeTab === "profil" ? "var(--color-brand-primary)" : "transparent", color: activeTab === "profil" ? "white" : "var(--color-text-secondary)", fontWeight: "bold", cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap" }}>Profil Saya</button>
-              <button className={`profile-tab ${activeTab === "statistik" ? "active" : ""}`} onClick={() => setActiveTab("statistik")} style={{ padding: "12px 24px", borderRadius: "var(--radius-large)", border: "none", backgroundColor: activeTab === "statistik" ? "var(--color-brand-primary)" : "transparent", color: activeTab === "statistik" ? "white" : "var(--color-text-secondary)", fontWeight: "bold", cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap" }}>Statistik & Riwayat</button>
-              <button className={`profile-tab ${activeTab === "pengaturan" ? "active" : ""}`} onClick={() => setActiveTab("pengaturan")} style={{ padding: "12px 24px", borderRadius: "var(--radius-large)", border: "none", backgroundColor: activeTab === "pengaturan" ? "var(--color-brand-primary)" : "transparent", color: activeTab === "pengaturan" ? "white" : "var(--color-text-secondary)", fontWeight: "bold", cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap" }}>Pengaturan Akun</button>
+            <div className="profile-tabs">
+              <button className={`profile-tab ${activeTab === "profil" ? "active" : ""}`} onClick={() => setActiveTab("profil")}>Profil Saya</button>
+              <button className={`profile-tab ${activeTab === "statistik" ? "active" : ""}`} onClick={() => setActiveTab("statistik")}>Statistik & Riwayat</button>
+              <button className={`profile-tab ${activeTab === "pengaturan" ? "active" : ""}`} onClick={() => setActiveTab("pengaturan")}>Pengaturan Akun</button>
             </div>
 
             {/* TAB 1: FORM EDIT PROFIL */}
@@ -490,14 +479,6 @@ export default function ProfilePage() {
                     <Button variant="outline" onClick={handleChangePassword}>Ganti Password</Button>
                   </div>
 
-                  <div className="settings-logout-section" style={{ marginTop: "24px", paddingTop: "32px", borderTop: "1px solid var(--color-border-divider)", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
-                      <h4 className="settings-logout-title" style={{ margin: 0, fontFamily: "var(--font-family-brand)", fontSize: "18px", color: "var(--color-status-error)" }}>Zona Keluar</h4>
-                      <p className="logout-desc" style={{ margin: 0, color: "var(--color-text-secondary)", fontSize: "14px" }}>Keluar dari akun Anda di perangkat ini.</p>
-                      <Button variant="outline" onClick={handleLogoutClick} style={{ color: "var(--color-status-error)", borderColor: "var(--color-status-error)" }}>
-                      <Icon icon="mdi:logout" style={{ marginRight: "8px" }} /> Keluar dari Aplikasi
-                    </Button>
-                  </div>
-
                 </div>
               </Card>
             )}
@@ -508,9 +489,9 @@ export default function ProfilePage() {
       {/* --- POPUP MODAL (SUKSES/GAGAL) --- */}
       {showSaveModal && (
         <div className="popup-modal-overlay" style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
-          <Card variant="standard" className="popup-modal" style={{ padding: "40px", textAlign: "center", maxWidth: "400px", width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
-            <div className={`popup-icon ${modalType}`} style={{ fontSize: "64px", color: modalType === 'success' ? 'var(--color-status-success)' : 'var(--color-status-error)' }}>
-                <Icon icon={modalType === 'success' ? 'mdi:check-circle' : 'mdi:alert'} />
+          <Card variant="standard" className="popup-modal" style={{ position: "relative", padding: "50px 32px 32px 32px", textAlign: "center", maxWidth: "400px", width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", marginTop: "40px", overflow: "visible" }}>
+            <div className={`popup-icon ${modalType}`} style={{ position: "absolute", top: "-40px", left: "50%", transform: "translateX(-50%)", color: modalType === 'success' ? 'var(--color-status-success)' : 'var(--color-status-error)', backgroundColor: "white", borderRadius: "50%", padding: "4px", display: "flex", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+                <Icon icon={modalType === 'success' ? 'mdi:check-circle' : 'mdi:alert'} width="80" height="80" />
             </div>
             <h3 style={{ margin: 0, fontFamily: "var(--font-family-brand)", fontSize: "24px" }}>{modalType === 'success' ? 'Berhasil' : 'Gagal'}</h3>
             <p style={{ margin: 0, color: "var(--color-text-secondary)" }}>{modalMessage}</p>
@@ -519,26 +500,6 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* --- MODAL LOGOUT --- */}
-      {showLogoutModal && (
-        <div className="logout-modal-overlay" style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
-          <Card variant="standard" className="logout-modal" style={{ padding: "40px", textAlign: "center", maxWidth: "400px", width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
-            <div className="logout-icon-wrapper" style={{ width: "80px", height: "80px", borderRadius: "50%", backgroundColor: "var(--color-status-error)15", color: "var(--color-status-error)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "40px" }}>
-                <Icon icon="mdi:logout" />
-            </div>
-            <h3 style={{ margin: 0, fontFamily: "var(--font-family-brand)", fontSize: "24px" }}>Konfirmasi Logout</h3>
-            <p style={{ margin: 0, color: "var(--color-text-secondary)" }}>Apakah Anda yakin ingin keluar?</p>
-            <div className="logout-actions" style={{ display: "flex", gap: "16px", width: "100%", marginTop: "16px" }}>
-              <Button variant="outline" onClick={() => setShowLogoutModal(false)} style={{ flex: 1 }}>
-                Batal
-              </Button>
-              <Button variant="primary" onClick={confirmLogout} style={{ flex: 1, backgroundColor: "var(--color-status-error)", borderColor: "var(--color-status-error)" }}>
-                Ya, Keluar
-              </Button>
-            </div>
-          </Card>
-        </div>
-      )}
     </div>
   );
 }

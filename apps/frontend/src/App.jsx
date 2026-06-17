@@ -56,7 +56,7 @@ function AppContent() {
     "/daftar-pengguna", "/daftar-dokter",
     "/dashboard-admin", "/manajemen-dokter", "/manajemen-user", "/manajemen-event-admin", "/manajemen-pendonor", "/laporan", "/profile-admin",
     "/dashboard-dokter", "/manajemen-stok", "/manajemen-event", "/konsultasi-edukasi", "/profile-dokter",
-    "/logout", "/error", "/forbidden", "/lupa-password", "/reset-password", 
+    "/logout", "/error", "/forbidden", "/lupa-password", "/reset-password", "/profile",
   ];
 
   return (
