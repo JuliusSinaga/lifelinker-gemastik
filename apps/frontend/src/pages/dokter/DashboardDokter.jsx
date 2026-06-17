@@ -70,7 +70,7 @@ export default function DashboardDokter() {
       {
         label: "Jumlah Stok",
         data: [stokA, stokB, stokAB, stokO],
-        backgroundColor: ["var(--color-status-error)", "var(--color-status-info)", "var(--color-status-warning)", "var(--color-status-success)"],
+        backgroundColor: ["#F13B3B", "#3B82F6", "#FFB300", "#19C26B"],
         borderRadius: 8,
       },
     ],
@@ -91,7 +91,8 @@ export default function DashboardDokter() {
             className={`btn-refresh ${isRefreshing ? "loading" : ""}`}
             onClick={handleRefresh}
             disabled={isRefreshing}
-            style={{ display: "flex", alignItems: "center", gap: "8px" }}
+            size="small"
+            style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", padding: "6px 14px", borderRadius: "6px" }}
           >
             {isRefreshing ? (
               <>
@@ -108,25 +109,25 @@ export default function DashboardDokter() {
         {/* STATISTIK */}
         <div className="stats-row" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "24px", marginBottom: "32px" }}>
 
-          <Card variant="standard" className="stats-card red" style={{ padding: "24px", borderTop: "4px solid var(--color-status-error)" }}>
+          <Card variant="standard" className="stats-card red" style={{ padding: "24px", textAlign: "center" }}>
             <h2 style={{ fontSize: "36px", margin: "0 0 8px 0", fontFamily: "var(--font-family-brand)", color: "var(--color-status-error)" }}>{totalStok.toLocaleString()}</h2>
             <p style={{ margin: "0 0 4px 0", fontWeight: "bold" }}>Total Stok Darah (Unit)</p>
             <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Data Aktual Sistem</span>
           </Card>
 
-          <Card variant="standard" className="stats-card blue" style={{ padding: "24px", borderTop: "4px solid var(--color-status-info)" }}>
+          <Card variant="standard" className="stats-card blue" style={{ padding: "24px", textAlign: "center" }}>
             <h2 style={{ fontSize: "36px", margin: "0 0 8px 0", fontFamily: "var(--font-family-brand)", color: "var(--color-status-info)" }}>89</h2>
             <p style={{ margin: "0 0 4px 0", fontWeight: "bold" }}>Pendonor Bulan Ini</p>
             <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Target: 120 orang</span>
           </Card>
 
-          <Card variant="standard" className="stats-card orange" style={{ padding: "24px", borderTop: "4px solid var(--color-status-warning)" }}>
+          <Card variant="standard" className="stats-card orange" style={{ padding: "24px", textAlign: "center" }}>
             <h2 style={{ fontSize: "36px", margin: "0 0 8px 0", fontFamily: "var(--font-family-brand)", color: "var(--color-status-warning)" }}>15</h2>
             <p style={{ margin: "0 0 4px 0", fontWeight: "bold" }}>Total Event RS Kami</p>
             <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>12 selesai, 3 berlangsung</span>
           </Card>
 
-          <Card variant="standard" className="stats-card green" style={{ padding: "24px", borderTop: "4px solid var(--color-status-success)" }}>
+          <Card variant="standard" className="stats-card green" style={{ padding: "24px", textAlign: "center" }}>
             <h2 style={{ fontSize: "36px", margin: "0 0 8px 0", fontFamily: "var(--font-family-brand)", color: "var(--color-status-success)" }}>845</h2>
             <p style={{ margin: "0 0 4px 0", fontWeight: "bold" }}>Pendonor Aktif</p>
             <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Di rumah sakit kami</span>

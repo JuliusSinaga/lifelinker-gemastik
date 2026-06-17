@@ -48,13 +48,13 @@ export default function EventPage() {
         
         // Mapping data DB ke format yang lebih mudah dipakai di UI
         const mappedEvents = dataDB.map(event => ({
-          id: event.ID,
-          title: event.nama_event,
-          date: formatDate(event.tanggal_event),
-          rawDate: event.tanggal_event, // simpan raw untuk sorting jika perlu
+          id: event.id || event.ID,
+          title: event.title || event.nama_event,
+          date: formatDate(event.date || event.tanggal_event),
+          rawDate: event.date || event.tanggal_event, // simpan raw untuk sorting jika perlu
           location: event.lokasi ? event.lokasi.nama_lokasi : "Lokasi Belum Ditentukan",
-          image: event.gambar_event || "bg beranda awal.jpg",
-          description: event.deskripsi_event
+          image: event.image || event.gambar_event || "bg beranda awal.jpg",
+          description: event.description || event.deskripsi_event
         }));
 
         setEvents(mappedEvents);
@@ -210,7 +210,7 @@ export default function EventPage() {
                             </span>
                           </div>
                         </div>
-                        <Button as={Link} to={`/events/${event.id}`} variant="ghost" fullWidth style={{ justifyContent: 'space-between' }}>
+                        <Button as={Link} to={`/event/${event.id}`} variant="ghost" fullWidth style={{ justifyContent: 'space-between' }}>
                           Lihat Detail <Icon icon="mdi:chevron-right" width="20" />
                         </Button>
                       </div>

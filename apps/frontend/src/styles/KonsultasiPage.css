@@ -287,73 +287,91 @@
 .login-link { color: #b91c1c; font-weight: 700; text-decoration: underline; }
 
 /* --- EMAIL CONSULTATION STYLING --- */
-/* .email-consultation {
-    /* Style base sudah di shared section */
-/* } */
-
 .email-info-box {
-    background-color: #eff6ff;
-    border-left: 4px solid #3b82f6;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    background-color: #fef2f2;
+    border-left: 4px solid var(--primary-red);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 24px;
 }
 
 .email-info-box p {
     margin: 0 0 8px 0;
     font-size: 14px;
-    color: #1e3a8a;
+    color: var(--primary-dark);
     line-height: 1.5;
 }
 
 .response-time {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: 12px;
     font-weight: 600;
-    color: #2563eb;
-    background-color: rgba(255,255,255,0.7);
-    padding: 4px 8px;
-    border-radius: 4px;
+    color: var(--primary-red);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 6px 12px;
+    border-radius: 20px;
 }
 
 .email-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
 }
 
 .ec-form-group input, 
 .ec-form-group textarea {
     width: 100%;
-    padding: 12px 15px;
+    padding: 14px 16px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
     font-size: 14px;
     outline: none;
     transition: all 0.2s;
     background-color: #f9fafb;
+    font-family: inherit;
+    resize: vertical;
 }
 
 .ec-form-group input:focus, 
 .ec-form-group textarea:focus {
     background-color: #fff;
-    border-color: #3b82f6; /* Biru agar beda dgn chat */
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
 .submit-email-btn {
-    background-color: #1f2937;
+    background-color: var(--primary-red);
     color: white;
-    padding: 12px;
+    padding: 14px;
     border: none;
     border-radius: 8px;
     font-weight: 600;
+    font-size: 15px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
 }
 
-.submit-email-btn:hover { background-color: #000; }
-.submit-email-btn.success { background-color: #10b981; cursor: default; }
+.submit-email-btn:hover:not(:disabled) { 
+    background-color: var(--primary-dark); 
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(220, 38, 38, 0.2);
+}
+.submit-email-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+.submit-email-btn.success { 
+    background-color: #10b981; 
+    cursor: default; 
+    transform: none;
+    box-shadow: none;
+}
 
 /* --- MODAL PILIH DOKTER --- */
 .modal-overlay {

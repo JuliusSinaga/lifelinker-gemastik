@@ -17,7 +17,7 @@
 
 /* Hero Section */
 .detail-hero {
-  background: linear-gradient(135deg, #6c757d, #495057);
+  background: var(--color-brand-primary);
   color: white;
   padding: 45px 0;
   text-align: center;

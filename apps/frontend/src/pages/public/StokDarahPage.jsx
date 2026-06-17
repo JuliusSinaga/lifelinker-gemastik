@@ -218,7 +218,7 @@ export default function StokDarahPage() {
                     {/* Blood Stock Summary */}
                     <div className="blood-stock-summary">
                       <h4 style={{ margin: '0 0 12px 0' }}>Status Stok Darah:</h4>
-                      <div className="blood-types-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '12px' }}>
+                      <div className="blood-types-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: '12px' }}>
                         {hospital.bloodStock && Object.entries(hospital.bloodStock).map(
                           ([type, data]) => (
                             <div

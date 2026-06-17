@@ -18,6 +18,8 @@ export default function KonsultasiEdukasi() {
   const [messageDraft, setMessageDraft] = useState("");
   const [isSending, setIsSending] = useState(false);
   const chatEndRef = useRef(null);
+  const hasAutoSelected = useRef(false);
+  const readCounts = useRef({}); // Track jumlah pesan yang sudah dibaca per room
 
   // --- State FAQ & Modal ---
   const [faqs, setFaqs] = useState([]);
@@ -33,8 +35,8 @@ export default function KonsultasiEdukasi() {
       const data = response.data.data || [];
 
       const formattedData = data.map(item => ({
-        id: item.id,
-        patientName: item.User?.name || "Pasien",
+        id: item.ID,
+        patientName: item.user?.name || "Pasien",
         topic: item.topic,
         date: item.consultation_date,
         time: item.consultation_time,
@@ -42,7 +44,7 @@ export default function KonsultasiEdukasi() {
         method: item.method || 'chat',
         link: item.meeting_link || "https://zoom.us",
         messages: (item.messages || []).map(msg => ({
-          id: msg.id,
+          id: msg.ID,
           text: msg.text,
           from: msg.sender_role || "patient",
           createdAt: msg.created_at
@@ -73,11 +75,14 @@ export default function KonsultasiEdukasi() {
         return formattedData;
       });
 
-      // Auto-select chat pertama HANYA jika belum ada yang dipilih
-      if (!selectedChatId && formattedData.length > 0) {
+      // Auto-select chat pertama HANYA saat load pertama kali
+      if (!hasAutoSelected.current && formattedData.length > 0) {
         // Cari konsultasi chat pertama
         const firstChat = formattedData.find(c => c.method === 'chat');
-        if (firstChat) setSelectedChatId(firstChat.id);
+        if (firstChat) {
+          setSelectedChatId(firstChat.id);
+          hasAutoSelected.current = true;
+        }
       }
 
     } catch (error) {
@@ -85,7 +90,7 @@ export default function KonsultasiEdukasi() {
     } finally {
       if (!isBackground) setLoading(false);
     }
-  }, [selectedChatId, searchTerm]);
+  }, [searchTerm]);
 
   // Initial Load & Polling
   useEffect(() => {
@@ -108,7 +113,10 @@ export default function KonsultasiEdukasi() {
 
   // Auto Scroll saat pindah chat atau ada pesan baru
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatEndRef.current && chatEndRef.current.parentElement) {
+      const container = chatEndRef.current.parentElement;
+      container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+    }
   }, [selectedChatId, consultations]);
 
   // --- Filter Data untuk View ---
@@ -116,13 +124,28 @@ export default function KonsultasiEdukasi() {
   const videoSessions = consultations.filter(c => c.method === 'video' || c.status === 'scheduled');
   
   // Ambil Data Chat yang SEDANG AKTIF (Dipilih)
-  // Logic ini memastikan perpindahan antar user berjalan mulus
   const activeChat = consultations.find(c => c.id === selectedChatId);
+
+  // Tandai pesan sebagai "dibaca" ketika room chat dibuka
+  useEffect(() => {
+    if (selectedChatId && activeChat) {
+      readCounts.current[selectedChatId] = activeChat.messages.length;
+    }
+  }, [selectedChatId, activeChat]);
+
+  // Hitung jumlah pesan belum dibaca (hanya pesan dari pasien)
+  const getUnreadCount = (chatRoom) => {
+    if (!chatRoom.messages || chatRoom.messages.length === 0) return 0;
+    if (chatRoom.id === selectedChatId) return 0; // Room aktif = sudah dibaca
+    const lastRead = readCounts.current[chatRoom.id] || 0;
+    // Hitung pesan pasien yang masuk SETELAH terakhir dibaca
+    const newMessages = chatRoom.messages.slice(lastRead);
+    return newMessages.filter(m => m.from === 'patient').length;
+  };
 
   // --- HANDLERS ---
 
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
+  const handleSendMessage = async () => {
     if (!messageDraft.trim() || !selectedChatId) return;
 
     setIsSending(true);
@@ -137,16 +160,37 @@ export default function KonsultasiEdukasi() {
     setMessageDraft("");
 
     try {
-      await axiosClient.post(`/consultations/${selectedChatId}/reply`, {
+      const res = await axiosClient.post(`/consultations/${selectedChatId}/reply`, {
         message: msgToSend,
         sender: "doctor"
       });
+      console.log("POST SUCCESS:", res.data);
       fetchData(true);
     } catch (error) {
-      setPopup({ show: true, type: "error", message: "Gagal mengirim pesan." });
+      console.error("POST FAILED:", error);
+      setPopup({ show: true, type: "error", message: `Gagal: ${error.response?.data?.error || error.message}` });
     } finally {
       setIsSending(false);
     }
+  };
+
+  const handleCloseChat = async () => {
+    const activeChat = filteredConsultations.find(c => c.id === selectedChatId);
+    if (!activeChat) return;
+
+    setPopup({
+      show: true, type: "confirm", message: "Apakah Anda yakin ingin menyelesaikan sesi chat ini?", confirmText: "Selesaikan",
+      confirmAction: async () => {
+        try {
+          await axiosClient.put(`/consultations/${activeChat.id}/status`, { status: "closed" });
+          setPopup({ show: true, type: "success", message: "Konsultasi selesai." });
+          setTimeout(() => closePopup(), 1500);
+          fetchData(false);
+        } catch (err) {
+          setPopup({ show: true, type: "error", message: "Gagal menutup konsultasi." });
+        }
+      }
+    });
   };
 
   // FAQ Handlers
@@ -164,7 +208,7 @@ export default function KonsultasiEdukasi() {
 
   const triggerDeleteFaq = (id) => {
     setPopup({
-      show: true, type: "confirm", message: "Hapus FAQ ini?",
+      show: true, type: "confirm", message: "Hapus FAQ ini?", confirmText: "Hapus",
       confirmAction: () => {
         setFaqs(faqs.filter(f => f.id !== id));
         setPopup({ show: true, type: "success", message: "FAQ dihapus." });
@@ -173,7 +217,7 @@ export default function KonsultasiEdukasi() {
     });
   };
 
-  const closePopup = () => setPopup({ show: false, type: "", message: "", confirmAction: null });
+  const closePopup = () => setPopup({ show: false, type: "", message: "", confirmAction: null, confirmText: "" });
   const handleStartSession = (link) => window.open(link, "_blank");
 
   return (
@@ -211,18 +255,35 @@ export default function KonsultasiEdukasi() {
                   chatSessions.map((c) => (
                     <div
                       key={c.id}
-                      className={`ke-chat-item ${selectedChatId === c.id ? 'active' : ''}`}
-                      onClick={() => setSelectedChatId(c.id)} 
-                      style={{ display: "flex", gap: "12px", padding: "16px", cursor: "pointer", borderBottom: "1px solid var(--color-border-divider)", backgroundColor: selectedChatId === c.id ? "var(--color-brand-primary)10" : "transparent", transition: "background-color 0.2s" }}
+                      className="ke-chat-item"
+                      onClick={() => setSelectedChatId(c.id)}
+                      style={{ 
+                        display: "flex", gap: "12px", padding: "16px", cursor: "pointer", 
+                        borderBottom: "1px solid var(--color-border-divider)", 
+                        borderLeft: selectedChatId === c.id ? "4px solid var(--color-brand-primary)" : "4px solid transparent",
+                        backgroundColor: selectedChatId === c.id ? "rgba(230, 46, 45, 0.08)" : "transparent", 
+                        transition: "all 0.2s" 
+                      }}
                     >
-                      <Icon icon="mdi:account-circle" className="user-avatar" style={{ fontSize: "40px", color: selectedChatId === c.id ? "var(--color-brand-primary)" : "var(--color-text-secondary)" }} />
+                      <Icon icon="mdi:account-circle" className="user-avatar" style={{ fontSize: "40px", color: selectedChatId === c.id ? "var(--color-brand-primary)" : "var(--color-text-secondary)", flexShrink: 0 }} />
                       <div className="chat-info" style={{ flex: 1, minWidth: 0 }}>
-                        <div className="chat-info-top" style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
+                        <div className="chat-info-top" style={{ display: "flex", justifyContent: "space-between", marginBottom: "2px" }}>
                           <h4 style={{ margin: 0, fontSize: "14px", fontWeight: "bold", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.patientName}</h4>
-                          <span style={{ fontSize: "12px", color: "var(--color-text-secondary)", whiteSpace: "nowrap" }}>{c.time}</span>
+                          <span style={{ fontSize: "11px", color: "var(--color-text-secondary)", whiteSpace: "nowrap" }}>{c.time}</span>
                         </div>
-                        <p style={{ margin: 0, fontSize: "12px", color: "var(--color-text-secondary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.topic}</p>
+                        <p style={{ margin: "0 0 4px 0", fontSize: "12px", color: selectedChatId === c.id ? "var(--color-brand-primary)" : "var(--color-text-secondary)", fontWeight: "600", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.topic}</p>
+                        {c.messages && c.messages.length > 0 && (
+                          <p style={{ margin: 0, fontSize: "11px", color: "#999", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontStyle: "italic" }}>
+                            {c.messages[c.messages.length - 1].from === "doctor" ? "Anda: " : ""}{c.messages[c.messages.length - 1].text}
+                          </p>
+                        )}
                       </div>
+                      {(() => {
+                        const unread = getUnreadCount(c);
+                        return unread > 0 ? (
+                          <span style={{ backgroundColor: "var(--color-brand-primary)", color: "white", fontSize: "10px", fontWeight: "bold", borderRadius: "50%", minWidth: "20px", height: "20px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, padding: "0 4px" }}>{unread}</span>
+                        ) : null;
+                      })()}
                     </div>
                   ))
                 ) : (
@@ -236,8 +297,21 @@ export default function KonsultasiEdukasi() {
               {activeChat ? (
                 <>
                   <div className="ke-chat-header" style={{ padding: "16px 24px", borderBottom: "1px solid var(--color-border-divider)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <h3 style={{ margin: 0, fontSize: "16px", fontFamily: "var(--font-family-brand)" }}>{activeChat.patientName}</h3>
-                    <span className="ke-topic-badge" style={{ fontSize: "12px", fontWeight: "bold", padding: "4px 12px", borderRadius: "16px", backgroundColor: "var(--color-surface-background)", border: "1px solid var(--color-border-divider)" }}>{activeChat.topic}</span>
+                    <h3 style={{ margin: 0, fontSize: "16px", fontFamily: "var(--font-family-brand)", display: "flex", alignItems: "center", gap: "8px" }}>
+                      {activeChat.patientName}
+                      {(activeChat.status === 'closed' || activeChat.status === 'Completed') && (
+                        <span style={{ fontSize: "10px", backgroundColor: "var(--color-status-error)", color: "white", padding: "2px 8px", borderRadius: "10px", fontWeight: "bold" }}>Selesai</span>
+                      )}
+                    </h3>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                      <span className="ke-topic-badge" style={{ fontSize: "12px", fontWeight: "bold", padding: "4px 12px", borderRadius: "16px", backgroundColor: "var(--color-surface-background)", border: "1px solid var(--color-border-divider)" }}>{activeChat.topic}</span>
+                      {activeChat.status !== 'closed' && activeChat.status !== 'Completed' && (
+                        <Button variant="danger" onClick={handleCloseChat} style={{ padding: "4px 12px", fontSize: "12px", borderRadius: "16px" }}>Selesaikan</Button>
+                      )}
+                      <button onClick={() => setSelectedChatId(null)} title="Tutup Ruangan" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--color-text-secondary)", display: "flex", alignItems: "center", padding: "4px" }}>
+                        <Icon icon="mdi:close" style={{ fontSize: "20px" }} />
+                      </button>
+                    </div>
                   </div>
 
                   <div className="ke-messages-area" style={{ flex: 1, overflowY: "auto", padding: "24px", display: "flex", flexDirection: "column", gap: "16px", backgroundColor: "var(--color-surface-background)" }}>
@@ -253,19 +327,20 @@ export default function KonsultasiEdukasi() {
                     <div ref={chatEndRef} />
                   </div>
 
-                  <form className="ke-chat-input" onSubmit={handleSendMessage} style={{ padding: "16px", borderTop: "1px solid var(--color-border-divider)", display: "flex", gap: "12px" }}>
-                    <Input
+                  <div className="ke-chat-input" style={{ padding: "16px", borderTop: "1px solid var(--color-border-divider)", display: "flex", gap: "12px", alignItems: "center" }}>
+                    <input
                       type="text"
                       value={messageDraft}
                       onChange={(e) => setMessageDraft(e.target.value)}
-                      disabled={isSending}
-                      placeholder="Ketik pesan..."
-                      style={{ flex: 1, borderRadius: "24px", border: "1px solid var(--color-border-input)" }}
+                      onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }}
+                      disabled={isSending || activeChat.status === 'closed' || activeChat.status === 'Completed'}
+                      placeholder={activeChat.status === 'closed' || activeChat.status === 'Completed' ? "Sesi chat telah selesai." : "Ketik pesan..."}
+                      style={{ flex: 1, borderRadius: "24px", border: "1px solid var(--color-border-input)", padding: "12px 20px", fontSize: "14px", outline: "none", fontFamily: "inherit" }}
                     />
-                    <Button type="submit" variant="primary" disabled={isSending} style={{ width: "48px", height: "48px", borderRadius: "50%", padding: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <button type="button" onClick={handleSendMessage} disabled={isSending || activeChat.status === 'closed' || activeChat.status === 'Completed'} style={{ width: "48px", height: "48px", borderRadius: "50%", padding: 0, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: (isSending || activeChat.status === 'closed' || activeChat.status === 'Completed') ? "#ccc" : "var(--color-brand-primary)", color: "white", border: "none", cursor: (isSending || activeChat.status === 'closed' || activeChat.status === 'Completed') ? "not-allowed" : "pointer", fontSize: "20px", flexShrink: 0 }}>
                       {isSending ? "..." : <Icon icon="mdi:send" />}
-                    </Button>
-                  </form>
+                    </button>
+                  </div>
                 </>
               ) : (
                 <div className="ke-no-chat" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--color-text-secondary)" }}><p>Pilih chat untuk memulai</p></div>
@@ -350,7 +425,7 @@ export default function KonsultasiEdukasi() {
       {popup.show && (
         <div className="ke-modal-overlay" onClick={closePopup} style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
           <Card variant="standard" className="ke-modal-box popup" onClick={(e) => e.stopPropagation()} style={{ padding: "40px", textAlign: "center", width: "100%", maxWidth: "400px", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
-            <div className={`popup-icon ${popup.type}`} style={{ fontSize: "64px", color: popup.type === "success" ? "var(--color-status-success)" : popup.type === "error" ? "var(--color-status-error)" : "var(--color-status-warning)" }}>
+            <div className={`popup-icon ${popup.type}`} style={{ fontSize: "120px", color: popup.type === "success" ? "var(--color-status-success)" : popup.type === "error" ? "var(--color-status-error)" : "var(--color-status-warning)", lineHeight: 1 }}>
               {popup.type === "success" && <Icon icon="mdi:check-circle" />}
               {popup.type === "error" && <Icon icon="mdi:close-circle" />}
               {popup.type === "confirm" && <Icon icon="mdi:alert" />}
@@ -361,7 +436,7 @@ export default function KonsultasiEdukasi() {
               {popup.type === "confirm" ? (
                 <>
                   <Button variant="outline" className="btn-cancel" onClick={closePopup} style={{ flex: 1 }}>Batal</Button>
-                  <Button variant="primary" className="btn-save delete-confirm" onClick={popup.confirmAction} style={{ flex: 1, backgroundColor: "var(--color-status-error)", borderColor: "var(--color-status-error)" }}>Ya, Hapus</Button>
+                  <Button variant="primary" className="btn-save delete-confirm" onClick={popup.confirmAction} style={{ flex: 1, backgroundColor: "var(--color-status-error)", borderColor: "var(--color-status-error)" }}>{popup.confirmText || "Lanjutkan"}</Button>
                 </>
               ) : (
                 <Button variant="primary" className="btn-save full-width" onClick={closePopup} style={{ width: "100%" }}>OK</Button>

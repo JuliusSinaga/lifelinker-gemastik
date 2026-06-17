@@ -46,11 +46,12 @@
 }
 
 .menu-item {
-  display: block;
-  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  padding: 14px 18px;
   color: #d1d5db;
   text-decoration: none;
-  border-radius: 10px;
+  border-radius: 12px;
   transition: 0.25s;
 }
 

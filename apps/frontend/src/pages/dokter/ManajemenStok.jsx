@@ -3,8 +3,12 @@ import SidebarDokter from "../../components/SidebarDokter";
 import "../../styles/ManajemenStok.css";
 import axiosClient from "../../service/axiosClient";
 
+import Icon from "../../components/core/Icon";
+import Button from "../../components/core/Button";
+
 export default function ManajemenStok() {
   const [stocks, setStocks] = useState([]);
+  const [searchTerm] = useState("");
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -14,7 +18,7 @@ export default function ManajemenStok() {
   const [matchingResults, setMatchingResults] = useState([]);
   const [isMatching, setIsMatching] = useState(false);
   const [matchingForm, setMatchingForm] = useState({ blood_type: "A", rhesus: "+" });
-  const [notificationSent, setNotificationSent] = useState(false);
+  const [selectedDonation, setSelectedDonation] = useState(null);
 
   // State Form Tambah Stok
   const [form, setForm] = useState({
@@ -106,10 +110,11 @@ export default function ManajemenStok() {
   // 4. Handle Smart Matching
   const handleSmartMatching = async () => {
     setIsMatching(true);
-    setNotificationSent(false);
     try {
-      const res = await axiosClient.get(`/stok-darah/matching?blood_type=${matchingForm.blood_type}&rhesus=${matchingForm.rhesus}`);
-      setMatchingResults(res.data.data || []);
+      // Asumsikan lokasi dokter ini id=1
+      const encodedRhesus = encodeURIComponent(matchingForm.rhesus);
+      const res = await axiosClient.get(`/stok-darah/matching?blood_type=${matchingForm.blood_type}&rhesus=${encodedRhesus}&lokasi_id=1`);
+      setMatchingResults(res.data.matches || []);
     } catch (error) {
       console.error("Gagal matching:", error);
       alert("Gagal melakukan pencocokan.");
@@ -118,47 +123,27 @@ export default function ManajemenStok() {
     }
   };
 
-  // 5. Handle Send FCM Notification
-  const handleSendNotification = async () => {
-    try {
-      // Asumsikan lokasi dokter ini id=1 (dummy untuk demo)
-      await axiosClient.post("/notifications/send", {
-        lokasi_id: 1,
-        blood_type: matchingForm.blood_type,
-        rhesus: matchingForm.rhesus,
-        message: `Dibutuhkan segera donor darah ${matchingForm.blood_type}${matchingForm.rhesus} di RS Anda. Klik untuk detail!`
-      });
-      setNotificationSent(true);
-      alert("Notifikasi darurat berhasil dikirim ke kandidat pendonor!");
-    } catch (error) {
-      console.error("Gagal kirim notif:", error);
-      alert("Gagal mengirim notifikasi FCM.");
-    }
-  };
-
   return (
-    <div className="ms-container">
+    <div className="dokter-layout">
       <SidebarDokter />
 
-      <main className="ms-content">
-        <h2 className="ms-page-title">Manajemen Stok Darah</h2>
+      <main className="dokter-main" style={{ padding: "32px", backgroundColor: "var(--color-bg-page)", minHeight: "100vh" }}>
+        <h2 className="ms-page-title" style={{ marginBottom: "5px" }}>Manajemen Stok Darah</h2>
+        <p style={{ color: "var(--color-text-secondary)", marginBottom: "30px", fontSize: "15px" }}>Perbarui dan pantau ketersediaan darah di instansi Anda.</p>
 
         {/* ===================== CARD STOK DARAH ===================== */}
         <div className="ms-card">
           <div className="ms-card-header">
             <h3>🩸 Stok Darah Terkini</h3>
 
-            <div className="search-bar">
-              <input type="text" placeholder="Cari golongan darah atau No. Kantong..." className="search-input" />
-            </div>
-
-            <div style={{ display: "flex", gap: "12px" }}>
-              <button className="btn-emergency" onClick={() => setShowMatchingModal(true)} style={{ backgroundColor: "var(--color-status-error)", color: "white", border: "none", padding: "10px 20px", borderRadius: "8px", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
-                <span className="icon">🚨</span> Cari Donor Darurat
-              </button>
-              <button className="ms-btn-add" onClick={openModal}>
-                ➕ Tambah Stok
-              </button>
+            <div className="header-actions" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <Button onClick={() => setShowMatchingModal(true)} style={{ backgroundColor: "#F13B3B", color: "white", borderRadius: "8px", display: "flex", alignItems: "center", gap: "6px", height: "46px", boxSizing: "border-box" }}>
+                  <Icon icon="mdi:alert-decagram" style={{ fontSize: "20px" }} /> Cari Donor Darurat
+              </Button>
+              
+              <Button onClick={openModal} style={{ borderRadius: "8px", display: "flex", alignItems: "center", gap: "6px", height: "46px", boxSizing: "border-box" }}>
+                  <Icon icon="mdi:plus" style={{ fontSize: "20px" }} /> Tambah Stok
+              </Button>
             </div>
           </div>
 
@@ -166,10 +151,10 @@ export default function ManajemenStok() {
             <table className="ms-table">
               <thead>
                 <tr>
-                  <th>Gol. Darah</th>
-                  <th>Jumlah (Unit)</th>
-                  <th>Target Min.</th>
-                  <th>Kedaluwarsa</th>
+                  <th>Gol.Darah</th>
+                  <th>Jumlah(Unit)</th>
+                  <th>Target Minimun</th>
+                  <th>Tanggal Kadaluarsa Terdekat</th>
                   <th>Status</th>
                   <th>Aksi</th>
                 </tr>
@@ -179,17 +164,25 @@ export default function ManajemenStok() {
                 {loading ? (
                     <tr><td colSpan="6" className="text-center">Memuat data...</td></tr>
                 ) : stocks.length > 0 ? (
-                    stocks.map((item) => {
-                        const status = getStockStatus(item.quantity);
+                    stocks
+                    .filter(item => {
+                      if (!searchTerm) return true;
+                      const bloodStr = `${item.gol_darah}${item.rhesus}`.toLowerCase();
+                      return bloodStr.includes(searchTerm.toLowerCase());
+                    })
+                    .map((item) => {
+                        const status = getStockStatus(item.jumlah_kantong);
                         return (
                             <tr key={item.id}>
-                                <td><span className="ms-blood-badge">{item.blood_type}{item.rhesus}</span></td>
-                                <td>{item.quantity}</td>
+                                <td><strong style={{ fontSize: "16px" }}>{item.gol_darah}{item.rhesus}</strong></td>
+                                <td>{item.jumlah_kantong}</td>
                                 <td>200</td> {/* Target statis sementara */}
-                                <td>{formatDate(item.expired_date)}</td>
+                                <td>{formatDate(item.waktu_pembaruan)}</td>
                                 <td><span className={`ms-badge ${status.class}`}>{status.label}</span></td>
                                 <td className="ms-actions">
-                                    <button className="ms-btn-icon delete" onClick={() => handleDeleteStok(item.id)}>🗑️</button>
+                                    <Button onClick={() => handleDeleteStok(item.id)} style={{ padding: "6px 16px", fontSize: "12px", display: "inline-flex", alignItems: "center", gap: "6px", borderRadius: "20px", backgroundColor: "#f3f4f6", color: "#1f2937", border: "1px solid #e5e7eb", cursor: "pointer", fontWeight: "600" }}>
+                                        <Icon icon="mdi:delete" style={{ fontSize: "16px", color: "#6b7280" }} /> Hapus
+                                    </Button>
                                 </td>
                             </tr>
                         );
@@ -205,19 +198,20 @@ export default function ManajemenStok() {
         {/* ===================== DATA PENDONOR (RIWAYAT) ===================== */}
         <div className="ms-card mt-30">
           <div className="ms-card-header">
-            <h3>📝 Riwayat Masuk (Donasi)</h3>
+            <h3>👥 Data Pendonor Stok Darah</h3>
           </div>
 
           <div className="table-responsive">
             <table className="ms-table">
               <thead>
                 <tr>
-                  <th>Tanggal</th>
+                  <th>Tanggal Donor</th>
                   <th>Nama Pendonor</th>
-                  <th>Gol. Darah</th>
-                  <th>Jumlah</th>
-                  <th>Lokasi</th>
+                  <th>Gol.Darah</th>
+                  <th>Jumlah(Kantong)</th>
+                  <th>Rumah Sakit</th>
                   <th>Status</th>
+                  <th>Aksi</th>
                 </tr>
               </thead>
 
@@ -227,12 +221,17 @@ export default function ManajemenStok() {
                 ) : donations.length > 0 ? (
                     donations.map((d) => (
                         <tr key={d.id}>
-                            <td>{formatDate(d.created_at)}</td>
+                            <td>{formatDate(d.donation_date)}</td>
                             <td>{d.user?.name || "Anonim"}</td>
-                            <td>{d.user?.blood_type}{d.user?.rhesus}</td>
-                            <td>1 Kantong</td>
+                            <td><strong style={{ fontSize: "16px" }}>{d.user?.blood_type || d.blood_type || "-"}{d.user?.rhesus || ""}</strong></td>
+                            <td>{d.quantity || "1"} Kantong</td>
                             <td>{d.location || "RSUP H. Adam Malik"}</td>
-                            <td><span className="ms-badge green">BERHASIL</span></td>
+                            <td><span className="ms-badge green" style={{ borderRadius: "20px", border: "1px solid #10b981", color: "#10b981", backgroundColor: "transparent" }}>Tersedia</span></td>
+                            <td className="ms-actions">
+                                <Button onClick={() => setSelectedDonation(d)} style={{ padding: "6px 12px", fontSize: "12px", display: "inline-flex", alignItems: "center", gap: "6px", borderRadius: "20px", backgroundColor: "transparent", color: "#6b7280", border: "1px solid #d1d5db", cursor: "pointer", fontWeight: "600" }}>
+                                    <Icon icon="mdi:eye" style={{ fontSize: "16px" }} /> Detail
+                                </Button>
+                            </td>
                         </tr>
                     ))
                 ) : (
@@ -307,11 +306,11 @@ export default function ManajemenStok() {
 
         {/* MODAL SMART MATCHING */}
         {showMatchingModal && (
-          <div className="ms-modal-overlay">
-            <div className="ms-modal" style={{ maxWidth: "600px", width: "100%" }}>
+          <div className="modal-overlay">
+            <div className="modal-box" style={{ maxWidth: "600px", width: "100%" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
                   <h3 className="modal-title" style={{ margin: 0 }}>🚨 Smart Matching Donor Darurat</h3>
-                  <button onClick={() => { setShowMatchingModal(false); setMatchingResults([]); setNotificationSent(false); }} style={{ background: "none", border: "none", fontSize: "1.2rem", cursor: "pointer" }}>✕</button>
+                  <button onClick={() => { setShowMatchingModal(false); setMatchingResults([]); }} style={{ background: "none", border: "none", fontSize: "1.2rem", cursor: "pointer" }}>✕</button>
               </div>
               
               <p style={{ color: "var(--color-text-secondary)", marginBottom: "20px" }}>Sistem akan mencari pendonor terdekat dengan riwayat kesehatan yang valid (Masa tunggu 90 hari).</p>
@@ -347,24 +346,72 @@ export default function ManajemenStok() {
                       <li key={i} style={{ padding: "12px 8px", borderBottom: "1px solid var(--color-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <div>
                           <strong>{m.user.name}</strong> <br/>
-                          <small style={{ color: "var(--color-text-tertiary)" }}>Jarak: {m.jarak.toFixed(1)} km</small>
+                          <small style={{ color: "var(--color-text-tertiary)" }}>Jarak: {m.distance_km.toFixed(1)} km</small>
                         </div>
-                        <span style={{ color: "var(--color-brand-primary)", fontWeight: "bold", fontSize: "1.2rem" }}>{m.skor.toFixed(0)} pts</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                            <span style={{ color: "var(--color-brand-primary)", fontWeight: "bold", fontSize: "1.2rem" }}>{m.score.toFixed(0)} pts</span>
+                            <a 
+                                href={`https://wa.me/${m.user.phone?.replace(/^0/, '62')}?text=Halo%20${encodeURIComponent(m.user.name)},%20kami%20dari%20Instansi%20Kesehatan%20sedang%20sangat%20membutuhkan%20donor%20darah%20golongan%20*${matchingForm.blood_type}${matchingForm.rhesus}*%20saat%20ini.%20Apakah%20Anda%20bersedia%20membantu?`}
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                style={{ backgroundColor: "#25D366", color: "white", padding: "6px 12px", borderRadius: "20px", textDecoration: "none", fontSize: "12px", fontWeight: "bold", display: "flex", alignItems: "center", gap: "4px", boxShadow: "0 2px 4px rgba(37, 211, 102, 0.3)" }}
+                            >
+                                <Icon icon="mdi:whatsapp" style={{ fontSize: "16px" }} /> WA
+                            </a>
+                        </div>
                       </li>
                     ))}
                   </ul>
-
-                  {!notificationSent ? (
-                    <button onClick={handleSendNotification} style={{ backgroundColor: "var(--color-status-error)", color: "white", width: "100%", padding: "12px", border: "none", borderRadius: "8px", fontWeight: "bold", cursor: "pointer", display: "flex", justifyContent: "center", gap: "8px" }}>
-                      <span>🔔</span> Kirim Push Notification (FCM)
-                    </button>
-                  ) : (
-                    <div style={{ padding: "12px", backgroundColor: "var(--color-status-success)20", color: "var(--color-status-success)", textAlign: "center", borderRadius: "8px", fontWeight: "bold" }}>
-                      ✅ Notifikasi Berhasil Dikirim ke {matchingResults.length} Kandidat!
-                    </div>
-                  )}
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* MODAL DETAIL DONASI */}
+        {selectedDonation && (
+          <div className="modal-overlay" onClick={() => setSelectedDonation(null)}>
+            <div className="modal-box" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "500px", width: "100%" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                  <h3 className="modal-title" style={{ margin: 0 }}>📄 Detail Riwayat Donasi</h3>
+                  <button onClick={() => setSelectedDonation(null)} style={{ background: "none", border: "none", fontSize: "1.2rem", cursor: "pointer" }}>✕</button>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "24px" }}>
+                  <div>
+                      <small style={{ color: "var(--color-text-secondary)" }}>Nama Pendonor</small>
+                      <p style={{ margin: "4px 0 0 0", fontWeight: "bold" }}>{selectedDonation.user?.name || "Anonim"}</p>
+                  </div>
+                  <div>
+                      <small style={{ color: "var(--color-text-secondary)" }}>Kontak</small>
+                      <p style={{ margin: "4px 0 0 0", fontWeight: "bold" }}>{selectedDonation.user?.phone || "-"}</p>
+                  </div>
+                  <div>
+                      <small style={{ color: "var(--color-text-secondary)" }}>Golongan Darah</small>
+                      <p style={{ margin: "4px 0 0 0", fontWeight: "bold", color: "var(--color-brand-primary)" }}>{selectedDonation.user?.blood_type || selectedDonation.blood_type}{selectedDonation.user?.rhesus || selectedDonation.rhesus || ""}</p>
+                  </div>
+                  <div>
+                      <small style={{ color: "var(--color-text-secondary)" }}>Volume Donor</small>
+                      <p style={{ margin: "4px 0 0 0", fontWeight: "bold" }}>{selectedDonation.quantity_donated || selectedDonation.quantity || 350} ml</p>
+                  </div>
+                  <div>
+                      <small style={{ color: "var(--color-text-secondary)" }}>Hemoglobin (Hb)</small>
+                      <p style={{ margin: "4px 0 0 0", fontWeight: "bold" }}>{selectedDonation.hemoglobin ? `${selectedDonation.hemoglobin} g/dL` : "Tidak dicatat"}</p>
+                  </div>
+                  <div>
+                      <small style={{ color: "var(--color-text-secondary)" }}>Tekanan Darah</small>
+                      <p style={{ margin: "4px 0 0 0", fontWeight: "bold" }}>{selectedDonation.blood_pressure || "Tidak dicatat"}</p>
+                  </div>
+              </div>
+
+              <div style={{ backgroundColor: "var(--color-surface-background)", padding: "12px", borderRadius: "8px", border: "1px solid var(--color-border-divider)" }}>
+                  <small style={{ color: "var(--color-text-secondary)" }}>Catatan Medis</small>
+                  <p style={{ margin: "4px 0 0 0" }}>{selectedDonation.notes || "Tidak ada catatan khusus."}</p>
+              </div>
+
+              <div className="modal-actions" style={{ marginTop: "24px" }}>
+                <button className="ms-btn-cancel" onClick={() => setSelectedDonation(null)} style={{ width: "100%" }}>Tutup</button>
+              </div>
             </div>
           </div>
         )}

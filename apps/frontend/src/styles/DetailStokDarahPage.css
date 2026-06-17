@@ -452,10 +452,7 @@
 .blood-type-text {
   font-size: 26px;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--primary-red), var(--primary-dark));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--primary-red);
 }
 
 .units-cell {
@@ -636,7 +633,7 @@
   align-items: flex-start;
   gap: 12px;
   padding: 18px;
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  background: rgba(220, 38, 38, 0.05);
   border-radius: 12px;
   border-left: 4px solid var(--primary-red);
   transition: all 0.3s ease;

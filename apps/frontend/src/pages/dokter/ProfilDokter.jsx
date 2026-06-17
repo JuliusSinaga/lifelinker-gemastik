@@ -6,6 +6,7 @@ import Icon from "../../components/core/Icon";
 import Button from "../../components/core/Button";
 import Card from "../../components/core/Card";
 import Input from "../../components/core/Input";
+import Avatar from "../../components/core/Avatar";
 
 export default function ProfilDokter() {
   // State Data Dokter
@@ -139,11 +140,16 @@ export default function ProfilDokter() {
           <h1 className="page-title" style={{ fontFamily: "var(--font-family-brand)", margin: 0 }}>Profil Saya</h1>
         </div>
 
-        <div className="pd-container" style={{ display: "flex", flexDirection: "column", gap: "24px", maxWidth: "900px", margin: "0 auto" }}>
+        <div className="pd-container" style={{ display: "flex", flexDirection: "column", gap: "24px", width: "100%" }}>
             {/* KARTU IDENTITAS SINGKAT */}
             <Card variant="standard" className="pd-card profile-summary" style={{ display: "flex", alignItems: "center", gap: "24px", padding: "32px" }}>
-                <div className="pd-avatar" style={{ width: "80px", height: "80px", borderRadius: "50%", backgroundColor: "var(--color-brand-primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: "40px" }}>
-                    <Icon icon="mdi:doctor" />
+                <div className="pd-avatar" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Avatar 
+                        src={doctorData.photo_url} 
+                        name={doctorData.name} 
+                        size={80} 
+                        style={{ backgroundColor: "var(--color-brand-primary)", color: "white", fontSize: "32px", boxShadow: "0 4px 12px rgba(241, 59, 59, 0.2)" }}
+                    />
                 </div>
                 <div className="pd-info" style={{ flex: 1 }}>
                     <h2 style={{ margin: "0 0 8px 0", fontSize: "24px", fontFamily: "var(--font-family-brand)" }}>{doctorData.name || "Nama Dokter"}</h2>
@@ -182,10 +188,14 @@ export default function ProfilDokter() {
                 <div className="pd-form-group">
                     <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Nomor Telepon</label>
                     <Input 
-                        type="text" 
+                        type="tel" 
                         name="phone"
                         value={doctorData.phone} 
-                        onChange={handleProfileChange}
+                        onChange={(e) => {
+                            const val = e.target.value.replace(/\D/g, '');
+                            handleProfileChange({ target: { name: 'phone', value: val } });
+                        }}
+                        pattern="[0-9]*"
                     />
                 </div>
 
@@ -291,17 +301,18 @@ export default function ProfilDokter() {
       </main>
 
       {/* POPUP MODAL */}
+      {/* POPUP MODAL */}
       {popup.show && (
         <div className="modal-overlay" onClick={closePopup} style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
-          <Card variant="standard" className="modal-content-popup" onClick={(e) => e.stopPropagation()} style={{ padding: "40px", textAlign: "center", width: "100%", maxWidth: "400px", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
-            <div className={`popup-icon ${popup.type}`} style={{ fontSize: "64px", color: popup.type === "success" ? "var(--color-status-success)" : "var(--color-status-error)" }}>
-                {popup.type === "success" ? <Icon icon="mdi:check-circle" /> : <Icon icon="mdi:close-circle" />}
+          <Card variant="standard" className="modal-content-popup" onClick={(e) => e.stopPropagation()} style={{ position: "relative", width: "100%", maxWidth: "400px", padding: "50px 32px 32px 32px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "16px", marginTop: "40px", overflow: "visible" }}>
+            <div className={`popup-icon ${popup.type}`} style={{ position: "absolute", top: "-40px", left: "50%", transform: "translateX(-50%)", color: popup.type === "success" ? "var(--color-status-success)" : "var(--color-status-error)", backgroundColor: "white", borderRadius: "50%", padding: "4px", display: "flex", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+              {popup.type === "success" ? <Icon icon="mdi:check-circle" width="80" height="80" /> : <Icon icon="mdi:close-circle" width="80" height="80" />}
             </div>
             <h3 className="popup-title" style={{ margin: 0, fontFamily: "var(--font-family-brand)", fontSize: "24px" }}>
                 {popup.type === "success" ? "Berhasil!" : "Gagal!"}
             </h3>
             <p className="popup-message" style={{ margin: 0, color: "var(--color-text-secondary)" }}>{popup.message}</p>
-            <Button variant="primary" className="popup-btn" onClick={closePopup} style={{ width: "100%", marginTop: "16px" }}>OK</Button>
+            <Button variant="primary" onClick={closePopup} style={{ marginTop: "8px", minWidth: "120px" }}>OK</Button>
           </Card>
         </div>
       )}

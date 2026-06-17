@@ -192,7 +192,7 @@ export default function ProfilAdmin() {
                     <div className="metric-subtitle" style={{ fontSize: "12px", color: "var(--color-text-secondary)", marginTop: "4px" }}>{m.subtitle}</div>
                   </div>
                   <div className="metric-icon" style={{ fontSize: "40px", color: iconColor, opacity: 0.8, backgroundColor: `${iconColor}15`, width: "64px", height: "64px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%" }}>
-                    <Icon icon={m.icon} />
+                    <Icon icon={m.icon} width="32" height="32" />
                   </div>
                 </Card>
             );
@@ -352,17 +352,15 @@ export default function ProfilAdmin() {
       {/* --- POPUP MODAL --- */}
       {popup.show && (
         <div className="modal-overlay" onClick={closePopup} style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
-          <Card variant="standard" className="modal-content-popup" onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: "400px", padding: "32px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "16px" }}>
-            <div className={`popup-icon ${popup.type}`} style={{ color: popup.type === "success" ? "var(--color-status-success)" : "var(--color-status-error)" }}>
+          <Card variant="standard" className="modal-content-popup" onClick={(e) => e.stopPropagation()} style={{ position: "relative", width: "100%", maxWidth: "400px", padding: "50px 32px 32px 32px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "16px", marginTop: "40px", overflow: "visible" }}>
+            <div className={`popup-icon ${popup.type}`} style={{ position: "absolute", top: "-40px", left: "50%", transform: "translateX(-50%)", color: popup.type === "success" ? "var(--color-status-success)" : "var(--color-status-error)", backgroundColor: "white", borderRadius: "50%", padding: "4px", display: "flex", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
               {popup.type === "success" ? <Icon icon="mdi:check-circle" width="80" height="80" /> : <Icon icon="mdi:close-circle" width="80" height="80" />}
             </div>
             <h3 className="popup-title" style={{ margin: 0, fontFamily: "var(--font-family-brand)", fontSize: "24px" }}>
                 {popup.type === "success" ? "Berhasil!" : "Gagal!"}
             </h3>
             <p className="popup-message" style={{ margin: 0, color: "var(--color-text-secondary)" }}>{popup.message}</p>
-            <Button variant="primary" onClick={closePopup} style={{ marginTop: "16px", minWidth: "120px" }}>
-                OK
-            </Button>
+            <Button variant="primary" onClick={closePopup} style={{ marginTop: "8px", minWidth: "120px" }}>OK</Button>
           </Card>
         </div>
       )}

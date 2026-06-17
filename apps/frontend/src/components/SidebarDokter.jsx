@@ -46,7 +46,7 @@ export default function SidebarDokter() {
 
   return (
     <>
-      <aside className="dokter-sidebar" style={{ backgroundColor: 'var(--color-bg-page)', borderRight: '1px solid var(--color-border-divider)' }}>
+      <aside className="dokter-sidebar" style={{ borderRight: '1px solid var(--color-border-divider)' }}>
 
         {/* --- PROFIL DINAMIS --- */}
         <div className="doctor-profile" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px' }}>
@@ -56,8 +56,8 @@ export default function SidebarDokter() {
             size={80} 
             style={{ marginBottom: '16px', border: '3px solid white', boxShadow: 'var(--shadow-base)' }}
           />
-          <h4 style={{ fontFamily: 'var(--font-family-primary)', margin: '0 0 4px 0', color: 'var(--color-text-primary)' }}>{doctorData.name}</h4>
-          <p style={{ fontFamily: 'var(--font-family-primary)', margin: 0, color: 'var(--color-text-secondary)', fontSize: '14px' }}>{doctorData.specialization}</p>
+          <h4 style={{ fontFamily: 'var(--font-family-primary)', margin: '0 0 4px 0', color: 'white' }}>{doctorData.name}</h4>
+          <p style={{ fontFamily: 'var(--font-family-primary)', margin: 0, color: 'rgba(255,255,255,0.7)', fontSize: '14px' }}>{doctorData.specialization}</p>
         </div>
 
         {/* --- MENU NAVIGASI --- */}

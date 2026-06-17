@@ -112,7 +112,7 @@ export default function ManajemenEvent() {
     <div className="dokter-layout">
       <DokterSidebar />
 
-      <main className="dokter-main">
+      <main className="dokter-main" style={{ padding: "32px", backgroundColor: "var(--color-bg-page)", minHeight: "100vh" }}>
         <h1 className="page-title">Request Event Donor Darah</h1>
 
         <div className="event-container">

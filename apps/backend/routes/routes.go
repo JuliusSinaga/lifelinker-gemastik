@@ -33,6 +33,7 @@ func SetupRoutes(router *gin.Engine) {
 	protected.Use(middleware.RequireAuth())
 	{
 		// User Profile Management
+		protected.GET("/doctors", controllers.GetDoctors)
 		protected.PUT("/users/:id", controllers.UpdateUser)       
 		protected.PUT("/users/:id/password", controllers.UpdatePassword)
 		protected.POST("/users/:id/avatar", controllers.UploadUserAvatar)
@@ -67,7 +68,7 @@ func SetupRoutes(router *gin.Engine) {
 
 	// --- STAFF ROUTES (Admin & Doctor) ---
 	staffRoutes := router.Group("/")
-	staffRoutes.Use(middleware.RequireAuth(), middleware.RequireRole("admin", "doctor"))
+	staffRoutes.Use(middleware.RequireAuth(), middleware.RequireRole("admin", "dokter"))
 	{
 		staffRoutes.POST("/lokasi", controllers.CreateLokasi)
 		staffRoutes.PUT("/lokasi/:id", controllers.UpdateLokasi)

@@ -24,7 +24,7 @@ function MetricCard({ value, title, subtitle, icon, colorClass }) {
         <div className="metric-subtitle" style={{ fontSize: "12px", color: "var(--color-text-secondary)", marginTop: "4px" }}>{subtitle}</div>
       </div>
       <div className="metric-icon" style={{ fontSize: "40px", color: iconColor, opacity: 0.8, backgroundColor: `${iconColor}15`, width: "64px", height: "64px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%" }}>
-        <Icon icon={icon} />
+        <Icon icon={icon} width="32" height="32" />
       </div>
     </Card>
   );

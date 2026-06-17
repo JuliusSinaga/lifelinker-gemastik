@@ -318,16 +318,16 @@ export default function DetailStokDarahPage() {
             <table className="blood-table" style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead style={{ backgroundColor: "var(--color-surface-background)" }}>
                 <tr>
-                  <th style={{ padding: "16px", textAlign: "left", borderBottom: "1px solid var(--color-border-divider)", color: "var(--color-text-secondary)" }}>Golongan Darah</th>
-                  <th style={{ padding: "16px", textAlign: "left", borderBottom: "1px solid var(--color-border-divider)", color: "var(--color-text-secondary)" }}>Status & Ketersediaan</th>
-                  <th style={{ padding: "16px", textAlign: "right", borderBottom: "1px solid var(--color-border-divider)", color: "var(--color-text-secondary)" }}>Jumlah (Kantong)</th>
+                  <th style={{ padding: "16px", textAlign: "center", borderBottom: "1px solid var(--color-border-divider)" }}>Golongan Darah</th>
+                  <th style={{ padding: "16px", textAlign: "center", borderBottom: "1px solid var(--color-border-divider)" }}>Status & Ketersediaan</th>
+                  <th style={{ padding: "16px", textAlign: "center", borderBottom: "1px solid var(--color-border-divider)" }}>Jumlah (Kantong)</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredData.length > 0 ? (
                   filteredData.map((item, index) => (
                     <tr key={index} className="blood-row" style={{ borderBottom: "1px solid var(--color-border-divider)" }}>
-                      <td className="blood-type-cell" style={{ padding: "20px 16px" }}>
+                      <td className="blood-type-cell" style={{ padding: "20px 16px", textAlign: "center" }}>
                         <span
                           className="blood-type-text"
                           style={{
@@ -348,18 +348,18 @@ export default function DetailStokDarahPage() {
                           {item.type}
                         </span>
                       </td>
-                      <td className="status-cell" style={{ width: "50%", padding: "20px 16px" }}>
+                      <td className="status-cell" style={{ width: "50%", padding: "20px 16px", textAlign: "center" }}>
                         <div
                           style={{
                             display: "flex",
                             flexDirection: "column",
                             gap: "8px",
+                            alignItems: "center"
                           }}
                         >
                           <span
                             className={`status-badge ${item.statusClass}`}
                             style={{
-                              alignSelf: "flex-start",
                               padding: "4px 12px",
                               borderRadius: "20px",
                               fontSize: "0.85rem",
@@ -403,7 +403,7 @@ export default function DetailStokDarahPage() {
                           </div>
                         </div>
                       </td>
-                      <td className="units-cell" style={{ padding: "20px 16px", textAlign: "right", verticalAlign: "middle" }}>
+                      <td className="units-cell" style={{ padding: "20px 16px", textAlign: "center", verticalAlign: "middle" }}>
                         <span
                           className="units-number"
                           style={{
@@ -446,7 +446,7 @@ export default function DetailStokDarahPage() {
             <div className="procedure-list" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {procedureInfo.map((info, index) => (
                 <div key={index} className="procedure-item" style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "var(--color-text-secondary)" }}>
-                  <Icon icon="mdi:check-circle" width="20" style={{ color: "var(--color-status-success)", marginTop: "2px", flexShrink: 0 }} />
+                  <Icon icon="mdi:check-circle" width="20" style={{ color: "var(--color-brand-primary)", marginTop: "2px", flexShrink: 0 }} />
                   <span style={{ lineHeight: 1.5 }}>{info}</span>
                 </div>
               ))}

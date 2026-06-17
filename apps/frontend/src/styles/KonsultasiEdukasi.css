@@ -127,12 +127,7 @@
 }
 
 .ke-chat-item:hover {
-  background-color: #fff;
-}
-
-.ke-chat-item.active {
-  background-color: #eff6ff;
-  border-left: 4px solid #3b82f6;
+  background-color: rgba(0, 0, 0, 0.03);
 }
 
 .user-avatar {

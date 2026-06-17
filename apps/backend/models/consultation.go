@@ -9,6 +9,7 @@ type Consultation struct {
 	Topic            string `json:"topic"`
 	ConsultationDate string `json:"consultation_date"` // Format: YYYY-MM-DD
 	ConsultationTime string `json:"consultation_time"` // Format: HH:MM
+	Method           string `json:"method" gorm:"default:'chat'"` // 'chat' atau 'video'
 	Status           string `json:"status" gorm:"default:'Scheduled'"` // Scheduled, Active, Completed, Cancelled
 	
 	// --- Integrasi Zoom ---

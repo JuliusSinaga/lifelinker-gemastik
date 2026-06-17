@@ -57,15 +57,12 @@
   padding: 20px;
   border-radius: 14px;
   background: white;
-  border-left: 6px solid;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  border: 1px solid var(--color-border-divider);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
 /* Colors */
-.stats-card.red { border-color: #e74c3c; }
-.stats-card.blue { border-color: #3498db; }
-.stats-card.orange { border-color: #f39c12; }
-.stats-card.green { border-color: #2ecc71; }
+/* Removed hardcoded color borders as requested */
 
 /* ======== GRAFIK FULL WIDTH ======== */
 .graph-full {

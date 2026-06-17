@@ -398,7 +398,6 @@
 
 .quota-label {
   font-size: 14px;
-  color: var(--text-light);
   font-weight: 600;
 }
 
@@ -419,7 +418,6 @@
 .quota-numbers {
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-dark);
   white-space: nowrap;
 }
 

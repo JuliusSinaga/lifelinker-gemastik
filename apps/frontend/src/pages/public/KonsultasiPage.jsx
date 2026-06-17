@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Link } from "react-router-dom";
+
 import "../../styles/KonsultasiPage.css"; 
 import Header from "../../components/Header";
 import axiosClient from "../../service/axiosClient";
@@ -21,14 +21,17 @@ const KonsultasiPage = () => {
   const [messages, setMessages] = useState([]);
   const [chatMessage, setChatMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
-  const [isLoadingChat, setIsLoadingChat] = useState(false);
-  const chatEndRef = useRef(null);
+  const readCounts = useRef({});
+  const [hasAutoOpened, setHasAutoOpened] = useState(false);
+  const chatMessagesContainerRef = useRef(null);
 
   // --- State Modal "Mulai Chat Baru" ---
   const [showNewChatModal, setShowNewChatModal] = useState(false);
   const [availableDoctors, setAvailableDoctors] = useState([]);
   const [searchDoctorTerm, setSearchDoctorTerm] = useState("");
   const [isCreatingChat, setIsCreatingChat] = useState(false);
+  const [selectedDoctorForChat, setSelectedDoctorForChat] = useState(null);
+  const [newChatTopic, setNewChatTopic] = useState("");
 
   // --- State FAQ & Email ---
   const [emailForm, setEmailForm] = useState({ email: "", question: "" });
@@ -47,19 +50,6 @@ const KonsultasiPage = () => {
     },
   ]);
 
-  // 1. Cek Login & Load User Info
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userStr = localStorage.getItem("user");
-    if (token) {
-      setIsLoggedIn(true);
-      if (userStr) {
-        setCurrentUser(JSON.parse(userStr));
-      }
-      fetchConsultationData();
-    }
-  }, []);
-
   // 2. Fetch Data Konsultasi (Chat & Video)
   const fetchConsultationData = useCallback(async (isBackground = false) => {
     try {
@@ -75,13 +65,13 @@ const KonsultasiPage = () => {
                 : "Mulai percakapan...";
             
             return {
-                id: c.id,
-                doctorId: c.DoctorID,
-                doctorName: c.Doctor?.name || "Dokter LifeLinker",
+                id: c.ID,
+                doctorId: c.doctor_id,
+                doctorName: c.doctor?.name || "Dokter LifeLinker",
                 topic: c.topic,
                 lastMessage: lastMsg,
                 time: c.consultation_time,
-                avatar: c.Doctor?.photo_url || "/images/dokter-tuti.png",
+                avatar: c.doctor?.photo_url || null,
                 messages: c.messages || [],
             };
         });
@@ -91,13 +81,13 @@ const KonsultasiPage = () => {
       const videos = data
         .filter((c) => c.method === "video" || c.meeting_link)
         .map((v) => ({
-          id: v.id,
-          doctor: v.Doctor?.name || "Dokter LifeLinker",
+          id: v.ID,
+          doctor: v.doctor?.name || "Dokter LifeLinker",
           topic: v.topic,
           date: v.consultation_date,
           time: v.consultation_time,
           status: v.status === "Scheduled" ? "available" : "full",
-          avatar: v.Doctor?.photo_url || "/images/dokter-anas.jpg",
+          avatar: v.doctor?.photo_url || null,
           link: v.meeting_link,
         }));
       setVideoSessions(videos);
@@ -107,27 +97,53 @@ const KonsultasiPage = () => {
     }
   }, []);
 
-  // 3. Efek Sinkronisasi Pesan
+  // 1. Cek Login & Load User Info
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userStr = localStorage.getItem("user");
+    if (token) {
+      setIsLoggedIn(true);
+      if (userStr) {
+        setCurrentUser(JSON.parse(userStr));
+      }
+      fetchConsultationData();
+    }
+  }, [fetchConsultationData]);
+
+  // 3. Efek Sinkronisasi Pesan & Read Counts
   useEffect(() => {
     if (chatSessions.length > 0) {
-        const targetId = activeConsultationId || chatSessions[0].id;
-        const session = chatSessions.find(c => c.id === targetId);
+        if (!activeConsultationId && !hasAutoOpened) {
+            setActiveConsultationId(chatSessions[0].id);
+            setHasAutoOpened(true);
+        }
         
-        if (session) {
-            if (!activeConsultationId) setActiveConsultationId(targetId);
-            const formattedMsgs = (session.messages || []).map((msg) => ({
-                id: msg.id,
-                sender: msg.sender_role === "patient" ? "user" : "doctor",
-                message: msg.text,
-                name: msg.sender_role === "patient" ? "Saya" : session.doctorName,
-                avatar: msg.sender_role === "patient" 
-                    ? (currentUser?.photo_url || null) 
-                    : session.avatar,
-            }));
-            setMessages(formattedMsgs);
+        if (activeConsultationId) {
+            const session = chatSessions.find(c => c.id === activeConsultationId);
+            if (session) {
+                readCounts.current[activeConsultationId] = session.messages.length;
+                const formattedMsgs = (session.messages || []).map((msg) => ({
+                    id: msg.ID,
+                    sender: msg.sender_role === "patient" ? "user" : "doctor",
+                    message: msg.text,
+                    name: msg.sender_role === "patient" ? "Saya" : session.doctorName,
+                    avatar: msg.sender_role === "patient" 
+                        ? (currentUser?.photo_url || null) 
+                        : session.avatar,
+                }));
+                setMessages(formattedMsgs);
+            }
         }
     }
-  }, [chatSessions, activeConsultationId, currentUser]);
+  }, [chatSessions, activeConsultationId, currentUser, hasAutoOpened]);
+
+  const getUnreadCount = (chatRoom) => {
+    if (!chatRoom.messages || chatRoom.messages.length === 0) return 0;
+    if (chatRoom.id === activeConsultationId) return 0; // Room aktif = terbaca
+    const lastRead = readCounts.current[chatRoom.id] || 0;
+    const newMessages = chatRoom.messages.slice(lastRead);
+    return newMessages.filter(m => m.sender_role === "dokter").length;
+  };
 
   // 4. Polling Real-time
   useEffect(() => {
@@ -139,7 +155,9 @@ const KonsultasiPage = () => {
 
   // 5. Auto Scroll
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatMessagesContainerRef.current) {
+        chatMessagesContainerRef.current.scrollTop = chatMessagesContainerRef.current.scrollHeight;
+    }
   }, [messages]);
 
 
@@ -148,19 +166,22 @@ const KonsultasiPage = () => {
   const handleSelectChat = (id) => setActiveConsultationId(id);
 
   const handleOpenNewChatModal = async () => {
+    setSelectedDoctorForChat(null);
+    setNewChatTopic("");
     setShowNewChatModal(true);
     try {
-        const res = await axiosClient.get("/users");
-        const allUsers = res.data.data || [];
-        const doctors = allUsers.filter((u) => u.role === "dokter");
+        const res = await axiosClient.get("/doctors");
+        const doctors = res.data.data || [];
         setAvailableDoctors(doctors);
     } catch (err) {
         console.error("Gagal ambil data dokter:", err);
     }
   };
 
-  const startNewChat = async (doctor) => {
-    const existingChat = chatSessions.find((c) => c.doctorId === doctor.id);
+  const startNewChat = async () => {
+    if (!selectedDoctorForChat || !newChatTopic.trim()) return;
+    
+    const existingChat = chatSessions.find((c) => c.doctorId === selectedDoctorForChat.id);
     if (existingChat) {
       setActiveConsultationId(existingChat.id);
       setShowNewChatModal(false);
@@ -170,8 +191,8 @@ const KonsultasiPage = () => {
     setIsCreatingChat(true);
     try {
       const payload = {
-        topic: "Konsultasi Baru",
-        doctor_id: doctor.id,
+        topic: newChatTopic,
+        doctor_id: selectedDoctorForChat.id,
         consultation_date: new Date().toISOString().split("T")[0],
         consultation_time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
       };
@@ -218,6 +239,22 @@ const KonsultasiPage = () => {
       console.error("Gagal kirim pesan:", error);
     } finally {
       setIsSending(false);
+    }
+  };
+
+  const handleCloseChat = async () => {
+    if (!activeConsultationId) return;
+    if (!window.confirm("Apakah Anda yakin ingin menyelesaikan sesi konsultasi ini?")) return;
+
+    try {
+        await axiosClient.put(`/consultations/${activeConsultationId}`, {
+            status: "Completed"
+        });
+        setActiveConsultationId(null);
+        fetchConsultationData(true);
+    } catch (error) {
+        console.error("Gagal menutup chat:", error);
+        alert("Gagal menyelesaikan sesi chat.");
     }
   };
 
@@ -299,8 +336,15 @@ const KonsultasiPage = () => {
                               <div className="online-status" style={{ position: "absolute", bottom: "2px", right: "2px", width: "12px", height: "12px", borderRadius: "50%", backgroundColor: "var(--color-status-success)", border: "2px solid var(--color-surface-card)" }}></div>
                             </div>
                             <div className="chat-item-info" style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                              <h5 style={{ margin: "0 0 4px 0", fontSize: "14px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{session.doctorName}</h5>
-                              <p style={{ margin: 0, fontSize: "12px", color: "var(--color-text-secondary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{session.lastMessage}</p>
+                              <h5 style={{ margin: "0 0 4px 0", fontSize: "14px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <span>{session.doctorName}</span>
+                                {getUnreadCount(session) > 0 && (
+                                  <span style={{ backgroundColor: "var(--color-status-error)", color: "white", borderRadius: "10px", padding: "2px 6px", fontSize: "10px", fontWeight: "bold" }}>
+                                    {getUnreadCount(session)}
+                                  </span>
+                                )}
+                              </h5>
+                              <p style={{ margin: 0, fontSize: "12px", color: "var(--color-text-secondary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontWeight: getUnreadCount(session) > 0 ? "bold" : "normal" }}>{session.lastMessage}</p>
                             </div>
                           </div>
                         ))
@@ -316,7 +360,8 @@ const KonsultasiPage = () => {
                   </div>
 
                   {/* Window: Isi Chat */}
-                  <div className="chat-window" style={{ flex: 1, display: "flex", flexDirection: "column", backgroundColor: "var(--color-surface-background)" }}>
+                  {activeConsultationId ? (
+                    <div className="chat-window" style={{ flex: 1, display: "flex", flexDirection: "column", backgroundColor: "var(--color-surface-background)" }}>
                     {activeSessionData ? (
                       <div className="chat-window-header" style={{ padding: "16px 24px", borderBottom: "1px solid var(--color-border-divider)", backgroundColor: "var(--color-surface-card)", display: "flex", alignItems: "center", gap: "16px" }}>
                         <div className="header-details" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -332,6 +377,14 @@ const KonsultasiPage = () => {
                             <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{activeSessionData.topic}</span>
                           </div>
                         </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <Button variant="outline" onClick={handleCloseChat} style={{ fontSize: "12px", padding: "6px 12px", borderRadius: "16px", borderColor: "var(--color-border-input)", color: "var(--color-text-secondary)" }}>
+                            Selesaikan
+                          </Button>
+                          <Button variant="ghost" onClick={() => setActiveConsultationId(null)} title="Tutup Obrolan" style={{ padding: "6px", borderRadius: "50%", color: "var(--color-text-secondary)", display: "flex", alignItems: "center", justifyContent: "center", width: "32px", height: "32px", border: "1px solid var(--color-border-divider)", cursor: "pointer", backgroundColor: "white" }}>
+                            <Icon icon="mdi:close" style={{ fontSize: "18px" }} />
+                          </Button>
+                        </div>
                       </div>
                     ) : (
                       <div className="chat-window-header empty" style={{ padding: "16px 24px", borderBottom: "1px solid var(--color-border-divider)", backgroundColor: "var(--color-surface-card)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -339,7 +392,7 @@ const KonsultasiPage = () => {
                       </div>
                     )}
 
-                    <div className="chat-messages-area" style={{ flex: 1, overflowY: "auto", padding: "24px", display: "flex", flexDirection: "column", gap: "16px" }}>
+                    <div ref={chatMessagesContainerRef} className="chat-messages-area" style={{ flex: 1, overflowY: "auto", padding: "24px", display: "flex", flexDirection: "column", gap: "16px" }}>
                       {messages.length > 0 ? (
                         messages.map((msg, index) => (
                           <div key={index} className={`chat-bubble ${msg.sender}`} style={{ display: "flex", alignItems: "flex-end", gap: "8px", alignSelf: msg.sender === "user" ? "flex-end" : "flex-start", flexDirection: msg.sender === "user" ? "row-reverse" : "row", maxWidth: "80%" }}>
@@ -364,7 +417,6 @@ const KonsultasiPage = () => {
                           <p>Sapa dokter untuk memulai konsultasi!</p>
                         </div>
                       )}
-                      <div ref={chatEndRef} />
                     </div>
 
                     <form className="chat-input-area" onSubmit={handleChatSubmit} style={{ padding: "16px", backgroundColor: "var(--color-surface-card)", borderTop: "1px solid var(--color-border-divider)", display: "flex", gap: "12px" }}>
@@ -380,12 +432,23 @@ const KonsultasiPage = () => {
                         <Icon icon="mdi:send" />
                       </Button>
                     </form>
-                  </div>
+                    </div>
+                  ) : (
+                    <div className="empty-chat-prompt" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px", backgroundColor: "var(--color-surface-background)" }}>
+                      <Icon icon="mdi:chat-outline" style={{ fontSize: "64px", color: "var(--color-border-divider)", marginBottom: "16px" }} />
+                      <h3 style={{ margin: "0 0 8px 0", color: "var(--color-text-primary)" }}>Belum Ada Obrolan Terbuka</h3>
+                      <p style={{ textAlign: "center", color: "var(--color-text-secondary)", margin: 0 }}>
+                        Pilih percakapan dari daftar di sebelah kiri atau klik <b style={{ color: "var(--color-brand-primary)" }}>+ Mulai Konsultasi</b> untuk mengobrol dengan dokter.
+                      </p>
+                    </div>
+                  )}
                 </div>
               ) : (
-                <div className="login-prompt" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px" }}>
-                  <p style={{ textAlign: "center", color: "var(--color-text-secondary)" }}>
-                    Silakan <Link to="/login-pengguna" className="login-link" style={{ color: "var(--color-brand-primary)", fontWeight: "bold", textDecoration: "none" }}>Login</Link> untuk memulai chat dengan dokter.
+                <div className="login-prompt" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px", backgroundColor: "var(--color-surface-background)" }}>
+                  <Icon icon="mdi:lock-outline" style={{ fontSize: "64px", color: "var(--color-border-divider)", marginBottom: "16px" }} />
+                  <h3 style={{ margin: "0 0 8px 0", color: "var(--color-text-primary)" }}>Akses Terbatas</h3>
+                  <p style={{ textAlign: "center", color: "var(--color-text-secondary)", margin: 0 }}>
+                    Silakan login terlebih dahulu untuk mengakses fitur Live Chat dengan dokter.
                   </p>
                 </div>
               )}
@@ -457,9 +520,12 @@ const KonsultasiPage = () => {
                 <Icon icon="mdi:email" className="section-icon" style={{ fontSize: "24px", color: "var(--color-brand-primary)" }} />
                 <h2 style={{ margin: 0, fontSize: "1.5rem" }}>Konsultasi via Email</h2>
               </div>
-              <div className="email-info-box" style={{ backgroundColor: "var(--color-surface-background)", padding: "16px", borderRadius: "var(--radius-standard)", marginBottom: "24px", fontSize: "14px", color: "var(--color-text-secondary)" }}>
-                <p style={{ margin: "0 0 8px 0" }}>Tidak punya waktu live chat? Kirimkan pertanyaan Anda, tim medis kami akan membalas via email.</p>
-                <span className="response-time" style={{ fontWeight: "bold", color: "var(--color-status-warning)" }}>⏱️ Respon: 30-60 menit (Jam Kerja)</span>
+              <div className="email-info-box">
+                <p>Tidak punya waktu live chat? Kirimkan pertanyaan Anda, tim medis kami akan membalas via email.</p>
+                <span className="response-time">
+                  <Icon icon="mdi:clock-outline" style={{ fontSize: "16px" }} />
+                  Respon: 30-60 menit (Jam Kerja)
+                </span>
               </div>
               
               <form className="email-form" onSubmit={handleEmailSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -481,7 +547,6 @@ const KonsultasiPage = () => {
                     className="question-textarea"
                     rows="4"
                     required
-                    style={{ width: "100%", padding: "12px 16px", borderRadius: "var(--radius-standard)", border: "1px solid var(--color-border-input)", fontFamily: "inherit", resize: "vertical", minHeight: "100px" }}
                     ></textarea>
                 </div>
                 
@@ -491,14 +556,9 @@ const KonsultasiPage = () => {
                     className={`submit-email-btn ${emailStatus}`}
                     disabled={emailStatus === 'sending'}
                     fullWidth
-                    style={{
-                      backgroundColor: emailStatus === 'success' ? 'var(--color-status-success)' : undefined,
-                      borderColor: emailStatus === 'success' ? 'var(--color-status-success)' : undefined,
-                    }}
                 >
-                    {emailStatus === 'sending' ? 'Mengirim...' : 
-                     emailStatus === 'success' ? 'Terikirim! ✅' : 
-                     'Kirim Pertanyaan'}
+                    <Icon icon={emailStatus === 'sending' ? 'mdi:loading' : (emailStatus === 'success' ? 'mdi:check-circle' : 'mdi:send')} className={emailStatus === 'sending' ? 'spin' : ''} />
+                    {emailStatus === 'sending' ? 'Mengirim...' : (emailStatus === 'success' ? 'Terkirim!' : 'Kirim Pertanyaan')}
                 </Button>
               </form>
             </Card>
@@ -517,47 +577,69 @@ const KonsultasiPage = () => {
               </Button>
             </div>
 
-            <div className="search-doctor-container" style={{ padding: "20px 24px", borderBottom: "1px solid var(--color-border-divider)" }}>
-              <Input
-                type="text"
-                placeholder="Cari nama dokter atau spesialis..."
-                value={searchDoctorTerm}
-                onChange={(e) => setSearchDoctorTerm(e.target.value)}
-                icon="mdi:magnify"
-              />
-            </div>
-
-            <div className="available-doctors-list" style={{ overflowY: "auto", padding: "16px 24px" }}>
-              {filteredDoctors.length > 0 ? (
-                filteredDoctors.map((doc) => (
-                  <div key={doc.id} className="doctor-card-item" style={{ display: "flex", alignItems: "center", gap: "16px", padding: "16px 0", borderBottom: "1px solid var(--color-border-divider)" }}>
-                    <div className="doc-card-avatar" style={{ width: "48px", height: "48px", borderRadius: "50%", backgroundColor: "var(--color-brand-primary)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", overflow: "hidden", flexShrink: 0 }}>
-                      {doc.photo_url ? (
-                        <img src={doc.photo_url} alt="Doc" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => (e.target.style.display = 'none')} />
+            <div className="modal-content" style={{ padding: "20px 24px" }}>
+              {!selectedDoctorForChat ? (
+                  <>
+                    <div className="search-doctor-container" style={{ marginBottom: "16px" }}>
+                      <Input
+                        type="text"
+                        placeholder="Cari nama dokter atau spesialis..."
+                        value={searchDoctorTerm}
+                        onChange={(e) => setSearchDoctorTerm(e.target.value)}
+                        icon={<Icon icon="mdi:magnify" />}
+                      />
+                    </div>
+                    <div className="available-doctors-list" style={{ overflowY: "auto", maxHeight: "400px" }}>
+                      {filteredDoctors.length > 0 ? (
+                        filteredDoctors.map((doc) => (
+                          <div key={doc.id} className="doctor-card-item" style={{ display: "flex", alignItems: "center", gap: "16px", padding: "16px", border: "1px solid var(--color-border-divider)", borderRadius: "var(--radius-standard)", marginBottom: "10px", cursor: "pointer", transition: "all 0.2s" }} onClick={() => setSelectedDoctorForChat(doc)}>
+                            <div className="doc-card-avatar" style={{ width: "48px", height: "48px", borderRadius: "50%", backgroundColor: "var(--color-brand-primary)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", overflow: "hidden", flexShrink: 0 }}>
+                              {doc.photo_url ? (
+                                <img src={doc.photo_url} alt="Doc" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => (e.target.style.display = 'none')} />
+                              ) : (
+                                <div className="avatar-initial">{doc.name.charAt(0)}</div>
+                              )}
+                            </div>
+                            <div className="doc-card-info" style={{ flex: 1 }}>
+                              <h4 style={{ margin: "0 0 4px 0" }}>{doc.name}</h4>
+                              <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--color-text-secondary)" }}>{doc.specialization || "Dokter Umum"}</p>
+                              <span className="rs-badge" style={{ fontSize: "12px", padding: "2px 8px", backgroundColor: "var(--color-surface-background)", borderRadius: "12px", border: "1px solid var(--color-border-divider)" }}>{doc.hospital || "RS Mitra"}</span>
+                            </div>
+                            <Icon icon="mdi:chevron-right" style={{ fontSize: "24px", color: "var(--color-text-secondary)" }} />
+                          </div>
+                        ))
                       ) : (
-                        <div className="avatar-initial">{doc.name.charAt(0)}</div>
+                        <p className="no-doc" style={{ textAlign: "center", color: "var(--color-text-secondary)", padding: "20px" }}>Tidak ada dokter ditemukan.</p>
                       )}
                     </div>
-                    <div className="doc-card-info" onClick={() => startNewChat(doc)} style={{ flex: 1, cursor: "pointer" }}>
-                      <h4 style={{ margin: "0 0 4px 0" }}>{doc.name}</h4>
-                      <p style={{ margin: "0 0 8px 0", fontSize: "14px", color: "var(--color-text-secondary)" }}>{doc.specialization || "Dokter Umum"}</p>
-                      <span className="rs-badge" style={{ fontSize: "12px", padding: "2px 8px", backgroundColor: "var(--color-surface-background)", borderRadius: "12px", border: "1px solid var(--color-border-divider)" }}>{doc.hospital || "RS Mitra"}</span>
-                    </div>
-                    <Button
-                      variant="primary"
-                      className="select-chat-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        startNewChat(doc);
-                      }}
-                      disabled={isCreatingChat}
-                    >
-                      {isCreatingChat ? "Memuat..." : "Chat"}
-                    </Button>
-                  </div>
-                ))
+                  </>
               ) : (
-                <p className="no-doc" style={{ textAlign: "center", color: "var(--color-text-secondary)", padding: "20px" }}>Tidak ada dokter ditemukan.</p>
+                  <div className="topic-input-container" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                      <div className="selected-doctor-summary" style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", backgroundColor: "var(--color-surface-background)", borderRadius: "var(--radius-standard)", border: "1px solid var(--color-border-divider)" }}>
+                          <div className="avatar-initial" style={{ width: "32px", height: "32px", fontSize: "14px" }}>{selectedDoctorForChat.name.charAt(0)}</div>
+                          <div>
+                              <p style={{ margin: 0, fontWeight: "bold", fontSize: "14px" }}>Konsultasi dengan {selectedDoctorForChat.name}</p>
+                              <p style={{ margin: 0, fontSize: "12px", color: "var(--color-text-secondary)" }}>{selectedDoctorForChat.specialization || "Dokter Umum"}</p>
+                          </div>
+                          <Button variant="ghost" onClick={() => setSelectedDoctorForChat(null)} style={{ marginLeft: "auto", fontSize: "12px", padding: "4px 8px" }}>Ganti Dokter</Button>
+                      </div>
+                      <div>
+                          <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold", fontSize: "14px", color: "var(--color-text-secondary)" }}>Topik / Keluhan Utama</label>
+                          <Input
+                              type="text"
+                              placeholder="Contoh: Pusing setelah donor, Syarat donor..."
+                              value={newChatTopic}
+                              onChange={(e) => setNewChatTopic(e.target.value)}
+                              autoFocus
+                          />
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "8px" }}>
+                          <Button variant="outline" onClick={() => setShowNewChatModal(false)}>Batal</Button>
+                          <Button variant="primary" onClick={startNewChat} disabled={isCreatingChat || !newChatTopic.trim()}>
+                              {isCreatingChat ? "Memulai..." : "Mulai Chat"}
+                          </Button>
+                      </div>
+                  </div>
               )}
             </div>
           </div>

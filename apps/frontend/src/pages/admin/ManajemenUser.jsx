@@ -83,7 +83,7 @@ export default function ManajemenUser() {
         </div>
 
         <div className="search-bar-container" style={{ display: "flex", alignItems: "center", marginBottom: "24px", position: "relative", maxWidth: "400px" }}>
-          <Icon icon="mdi:magnify" className="search-icon" style={{ position: "absolute", left: "16px", color: "var(--color-text-secondary)" }} />
+          <Icon icon="mdi:magnify" className="search-icon" style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "var(--color-text-secondary)", fontSize: "20px", pointerEvents: "none" }} />
           <Input
             type="text"
             placeholder="Cari nama atau email pendonor..."

@@ -45,15 +45,15 @@ export default function DetailEventPage() {
         const totalQuota = dataDB.target_peserta || 300;
 
         const eventData = {
-          id: dataDB.ID,
-          title: dataDB.nama_event,
-          description: dataDB.deskripsi_event,
-          date: formatDate(dataDB.tanggal_event),
+          id: dataDB.id || dataDB.ID,
+          title: dataDB.title || dataDB.nama_event,
+          description: dataDB.description || dataDB.deskripsi_event,
+          date: formatDate(dataDB.date || dataDB.tanggal_event),
           time: "08:00 - 14:00 WIB",
           location: dataDB.lokasi?.nama_lokasi || "Lokasi belum ditentukan",
           address: dataDB.lokasi?.alamat_lokasi || "Alamat belum tersedia",
-          image: dataDB.gambar_event || "bg beranda awal.jpg",
-          targetDate: new Date(dataDB.tanggal_event),
+          image: dataDB.image || dataDB.gambar_event || "bg beranda awal.jpg",
+          targetDate: new Date(dataDB.date || dataDB.tanggal_event),
 
           quota: {
             current: currentParticipants,
@@ -212,7 +212,7 @@ export default function DetailEventPage() {
         className="event-hero-detail"
         style={{
           backgroundImage: `url(${
-            process.env.PUBLIC_URL + "/images/" + event.image
+            process.env.PUBLIC_URL + "/images/" + event.image.replace("/images/", "")
           })`,
           backgroundSize: "cover",
           backgroundPosition: "center",

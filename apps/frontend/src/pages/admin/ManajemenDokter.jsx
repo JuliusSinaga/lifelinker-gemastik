@@ -12,7 +12,7 @@ function MetricCard({ value, title, subtitle, icon, iconColor }) {
   return (
     <Card variant="standard" className="metric-card" style={{ padding: "24px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", gap: "16px" }}>
       <div className="metric-icon" style={{ fontSize: "48px", color: iconColor, opacity: 0.8, backgroundColor: `${iconColor}15`, width: "80px", height: "80px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%" }}>
-        <Icon icon={icon} width="40" />
+        <Icon icon={icon} width="48" height="48" />
       </div>
       <div className="metric-content" style={{ flex: 1 }}>
         <div className="metric-value" style={{ fontSize: "36px", fontWeight: "bold", fontFamily: "var(--font-family-brand)", color: "var(--color-text-primary)", marginBottom: "4px" }}>{value}</div>

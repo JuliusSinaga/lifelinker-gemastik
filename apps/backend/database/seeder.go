@@ -252,13 +252,11 @@ func SeedEvents(db *gorm.DB) {
 
 // --- SEEDER DONASI (UPDATED) ---
 func SeedDonations(db *gorm.DB) {
-	var count int64
-	db.Model(&models.DonationHistory{}).Count(&count)
-	if count > 0 {
-		return
-	}
+	// Hapus semua riwayat donasi lama agar sinkron dengan data mockup baru
+	db.Unscoped().Session(&gorm.Session{AllowGlobalUpdate: true}).Delete(&models.DonationHistory{})
 
-	var user, dokter models.User
+	var user models.User
+	var dokter models.User
 	var lokasi models.Lokasi // [BARU] Wajib ambil lokasi
 
 	if err := db.Where("email = ?", "budi@gmail.com").First(&user).Error; err != nil {
@@ -275,32 +273,41 @@ func SeedDonations(db *gorm.DB) {
 		return
 	}
 
-	// Variabel bantu untuk pointer
-	qty350 := 350
+	// Hapus dummy users sebelumnya jika ada (gunakan Unscoped agar terhapus permanen dan tidak bentrok UNIQUE constraint)
+	db.Unscoped().Where("email IN ?", []string{
+		"juniah@example.com", "kaojey@example.com", "damia@example.com", 
+		"lisbue@example.com", "andika@example.com", "kael@example.com",
+	}).Delete(&models.User{})
+
+	// Buat Dummy Users untuk Pendonor Khusus
+	mockupUsers := []models.User{
+		{Nama: "Juniah Jaos", Email: "juniah@example.com", Password: "password123", Role: "user", GolDarah: "A", Rhesus: "+", NoHp: "081234567890", Kota: "Medan", TanggalLahir: "1995-02-10", JenisKelamin: "Perempuan"},
+		{Nama: "Kaojey Sloha", Email: "kaojey@example.com", Password: "password123", Role: "user", GolDarah: "A", Rhesus: "+", NoHp: "081298765432", Kota: "Medan", TanggalLahir: "1992-07-22", JenisKelamin: "Laki-laki"},
+		{Nama: "Damia Loe", Email: "damia@example.com", Password: "password123", Role: "user", GolDarah: "B", Rhesus: "-", NoHp: "082155556666", Kota: "Binjai", TanggalLahir: "1998-11-05", JenisKelamin: "Perempuan"},
+		{Nama: "Lisbue Reas", Email: "lisbue@example.com", Password: "password123", Role: "user", GolDarah: "B", Rhesus: "+", NoHp: "085233334444", Kota: "Medan", TanggalLahir: "1990-03-18", JenisKelamin: "Laki-laki"},
+		{Nama: "Andika Olo", Email: "andika@example.com", Password: "password123", Role: "user", GolDarah: "O", Rhesus: "+", NoHp: "081377778888", Kota: "Deli Serdang", TanggalLahir: "1996-09-30", JenisKelamin: "Laki-laki"},
+		{Nama: "Kael Simatu", Email: "kael@example.com", Password: "password123", Role: "user", GolDarah: "O", Rhesus: "-", NoHp: "081199990000", Kota: "Medan", TanggalLahir: "2000-01-25", JenisKelamin: "Laki-laki"},
+	}
+	db.Create(&mockupUsers)
+
+	qty1 := 1
+	qty2 := 2
+
+	// Format tanggal: Tahun 2025
+	t1, _ := time.Parse("2006-01-02", "2025-01-02")
+	t2, _ := time.Parse("2006-01-02", "2025-01-03")
+	t3, _ := time.Parse("2006-01-02", "2025-01-04")
+	t4, _ := time.Parse("2006-01-02", "2025-01-05")
+	t5, _ := time.Parse("2006-01-02", "2025-01-05")
+	t6, _ := time.Parse("2006-01-02", "2025-01-06")
 
 	donations := []models.DonationHistory{
-		// 1. Contoh Donasi Selesai (Ada Dokter & Quantity)
-		{
-			UserID:          user.ID,
-			DoctorID:        &dokter.ID, // [UPDATED] Pointer
-			LokasiID:        lokasi.ID,  // [UPDATED] Wajib
-			DonationDate:    time.Now().AddDate(0, -3, 0),
-			BloodType:       user.GolDarah,
-			QuantityDonated: &qty350, // [UPDATED] Pointer
-			Status:          "Approved",
-			Notes:           "Donor berhasil tanpa kendala.",
-		},
-		// 2. Contoh Pendaftaran Online (Pending, Dokter Kosong)
-		{
-			UserID:          user.ID,
-			DoctorID:        nil,       // [UPDATED] Belum ada dokter
-			LokasiID:        lokasi.ID, // [UPDATED] Wajib
-			DonationDate:    time.Now().AddDate(0, 0, 1),
-			BloodType:       user.GolDarah,
-			QuantityDonated: nil, // [UPDATED] Belum donor
-			Status:          "Pending",
-			Notes:           "Pendaftaran mandiri via aplikasi.",
-		},
+		{UserID: mockupUsers[0].ID, DoctorID: &dokter.ID, LokasiID: lokasi.ID, DonationDate: t1, BloodType: "A", QuantityDonated: &qty1, Status: "Tersedia"},
+		{UserID: mockupUsers[1].ID, DoctorID: &dokter.ID, LokasiID: lokasi.ID, DonationDate: t2, BloodType: "A", QuantityDonated: &qty2, Status: "Tersedia"},
+		{UserID: mockupUsers[2].ID, DoctorID: &dokter.ID, LokasiID: lokasi.ID, DonationDate: t3, BloodType: "B", QuantityDonated: &qty2, Status: "Tersedia"},
+		{UserID: mockupUsers[3].ID, DoctorID: &dokter.ID, LokasiID: lokasi.ID, DonationDate: t4, BloodType: "B", QuantityDonated: &qty2, Status: "Tersedia"},
+		{UserID: mockupUsers[4].ID, DoctorID: &dokter.ID, LokasiID: lokasi.ID, DonationDate: t5, BloodType: "O", QuantityDonated: &qty1, Status: "Digunakan"},
+		{UserID: mockupUsers[5].ID, DoctorID: &dokter.ID, LokasiID: lokasi.ID, DonationDate: t6, BloodType: "O", QuantityDonated: &qty1, Status: "Digunakan"},
 	}
 
 	if err := db.Create(&donations).Error; err != nil {
@@ -312,20 +319,18 @@ func SeedDonations(db *gorm.DB) {
 
 // --- SEEDER KONSULTASI ---
 func SeedConsultations(db *gorm.DB) {
-	var count int64
-	db.Model(&models.Consultation{}).Count(&count)
-	if count > 0 {
-		return
-	}
+	// Hapus semua pesan terlebih dahulu untuk menghindari error Foreign Key
+	db.Unscoped().Session(&gorm.Session{AllowGlobalUpdate: true}).Delete(&models.Message{})
 
-	var user, dokter models.User
+	// Baru hapus semua konsultasi lama
+	db.Unscoped().Session(&gorm.Session{AllowGlobalUpdate: true}).Delete(&models.Consultation{})
 
-	if err := db.Where("email = ?", "budi@gmail.com").First(&user).Error; err != nil {
-		return
-	}
-	if err := db.Where("email = ?", "dokteranastasya@gmail.com").First(&dokter).Error; err != nil {
-		return
-	}
+	var user models.User
+	var dokter models.User
+	var aisha models.User
+	db.Where("email = ?", "budi@gmail.com").First(&user)
+	db.Where("email = ?", "dokteranastasya@gmail.com").First(&dokter)
+	db.Where("email = ?", "aisha@gmail.com").First(&aisha)
 
 	consultations := []models.Consultation{
 		{
@@ -334,8 +339,9 @@ func SeedConsultations(db *gorm.DB) {
 			ConsultationDate: time.Now().AddDate(0, 0, -2).Format("2006-01-02"),
 			ConsultationTime: "10:00",
 			Topic:            "Efek Samping Donor",
-			Status:           "Completed",
-			ZoomLink:         "", // Kosongkan jika completed
+			Method:           "chat",
+			Status:           "active",
+			ZoomLink:         "",
 		},
 		{
 			UserID:           user.ID,
@@ -343,8 +349,29 @@ func SeedConsultations(db *gorm.DB) {
 			ConsultationDate: time.Now().Format("2006-01-02"),
 			ConsultationTime: "14:00",
 			Topic:            "Syarat Donor Flu Ringan",
+			Method:           "chat",
+			Status:           "active",
+			ZoomLink:         "",
+		},
+		{
+			UserID:           aisha.ID,
+			DoctorID:         dokter.ID,
+			ConsultationDate: time.Now().Format("2006-01-02"),
+			ConsultationTime: "08:30",
+			Topic:            "Pantangan Sebelum Donor Darah Pertama",
+			Method:           "chat",
+			Status:           "active",
+			ZoomLink:         "",
+		},
+		{
+			UserID:           user.ID,
+			DoctorID:         dokter.ID,
+			ConsultationDate: time.Now().Format("2006-01-02"),
+			ConsultationTime: "16:00",
+			Topic:            "Konsultasi Pra-Donor via Video",
+			Method:           "video",
 			Status:           "Scheduled",
-			ZoomLink:         "https://zoom.us/j/dummy-link", // Contoh link
+			ZoomLink:         "https://zoom.us/j/1234567890",
 		},
 	}
 
@@ -357,40 +384,43 @@ func SeedConsultations(db *gorm.DB) {
 
 // --- SEEDER PESAN CHAT ---
 func SeedMessages(db *gorm.DB) {
-	var count int64
-	db.Model(&models.Message{}).Count(&count)
-	if count > 0 {
-		return
-	}
+	// (Pesan lama sudah dihapus di dalam SeedConsultations)
 
-	// Ambil Konsultasi Pertama
-	var consult models.Consultation
-	if err := db.First(&consult).Error; err != nil {
+	// Ambil semua Konsultasi
+	var consults []models.Consultation
+	if err := db.Find(&consults).Error; err != nil || len(consults) == 0 {
 		log.Println("Skip SeedMessages: Konsultasi tidak ditemukan.")
 		return
 	}
 
-	messages := []models.Message{
-		{
-			ConsultationID: consult.ID,
-			SenderRole:     "patient",
-			Text:           "Halo Dok, saya sering merasa pusing setelah donor darah. Apakah itu normal?",
-		},
-		{
-			ConsultationID: consult.ID,
-			SenderRole:     "doctor",
-			Text:           "Halo Pak Budi. Itu hal yang wajar jika tubuh belum terbiasa atau kurang istirahat.",
-		},
-		{
-			ConsultationID: consult.ID,
-			SenderRole:     "doctor",
-			Text:           "Pastikan Anda minum banyak air putih sebelum dan sesudah donor, serta hindari aktivitas berat selama 24 jam.",
-		},
-		{
-			ConsultationID: consult.ID,
-			SenderRole:     "patient",
-			Text:           "Baik Dok, terima kasih sarannya.",
-		},
+	messages := []models.Message{}
+
+	// Pesan untuk Konsultasi 1 (Efek Samping Donor)
+	if len(consults) > 0 {
+		messages = append(messages, 
+			models.Message{ConsultationID: consults[0].ID, SenderRole: "patient", Text: "Halo Dok, saya sering merasa pusing setelah donor darah. Apakah itu normal?"},
+			models.Message{ConsultationID: consults[0].ID, SenderRole: "doctor", Text: "Halo Pak Budi. Itu hal yang wajar jika tubuh belum terbiasa atau kurang istirahat."},
+			models.Message{ConsultationID: consults[0].ID, SenderRole: "doctor", Text: "Pastikan Anda minum banyak air putih sebelum dan sesudah donor, serta hindari aktivitas berat selama 24 jam."},
+			models.Message{ConsultationID: consults[0].ID, SenderRole: "patient", Text: "Baik Dok, terima kasih sarannya."},
+		)
+	}
+
+	// Pesan untuk Konsultasi 2 (Syarat Donor Flu Ringan)
+	if len(consults) > 1 {
+		messages = append(messages, 
+			models.Message{ConsultationID: consults[1].ID, SenderRole: "patient", Text: "Selamat siang Dokter, saat ini saya sedang flu ringan (hanya bersin). Apakah saya boleh mendonorkan darah besok?"},
+			models.Message{ConsultationID: consults[1].ID, SenderRole: "doctor", Text: "Siang Pak Budi. Sebaiknya ditunda dulu ya. Pendonor harus dalam keadaan 100% fit dan tidak sedang mengonsumsi obat-obatan."},
+		)
+	}
+
+	// Pesan untuk Konsultasi 3 (Pantangan Aisha)
+	if len(consults) > 2 {
+		messages = append(messages, 
+			models.Message{ConsultationID: consults[2].ID, SenderRole: "patient", Text: "Permisi Dok, ini kali pertama saya mau donor. Apakah ada pantangan makanan sebelumnya?"},
+			models.Message{ConsultationID: consults[2].ID, SenderRole: "doctor", Text: "Halo Aisha! Selamat ya untuk keberaniannya. Hindari makanan berlemak tinggi (seperti gorengan atau fast food) minimal 4 jam sebelum donor karena dapat memengaruhi kualitas plasma darah."},
+			models.Message{ConsultationID: consults[2].ID, SenderRole: "doctor", Text: "Perbanyak makan sayur bayam atau daging merah agar zat besi Anda cukup."},
+			models.Message{ConsultationID: consults[2].ID, SenderRole: "patient", Text: "Wah, noted Dok! Terima kasih banyak infonya."},
+		)
 	}
 
 	if err := db.Create(&messages).Error; err != nil {

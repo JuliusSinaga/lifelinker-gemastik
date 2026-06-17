@@ -13,8 +13,8 @@ const Avatar = ({
   return (
     <div 
       className={`core-avatar ${className}`} 
-      style={{ width: size, height: size, fontSize: size * 0.4 }}
       {...props}
+      style={{ width: size, height: size, fontSize: size * 0.4, ...(props.style || {}) }}
     >
       {src ? (
         <img src={src} alt={name || 'Avatar'} className="core-avatar-img" />

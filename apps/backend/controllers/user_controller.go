@@ -274,6 +274,27 @@ func GetUsers(c *gin.Context) {
 }
 
 // ----------------------------------------------------
+// FITUR 5.5: GET SEMUA DOKTER (Bisa diakses pasien)
+// ----------------------------------------------------
+func GetDoctors(c *gin.Context) {
+	var users []models.User
+
+	// Ambil semua data user yang rolenya 'dokter'
+	if err := database.DB.Where("role = ?", "dokter").Find(&users).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengambil data dokter"})
+		return
+	}
+
+	// Format data
+	var formattedUsers []map[string]interface{}
+	for _, user := range users {
+		formattedUsers = append(formattedUsers, formatUserResponse(user))
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": formattedUsers})
+}
+
+// ----------------------------------------------------
 // FITUR 6: UPDATE PROFIL USER (PUT /users/:id)
 // ----------------------------------------------------
 func UpdateUser(c *gin.Context) {
